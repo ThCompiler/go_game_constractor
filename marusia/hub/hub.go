@@ -1,8 +1,9 @@
-package marusia
+package hub
 
 import (
 	"encoding/json"
 	drt "github.com/ThCompiler/go_game_constractor/director"
+	"github.com/ThCompiler/go_game_constractor/marusia"
 )
 
 type request struct {
@@ -12,12 +13,12 @@ type request struct {
 	wasButton    bool
 }
 
-func fromMarusiaRequest(rqm RequestIn) *request {
+func fromMarusiaRequest(rqm marusia.RequestIn) *request {
 	return &request{
 		command:      rqm.Command,
 		fullUserText: rqm.OriginalUtterance,
 		payload:      rqm.Payload,
-		wasButton:    rqm.Type == ButtonPressed,
+		wasButton:    rqm.Type == marusia.ButtonPressed,
 	}
 }
 
@@ -87,7 +88,7 @@ func (h *ScriptHub) detachDirector(drt *director) {
 	h.dettacher <- drt
 }
 
-func (h *ScriptHub) RunScene(rq Request) chan PlayedSceneResult {
+func (h *ScriptHub) RunScene(rq marusia.Request) chan PlayedSceneResult {
 	answer := make(chan PlayedSceneResult)
 	h.broadcast <- &(sceneMessage{
 		userId:    rq.Session.UserID,

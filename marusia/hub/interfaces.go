@@ -1,7 +1,8 @@
-package marusia
+package hub
 
 import (
 	drt "github.com/ThCompiler/go_game_constractor/director"
+	"github.com/ThCompiler/go_game_constractor/marusia"
 )
 
 type ClosedDirector interface {
@@ -15,5 +16,5 @@ type PlayedSceneResult struct {
 
 type ScriptRunner interface {
 	AttachDirector(sessionId string, op drt.Director)
-	RunScene(req Request) chan PlayedSceneResult
+	RunScene(req marusia.Request) chan PlayedSceneResult
 }
