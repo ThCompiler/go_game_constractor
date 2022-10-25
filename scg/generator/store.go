@@ -1,9 +1,9 @@
 package generator
 
 import (
-	"github.com/thcompiler/go_game_constractor/scg/expr"
-	"github.com/thcompiler/go_game_constractor/scg/generator/codegen"
-	storecodegen "github.com/thcompiler/go_game_constractor/scg/store/codegen"
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+	storecodegen "github.com/ThCompiler/go_game_constractor/scg/store/codegen"
 )
 
 // Store add generate code of script store

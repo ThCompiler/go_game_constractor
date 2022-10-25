@@ -1,7 +1,7 @@
 package scene
 
 import (
-	"github.com/thcompiler/go_game_constractor/scg/go/types"
+	"github.com/ThCompiler/go_game_constractor/scg/go/types"
 	"strings"
 )
 

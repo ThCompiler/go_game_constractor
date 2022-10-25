@@ -1,9 +1,9 @@
 package codegen
 
 import (
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 	"github.com/google/uuid"
-	"github.com/thcompiler/go_game_constractor/scg/expr"
-	"github.com/thcompiler/go_game_constractor/scg/generator/codegen"
 	"path"
 	"path/filepath"
 )

@@ -1,7 +1,7 @@
 package marusia
 
 import (
-	drt "github.com/thcompiler/go_game_constractor/director"
+	drt "github.com/ThCompiler/go_game_constractor/director"
 )
 
 type ClosedDirector interface {

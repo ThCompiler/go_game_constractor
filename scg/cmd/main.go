@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/thcompiler/go_game_constractor/scg/expr"
-	"github.com/thcompiler/go_game_constractor/scg/generator"
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator"
 	"os"
 	"strings"
 )

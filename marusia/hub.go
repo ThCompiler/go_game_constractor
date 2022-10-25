@@ -2,7 +2,7 @@ package marusia
 
 import (
 	"encoding/json"
-	drt "github.com/thcompiler/go_game_constractor/director"
+	drt "github.com/ThCompiler/go_game_constractor/director"
 )
 
 type request struct {

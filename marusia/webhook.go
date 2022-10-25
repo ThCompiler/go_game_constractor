@@ -6,9 +6,9 @@ Get code from github.com/SevereCloud/vksdk. And rewrite to gin handler
 
 import (
 	"encoding/json"
+	"github.com/ThCompiler/go_game_constractor/pkg/ginutilits"
+	"github.com/ThCompiler/go_game_constractor/pkg/logger"
 	"github.com/gin-gonic/gin"
-	"github.com/thcompiler/go_game_constractor/pkg/ginutilits"
-	"github.com/thcompiler/go_game_constractor/pkg/logger"
 	"mime"
 	"net/http"
 )

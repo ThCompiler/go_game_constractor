@@ -3,7 +3,7 @@ package director
 import (
 	"context"
 	"encoding/json"
-	"github.com/thcompiler/go_game_constractor/director/scene"
+	"github.com/ThCompiler/go_game_constractor/director/scene"
 )
 
 type Result struct {

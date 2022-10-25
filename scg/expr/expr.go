@@ -2,8 +2,8 @@ package expr
 
 import (
 	"fmt"
-	"github.com/thcompiler/go_game_constractor/pkg/cleanenv"
-	"github.com/thcompiler/go_game_constractor/scg/expr/scene"
+	"github.com/ThCompiler/go_game_constractor/pkg/cleanenv"
+	"github.com/ThCompiler/go_game_constractor/scg/expr/scene"
 )
 
 type Script map[string]scene.Scene
