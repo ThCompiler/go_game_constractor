@@ -1,4 +1,4 @@
-module github.com/thcompiler/go_game_constractor
+module github.com/ThCompiler/go_game_constractor
 
 go 1.19
 
