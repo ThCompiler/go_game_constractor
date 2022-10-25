@@ -1,6 +1,6 @@
 package matchers
 
-import "gameconstractor/director/scene"
+import "github.com/thcompiler/go_game_constractor/director/scene"
 
 const (
 	positiveNumberErrorString = "Я не знаю такого положительного числа"

@@ -1,8 +1,8 @@
 package generator
 
 import (
-	"gameconstractor/scg/expr"
-	"gameconstractor/scg/generator/codegen"
+	"github.com/thcompiler/go_game_constractor/scg/expr"
+	"github.com/thcompiler/go_game_constractor/scg/generator/codegen"
 	"golang.org/x/tools/go/packages"
 	"os"
 	"path/filepath"

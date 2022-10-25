@@ -1,8 +1,8 @@
 package scene
 
 import (
-	"gameconstractor/scg/go/types"
 	"github.com/pkg/errors"
+	"github.com/thcompiler/go_game_constractor/scg/go/types"
 )
 
 var (

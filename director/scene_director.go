@@ -2,9 +2,9 @@ package director
 
 import (
 	"context"
-	"gameconstractor/director/scene"
-	"gameconstractor/marusia"
-	"gameconstractor/pkg/stack"
+	"github.com/thcompiler/go_game_constractor/director/scene"
+	"github.com/thcompiler/go_game_constractor/marusia"
+	"github.com/thcompiler/go_game_constractor/pkg/stack"
 	"strings"
 )
 
