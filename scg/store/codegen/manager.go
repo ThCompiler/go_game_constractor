@@ -23,7 +23,7 @@ func usecase(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codege
 	imports := []*codegen.ImportSpec{
 		{Path: path.Join(rootPkg, "store"), Name: "store"},
 		{Path: path.Join(rootPkg, "pkg", "str")},
-		{Path: path.Join(rootPkg, "pkg", "scene")},
+		codegen.SCGImport(path.Join("director", "scene")),
 		{Path: path.Join(rootPkg, "consts", "textsname"), Name: "consts"},
 	}
 
@@ -55,7 +55,7 @@ func managerInterface(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo
 
 	fpath := filepath.Join(rootDir, "manager", "interface.go")
 	imports := []*codegen.ImportSpec{
-		{Path: path.Join(rootPkg, "pkg", "scene")},
+		codegen.SCGImport(path.Join("director", "scene")),
 	}
 
 	sections = []*codegen.SectionTemplate{
@@ -122,12 +122,12 @@ const usecaseFuncStructT = ` {{ range $name, $scene := .Script }}
 		}
 		
 		res := scene.Text{
-			Text: str.StringFormat(text, args...),
-			TTS: str.StringFormat(tts, args...),
+			BaseText: str.StringFormat(text, args...),
+			TextToSpeech: str.StringFormat(tts, args...),
 		}{{ else }}
 		res := scene.Text{
-			Text: text,
-			TTS: tts,
+			BaseText: text,
+			TextToSpeech: tts,
 		} {{end}}
 
 		return res, nil
@@ -154,12 +154,12 @@ const usecaseFuncStructT = ` {{ range $name, $scene := .Script }}
 		}
 		
 		res := scene.Text{
-			Text: str.StringFormat(text, args...),
-			TTS: str.StringFormat(tts, args...),
+			BaseText: str.StringFormat(text, args...),
+			TextToSpeech: str.StringFormat(tts, args...),
 		}{{ else }}
 		res := scene.Text{
-			Text: text,
-			TTS: tts,
+			BaseText: text,
+			TextToSpeech: tts,
 		} {{end}}
 
 		return res, nil

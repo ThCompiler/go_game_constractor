@@ -36,7 +36,7 @@ func SCGImport(rel string) *ImportSpec {
 
 // SCGNamedImport creates an import for a Goa package with the given name.
 func SCGNamedImport(rel, name string) *ImportSpec {
-	root := "scg"
+	root := "github.com/ThCompiler/go_game_constractor"
 	if rel != "" {
 		rel = "/" + rel
 	}

@@ -9,6 +9,7 @@ import (
 type Script map[string]scene.Scene
 
 type ScriptInfo struct {
+	StartScene     string             `yaml:"startScene" json:"start_scene" xml:"startScene"`
 	Name           string             `yaml:"name" json:"name" xml:"name"`
 	GoodByeCommand string             `yaml:"goodByeCommand" json:"good_bye_command" xml:"goodByeCommand"`
 	GoodByeScene   scene.GoodByeScene `yaml:"goodByeScene" json:"good_bye_scene" xml:"goodByeScene"`
@@ -32,6 +33,10 @@ func (si *ScriptInfo) IsValid() (bool, error) {
 
 	if _, is = si.Script[si.GoodByeScene.Name]; is {
 		return false, errorNameSceneExists(si.GoodByeScene.Name)
+	}
+
+	if _, is = si.Script[si.StartScene]; !is {
+		return false, StartSceneNotFoundError
 	}
 
 	return false, nil

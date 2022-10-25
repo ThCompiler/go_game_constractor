@@ -1,4 +1,5 @@
 name: 'echo_game'
+startScene: "hello"
 goodByeCommand: "GoodeBye"
 goodByeScene:
   name: "goodbye"

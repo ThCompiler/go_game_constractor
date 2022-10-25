@@ -16,5 +16,5 @@ var Generators = generators
 
 // generators returns the generator functions exposed by the generator
 func generators() []Genfunc {
-	return []Genfunc{Store}
+	return []Genfunc{Store, Script}
 }
