@@ -1,0 +1,34 @@
+name: 'echo_game'
+goodByeCommand: "GoodeBye"
+goodByeScene:
+  name: "goodbye"
+  scene:
+    text:
+      string: "GoodyBye"
+      tts: "GoodyBye"
+    nextScene: 'goodByeScene'
+script:
+  hello:
+    text:
+      string: "Hello boy. Is number {number}"
+      tts: "Hello boy. Is number {number}"
+      values:
+        number: 'int64'
+    nextScene: 'echo'
+    isInfoScene: true
+  echo:
+    text:
+      string: "I will Repeat you word"
+      tts: "I will Repeat you word"
+    nextScene: 'echoRepeat'
+    matchers:
+      - 'any'
+  echoRepeat:
+    text:
+      string: "Hello boy. Is number {userText}"
+      tts: "Hello boy. Is number {userText}"
+      values:
+        userText: 'string'
+    nextScene: 'echoRepeat'
+    matchers:
+      - 'any'
