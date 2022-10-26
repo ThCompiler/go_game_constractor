@@ -45,7 +45,7 @@ func scriptStore(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.
 	var imports []*codegen.ImportSpec
 
 	sections = []*codegen.SectionTemplate{
-		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Interface for script store", "repository", imports, false),
+		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Interface for script store", "store", imports, false),
 	}
 
 	sections = append(sections, &codegen.SectionTemplate{

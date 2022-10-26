@@ -22,7 +22,7 @@ func saverStore(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 
 	fpath := filepath.Join(rootDir, "store", "storesaver", "init.go")
 	imports := []*codegen.ImportSpec{
-		{Path: path.Join(rootPkg, "repository"), Name: "store"},
+		{Path: path.Join(rootPkg, "store")},
 		{Path: path.Join(rootPkg, "consts", "textsname"), Name: "consts"},
 	}
 
@@ -41,13 +41,10 @@ func saverStore(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 		Source: checkInitStructT,
 	})
 
-	scenes := codegen.CopyStringMap(scriptInfo.Script)
-	scenes[scriptInfo.GoodByeScene.Name] = scriptInfo.GoodByeScene.Scene
-
 	sections = append(sections, &codegen.SectionTemplate{
 		Name:   "saver-script",
 		Source: saveStoreStructT,
-		Data:   scenes,
+		Data:   scriptInfo.Script,
 		FuncMap: map[string]interface{}{
 			"ToTitle": codegen.ToTitle,
 		},
@@ -59,6 +56,11 @@ func saverStore(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 	})
 
 	return &codegen.File{Path: fpath, SectionTemplates: sections}
+}
+
+type constData struct {
+	Scenes expr.Script
+	Name   string
 }
 
 func constName(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
@@ -76,13 +78,13 @@ func constName(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.Fi
 		Source: constTypeNameStructT,
 	})
 
-	scenes := codegen.CopyStringMap(scriptInfo.Script)
-	scenes[scriptInfo.GoodByeScene.Name] = scriptInfo.GoodByeScene.Scene
-
 	sections = append(sections, &codegen.SectionTemplate{
 		Name:   "const-name",
 		Source: constNamesStructT,
-		Data:   scenes,
+		Data: constData{
+			Scenes: scriptInfo.Script,
+			Name:   codegen.ToTitle(scriptInfo.Name),
+		},
 		FuncMap: map[string]interface{}{
 			"ToTitle": codegen.ToTitle,
 		},
@@ -115,10 +117,10 @@ const constTypeNameStructT = `type SceneTextName string
 `
 
 const constNamesStructT = `const (
-	{{ range $name, $scene := . }}
+	{{ $script_name := .Name }}{{ range $name, $scene := .Scenes }}
 		// {{ ToTitle $name }}Text and {{ ToTitle $name }}TTS of text for {{ ToTitle $name }} scene
-		{{ ToTitle $name }}Text = "{{ $name }}Text"
-		{{ ToTitle $name }}TTS = "{{ $name }}TTS"
+		{{ ToTitle $name }}Text = "{{ $script_name }}{{ $name }}Text"
+		{{ ToTitle $name }}TTS = "{{ $script_name }}{{ $name }}TTS"
 	{{ end }}
 )`
 

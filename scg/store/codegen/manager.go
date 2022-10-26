@@ -94,10 +94,6 @@ const scriptTextManagerT = `type TextManager interface {
 	range $nameVar, $typeVar := $scene.Text.Values}}{{$nameVar}} {{$typeVar}}{{
 	if not (IsLast $lenValues) }}, {{end}}{{end}}{{end}}) (scene.Text, error)
 	{{ end }}
-	// Get{{ ToTitle .GoodByeScene.Name }}Text get text for {{.GoodByeScene.Name}} scene with variables {{$lenValues := len .GoodByeScene.Text.Values}}
-	Get{{ ToTitle .GoodByeScene.Name }}Text({{ if $lenValues }}{{
-	range $nameVar, $typeVar := .GoodByeScene.Text.Values}}{{$nameVar}} {{$typeVar}}{{
-	if not (IsLast $lenValues) }}, {{end}}{{end}}{{end}}) (scene.Text, error)
 }
 `
 
@@ -117,7 +113,7 @@ const usecaseFuncStructT = ` {{ range $name, $scene := .Script }}
 		}
 		
 		{{ if $lenValues }} args := []interface{}{
-			{{range $nameVar, $typeVar := $scene.Text.Values}}{{$nameVar}},
+			{{range $nameVar, $typeVar := $scene.Text.Values}}"{{$nameVar}}", {{$nameVar}},
 			{{end}}
 		}
 		
@@ -133,37 +129,6 @@ const usecaseFuncStructT = ` {{ range $name, $scene := .Script }}
 		return res, nil
 	}
 	{{ end }}
-
-	// Get{{ ToTitle .GoodByeScene.Name }}Text get text for {{.GoodByeScene.Name}} scene with variables {{$lenValues := len .GoodByeScene.Text.Values}}
-	func (tu *TextUsecase) Get{{ ToTitle .GoodByeScene.Name }}Text({{ if $lenValues }}{{
-	range $nameVar, $typeVar := .GoodByeScene.Text.Values}}{{$nameVar}} {{$typeVar}}{{
-	if not (IsLast $lenValues) }}, {{end}}{{end}}{{end}}) (scene.Text, error) {
-		text, err := tu.store.GetText(consts.{{ ToTitle .GoodByeScene.Name }}Text)
-		if err != nil {
-			return scene.Text{}, nil
-		}
-
-		tts, err := tu.store.GetText(consts.{{ ToTitle .GoodByeScene.Name}}TTS)
-		if err != nil {
-			return scene.Text{}, nil
-		}
-		
-		{{ if $lenValues }} args := []interface{}{
-			{{range $nameVar, $typeVar := .GoodByeScene.Text.Values}}{{$nameVar}},
-			{{end}}
-		}
-		
-		res := scene.Text{
-			BaseText: str.StringFormat(text, args...),
-			TextToSpeech: str.StringFormat(tts, args...),
-		}{{ else }}
-		res := scene.Text{
-			BaseText: text,
-			TextToSpeech: tts,
-		} {{end}}
-
-		return res, nil
-	}
 `
 
 const usecaseTypeStructT = `type TextUsecase struct {

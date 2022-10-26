@@ -1,14 +1,13 @@
 name: 'echo_game'
 startScene: "hello"
 goodByeCommand: "GoodeBye"
-goodByeScene:
-  name: "goodbye"
-  scene:
+goodByeScene: "goodbye"
+script:
+  goodbye:
     text:
       string: "GoodyBye"
       tts: "GoodyBye"
-    nextScene: 'goodByeScene'
-script:
+    nextScene: 'goodbye'
   hello:
     text:
       string: "Hello boy. Is number {number}"
@@ -26,8 +25,8 @@ script:
       - 'any'
   echoRepeat:
     text:
-      string: "Hello boy. Is number {userText}"
-      tts: "Hello boy. Is number {userText}"
+      string: "You say {userText}"
+      tts: "You say {userText}"
       values:
         userText: 'string'
     nextScene: 'echoRepeat'

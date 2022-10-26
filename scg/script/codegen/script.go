@@ -76,16 +76,6 @@ func scriptScenes(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *c
 		})
 	}
 
-	sections = append(sections, &codegen.SectionTemplate{
-		Name:   "scene-struct-goodbye",
-		Source: sceneStructT,
-		Data:   scriptInfo.GoodByeScene,
-		FuncMap: map[string]interface{}{
-			"ToTitle":   codegen.ToTitle,
-			"CamelCase": codegen.CamelCase,
-		},
-	})
-
 	return &codegen.File{Path: fpath, SectionTemplates: sections}
 }
 
@@ -141,7 +131,7 @@ const GoodByeCommand = "{{ .GoodByeCommand }}"
 func New{{ ToTitle .Name }}Script(manager  manager.TextManager) game.SceneDirectorConfig {
 	return game.SceneDirectorConfig{
 		StartScene:   &{{ ToTitle .StartScene }}{manager},
-		GoodbyeScene: &{{ ToTitle .GoodByeScene.Name }}{manager},
+		GoodbyeScene: &{{ ToTitle .GoodByeScene }}{manager},
 		EndCommand:   GoodByeCommand,
 	}
 }
