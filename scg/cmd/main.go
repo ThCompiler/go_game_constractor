@@ -14,7 +14,7 @@ func main() {
 	var (
 		out     = flag.String("output", "", "")
 		script  = flag.String("script", "", "")
-		version = flag.String("version", "", "")
+		version = flag.Bool("version", true, "")
 	)
 	{
 		flag.Parse()
@@ -26,7 +26,7 @@ func main() {
 			fail("missing script flag")
 		}
 
-		if *version != "" {
+		if *version {
 			fmt.Print(go_game_constractor.Version)
 			return
 		}
