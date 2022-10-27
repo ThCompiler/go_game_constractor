@@ -21,9 +21,7 @@ jobs:
       - name: build
         run: make build
       - name: version
-        run: |
-          chmod +x ./workflow/version.sh
-          echo "version=$(./workflow/version.sh $(./bin/scg -version))" >> $GITHUB_OUTPUT
+        run: chmod +x ./workflow/version.sh && echo "version=$(./workflow/version.sh $(./bin/scg -version))" >> $GITHUB_OUTPUT
         shell: bash
         id: version
       - name: tag
