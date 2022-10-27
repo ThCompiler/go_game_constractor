@@ -15,8 +15,8 @@ ARCH=amd64
 VERSION=local
 
 
-.PHONY: build build-debug test install install-systemd clean release install-notify bin-dir
 
+.PHONY: build
 build: bin-dir
 	if [ -z "$(shell git status --porcelain)" ]; then \
 		go build -o $(BIN_DIR)/$(BIN) github.com/ThCompiler/go_game_constractor/scg/cmd ; \
@@ -25,6 +25,7 @@ build: bin-dir
 		echo Working directory not clean, commit changes; \
 	fi
 
+.PHONY: build-linux
 build-linux: bin-dir
 	if [ -z "$(shell git status --porcelain)" ]; then \
 		sed -i "s|${VERSION}|${VERSION} $(LINUX_OS)/$(ARCH)|" ./version.go; \
@@ -36,6 +37,7 @@ build-linux: bin-dir
 		echo Working directory not clean, commit changes; \
 	fi
 
+.PHONY: build-darwinr
 build-darwin: bin-dir
 	if [ -z "$(shell git status --porcelain)" ]; then \
 		sed -i "s|${VERSION}|${VERSION} $(MAC_OS)/$(ARCH)|" ./version.go; \
@@ -47,6 +49,7 @@ build-darwin: bin-dir
 		echo Working directory not clean, commit changes; \
 	fi
 
+.PHONY: build-windows
 build-windows: bin-dir
 	if [ -z "$(shell git status --porcelain)" ]; then \
 		sed -i "s|${VERSION}|${VERSION} $(WINDOWS_OS)/$(ARCH)|" ./version.go; \
@@ -58,9 +61,20 @@ build-windows: bin-dir
 		echo Working directory not clean, commit changes; \
 	fi
 
+.PHONY: bin-dir
 bin-dir:
 	mkdir -p $(BIN_DIR)
 
+.PHONY: release
 release:
 	git tag $(VERSION); \
 	git push origin $(VERSION)
+
+.PHONY: clean
+changelog:
+	sh ./workflow/changes.sh > CURRENT-CHANGELOG.md \
+
+.PHONY: clean
+clean:
+	echo "Cleaning..."; \
+	rm -Rf $(BUILD_DIR)

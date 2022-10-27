@@ -27,15 +27,17 @@ jobs:
         run: make build-linux VERSION=${{ steps.version.outputs.version }} && make build-windows VERSION=${{ steps.version.outputs.version }} && make build-darwin VERSION=${{ steps.version.outputs.version }}
       - name: tag
         run: make release VERSION=${{ steps.version.outputs.version }}
+      - name: tag
+        run: make changelog VERSION=${{ steps.version.outputs.version }}
       - name: release
         uses: actions/create-release@v1
         id: create_release
         with:
           draft: true
           prerelease: false
-          release_name: ${{ steps.version.outputs.version }}
-          tag_name: refs/tags/${{ steps.version.outputs.version }}
-          body_path: CHANGELOG.md
+          release_name: Release {{ steps.version.outputs.version }}
+          tag_name: ${{ steps.version.outputs.version }}
+          body_path: CURRENT-CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: upload linux artifact
@@ -65,3 +67,5 @@ jobs:
           asset_path: ./bin/scg.windows-amd64.zip
           asset_name: scg.windows-amd64.zip
           asset_content_type: application/zip
+      - name: clean
+        run: make clean
