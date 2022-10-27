@@ -7,7 +7,6 @@ MAC_OS=darwin
 ARCH=amd64
 VERSION=local
 
-
 .PHONY: build
 build: bin-dir
 	if [ -z "$(shell git status --porcelain)" ]; then \
