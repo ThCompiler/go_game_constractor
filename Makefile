@@ -61,6 +61,6 @@ build-windows: bin-dir
 bin-dir:
 	mkdir -p $(BIN_DIR)
 
-release: build
-	git tag $VERSION; \
-	git push origin $VERSION
+release:
+	git tag $(VERSION); \
+	git push origin $(VERSION)
