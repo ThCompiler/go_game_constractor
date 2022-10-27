@@ -15,7 +15,6 @@ ARCH=amd64
 VERSION=local
 
 
-
 .PHONY: build
 build: bin-dir
 	if [ -z "$(shell git status --porcelain)" ]; then \
@@ -77,4 +76,4 @@ changelog:
 .PHONY: clean
 clean:
 	echo "Cleaning..."; \
-	rm -Rf $(BUILD_DIR)
+	rm -Rf $(BIN_DIR)
