@@ -35,7 +35,7 @@ jobs:
         with:
           draft: true
           prerelease: false
-          release_name: Release {{ steps.version.outputs.version }}
+          release_name: Release ${{ steps.version.outputs.version }}
           tag_name: ${{ steps.version.outputs.version }}
           body_path: CURRENT-CHANGELOG.md
         env:
