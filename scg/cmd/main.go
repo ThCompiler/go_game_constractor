@@ -18,17 +18,17 @@ func main() {
 	)
 	{
 		flag.Parse()
+		if *version {
+			fmt.Print(go_game_constractor.Version)
+			return
+		}
+
 		if *out == "" {
 			fail("missing output flag")
 		}
 
 		if *script == "" {
 			fail("missing script flag")
-		}
-
-		if *version {
-			fmt.Print(go_game_constractor.Version)
-			return
 		}
 	}
 

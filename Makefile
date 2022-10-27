@@ -19,7 +19,6 @@ VERSION=local
 
 build: bin-dir
 	if [ -z "$(shell git status --porcelain)" ]; then \
-		sed -i "s|local|$(./workflow/version.sh aplha)|" ./version.go; \
 		go build -o $(BIN_DIR)/$(BIN) github.com/ThCompiler/go_game_constractor/scg/cmd ; \
 		git checkout -- ./version.go; \
 	else \
