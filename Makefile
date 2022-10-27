@@ -1,13 +1,6 @@
 BIN_DIR=./bin
 BIN=scg
 BIN_WINDOWS=scg.exe
-BIN_DEBUG=$(BIN).debug
-GCFLAGS_DEBUG="all=-N -l"
-SYSTEMD_DIR=~/.config/systemd/user
-NOTIFY_SCRIPT_DIR=./scripts
-NOTIFY_SCRIPT=notify.sh
-NOTIFY_SCRIPT_INSTALL_DIR=~
-INSTALL_LOCATION=~/bin
 WINDOWS_OS=windows
 LINUX_OS=linux
 MAC_OS=darwin

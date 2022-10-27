@@ -23,10 +23,10 @@ jobs:
       - name: version
         run: echo "version=$(sh ./workflow/version.sh $(./bin/scg -version))" >> $GITHUB_OUTPUT
         id: version
-      - name: build artifacts
-        run: make build-linux VERSION=${{ steps.version.outputs.version }} && make build-windows VERSION=${{ steps.version.outputs.version }} && make build-darwin VERSION=${{ steps.version.outputs.version }}
       - name: tag
         run: make release VERSION=${{ steps.version.outputs.version }}
+      - name: build artifacts
+        run: make build-linux VERSION=${{ steps.version.outputs.version }} && make build-windows VERSION=${{ steps.version.outputs.version }} && make build-darwin VERSION=${{ steps.version.outputs.version }}
       - name: tag
         run: make changelog VERSION=${{ steps.version.outputs.version }}
       - name: release
