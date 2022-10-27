@@ -63,7 +63,7 @@ release:
 
 .PHONY: clean
 changelog:
-	sh ./workflow/changes.sh > CURRENT-CHANGELOG.md \
+	bash ./workflow/changes.sh > CURRENT-CHANGELOG.md \
 
 .PHONY: clean
 clean:

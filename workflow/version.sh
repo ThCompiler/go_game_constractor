@@ -13,7 +13,9 @@ else
     LATEST_TAG="v0.0.0"
 fi
 
-if [  "${VERSION}" = "${LATEST_TAG}" ]; then
+echo $LATEST_TAG
+
+if [[  "${LATEST_TAG}" == "${VERSION}"* ]]; then
     echo "$VERSION-$(git rev-list HEAD --max-count=1 --abbrev-commit)"
 else
     echo "$VERSION"
