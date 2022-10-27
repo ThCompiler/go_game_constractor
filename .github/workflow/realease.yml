@@ -2,7 +2,7 @@ name: release
 
 on:
   push:
-    branches: [dev/aplha/0.0.1/workflow]
+    branches: [dev/alpha/0.0.1/workflow]
 
 jobs:
   build_release:
