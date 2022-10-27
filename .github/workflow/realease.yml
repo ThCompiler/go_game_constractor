@@ -1,0 +1,66 @@
+name: release
+
+on:
+  push:
+    branches: [dev/aplha/0.0.1/workflow]
+
+jobs:
+  build_release:
+    name: build_release
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: build
+        run: make build
+      - name: version
+        run: echo "::set-output name=version::$(sh ./workflow/version.sg $(./bin/scg --version))"
+        id: version
+      - name: build artifacts
+        run: make build-linux VERSION=${{ steps.version.outputs.version }} && make build-windows VERSION=${{ steps.version.outputs.version }} && make build-darwin VERSION=${{ steps.version.outputs.version }}
+      - name: tag
+        run: make release VERSION=${{ steps.version.outputs.version }}
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: true
+          prerelease: false
+          release_name: ${{ steps.version.outputs.version }}
+          tag_name: refs/tags/${{ steps.version.outputs.version }}
+          body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: upload linux artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/scg.linux-amd64.tar.gz
+          asset_name: scg.linux-amd64.tar.gz
+          asset_content_type: application/gzip
+      - name: upload darwin artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/scg.darwin-amd64.tar.gz
+          asset_name: scg.darwin-amd64.tar.gz
+          asset_content_type: application/gzip
+      - name: upload windows artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/scg.windows-amd64.zip
+          asset_name: scg.windows-amd64.zip
+          asset_content_type: application/zip

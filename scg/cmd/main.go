@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/ThCompiler/go_game_constractor"
 	"github.com/ThCompiler/go_game_constractor/scg/expr"
 	"github.com/ThCompiler/go_game_constractor/scg/generator"
 	"os"
@@ -11,8 +12,9 @@ import (
 
 func main() {
 	var (
-		out    = flag.String("output", "", "")
-		script = flag.String("script", "", "")
+		out     = flag.String("output", "", "")
+		script  = flag.String("script", "", "")
+		version = flag.String("version", "", "")
 	)
 	{
 		flag.Parse()
@@ -22,6 +24,11 @@ func main() {
 
 		if *script == "" {
 			fail("missing script flag")
+		}
+
+		if *version != "" {
+			fmt.Print(go_game_constractor.Version)
+			return
 		}
 	}
 
