@@ -1,6 +1,6 @@
 BIN_DIR=./bin
 BIN=scg
-BIN_WINDOWS=azblogfilter.exe
+BIN_WINDOWS=scg.exe
 BIN_DEBUG=$(BIN).debug
 GCFLAGS_DEBUG="all=-N -l"
 SYSTEMD_DIR=~/.config/systemd/user
