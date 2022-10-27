@@ -17,7 +17,7 @@ jobs:
       - name: build
         run: make build
       - name: version
-        run: echo "::set-output name=version::$(sh ./workflow/version.sg $(./bin/scg --version))"
+        run: echo "::set-output name=version::$(sh ./workflows/version.sg $(./bin/scg --version))"
         id: version
       - name: build artifacts
         run: make build-linux VERSION=${{ steps.version.outputs.version }} && make build-windows VERSION=${{ steps.version.outputs.version }} && make build-darwin VERSION=${{ steps.version.outputs.version }}
