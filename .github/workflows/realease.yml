@@ -74,7 +74,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: release-artifacts
-          path: .
+          path: ./bin
       - name: load-release-changelog
         uses: actions/download-artifact@master
         with:
