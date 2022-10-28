@@ -1,0 +1,122 @@
+name: release
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  prepare_changelog:
+    name: prepare_changelog
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.19
+      - name: build
+        run: make build
+      - name: version
+        run: echo "version=$(bash ./workflow/version.sh $(./bin/scg -version))" >> $GITHUB_OUTPUT
+        id: version
+      - name: changelog
+        run: make changelog VERSION=$(./bin/scg -version)
+      - uses: actions/upload-artifact@v3
+        with:
+          name: release-changelog
+          path: ./CURRENT-CHANGELOG.md
+      - name: clean
+        run: make clean
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+  build_release:
+    name: build_release
+    needs: prepare_changelog
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.19
+      - name: build artifacts
+        run: |
+          make build-linux VERSION=${{ needs.prepare_changelog.outputs.version }}
+          make build-windows VERSION=${{ needs.prepare_changelog.outputs.version }}
+          make build-darwin VERSION=${{ needs.prepare_changelog.outputs.version }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: release-artifacts
+          path: |
+            ./bin/*.tar.gz
+            ./bin/*.zip
+      - name: clean
+        run: make clean
+  publish_release:
+    name: publish_release
+    needs: [prepare_changelog, build_release]
+    environment:
+      name: app-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: load-release-artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: release-artifacts
+          path: ./bin
+      - name: load-release-changelog
+        uses: actions/download-artifact@master
+        with:
+          name: release-changelog
+          path: .
+      - name: tag
+        run: make release VERSION=${{ needs.prepare_changelog.outputs.version }}
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: true
+          prerelease: false
+          release_name: Release ${{ needs.prepare_changelog.outputs.version }}
+          tag_name: ${{ needs.prepare_changelog.outputs.version }}
+          body_path: ./CURRENT-CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: upload linux artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/scg.linux-amd64.tar.gz
+          asset_name: scg.linux-amd64.tar.gz
+          asset_content_type: application/gzip
+      - name: upload darwin artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/scg.darwin-amd64.tar.gz
+          asset_name: scg.darwin-amd64.tar.gz
+          asset_content_type: application/gzip
+      - name: upload windows artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/scg.windows-amd64.zip
+          asset_name: scg.windows-amd64.zip
+          asset_content_type: application/zip
