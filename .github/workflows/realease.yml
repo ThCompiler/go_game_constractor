@@ -61,7 +61,7 @@ jobs:
         run: make clean
   publish_release:
     name: publish_release
-    needs: build_release
+    needs: [prepare_changelog, build_release]
     environment:
       name: app-release
     runs-on: ubuntu-latest
