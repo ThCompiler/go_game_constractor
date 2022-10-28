@@ -2,7 +2,7 @@ name: release
 
 on:
   push:
-    branch:
+    branches:
       - 'main'
 
 jobs:
@@ -75,11 +75,13 @@ jobs:
         with:
           name: release-artifacts
           path: .
-      - name: load-release-artifacts
+      - name: load-release-changelog
         uses: actions/download-artifact@master
         with:
           name: release-changelog
           path: .
+      - run: ls -la
+      - run: ls -la ./bin
       - name: tag
         run: make release VERSION=${{ needs.prepare_changelog.outputs.version }}
       - name: release
