@@ -11,7 +11,6 @@ VERSION=local
 build: bin-dir
 	if [ -z "$(shell git status --porcelain)" ]; then \
 		go build -o $(BIN_DIR)/$(BIN) github.com/ThCompiler/go_game_constractor/scg/cmd ; \
-		git checkout -- ./version.go; \
 	else \
 		echo Working directory not clean, commit changes; \
 	fi
@@ -63,7 +62,7 @@ release:
 
 .PHONY: clean
 changelog:
-	bash ./workflow/changes.sh > CURRENT-CHANGELOG.md \
+	sh ./workflow/changes.sh $(VERSION) > CURRENT-CHANGELOG.md
 
 .PHONY: clean
 clean:

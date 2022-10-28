@@ -29,7 +29,7 @@ jobs:
           make build-windows VERSION=${{ steps.version.outputs.version }}
           make build-darwin VERSION=${{ steps.version.outputs.version }}
       - name: changelog
-        run: make changelog VERSION=$(./bin/scg -version) > CURRENT-CHANGELOG.md
+        run: make changelog VERSION=$(./bin/scg -version)
       - uses: actions/upload-artifact@v3
         with:
           name: release-artifacts

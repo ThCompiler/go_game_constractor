@@ -19,7 +19,7 @@ func main() {
 	{
 		flag.Parse()
 		if *version {
-			fmt.Print(go_game_constractor.Version)
+			fmt.Printf(go_game_constractor.Version)
 			return
 		}
 
