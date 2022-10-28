@@ -29,7 +29,7 @@ jobs:
           make build-windows VERSION=${{ steps.version.outputs.version }}
           make build-darwin VERSION=${{ steps.version.outputs.version }}
       - name: changelog
-        run: make changelog VERSION=$(./bin/scg -version) >> CURRENT-CHANGELOG.md
+        run: make changelog VERSION=$(./bin/scg -version) > CURRENT-CHANGELOG.md
       - uses: actions/upload-artifact@v3
         with:
           name: release-artifacts
@@ -67,7 +67,7 @@ jobs:
           prerelease: false
           release_name: Release ${{ needs.build_release.outputs.version }}
           tag_name: ${{ needs.build_release.outputs.version }}
-          body_path: CURRENT-CHANGELOG.md
+          body_path: ./CURRENT-CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: upload linux artifact
