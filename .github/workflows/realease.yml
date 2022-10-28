@@ -3,7 +3,7 @@ name: release
 on:
   push:
     branches:
-      - 'main'
+      - 'dev/alpha/0.0.1/workflow'
 
 jobs:
   prepare_changelog:
