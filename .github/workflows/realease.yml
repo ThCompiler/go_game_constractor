@@ -3,7 +3,7 @@ name: release
 on:
   push:
     branches:
-      - 'dev/alpha/0.0.1/workflow'
+      - 'main'
 
 jobs:
   prepare_changelog:
@@ -80,10 +80,6 @@ jobs:
         with:
           name: release-changelog
           path: .
-      - name: create-source-code
-        run: |
-          zip -9 -y source-code.zip ./director ./marusia ./pkg ./scg ./.gitignore ./README.md ./CHANGELOG.md ./LICENSE ./go.mod ./Makefile ./version.go
-          tar -czvf source-code.tar.gz ./director ./marusia ./pkg ./scg ./.gitignore ./README.md ./CHANGELOG.md ./LICENSE ./go.mod ./Makefile ./version.go
       - name: tag
         run: make release VERSION=${{ needs.prepare_changelog.outputs.version }}
       - name: release
@@ -124,21 +120,3 @@ jobs:
           asset_path: ./bin/scg.windows-amd64.zip
           asset_name: scg.windows-amd64.zip
           asset_content_type: application/zip
-      - name: upload source code zip
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./source-code.zip
-          asset_name: Source code.zip
-          asset_content_type: application/zip
-      - name: upload source code tag
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./source-code.tag.gz
-          asset_name: Source code.tag.gz
-          asset_content_type: application/gzip
