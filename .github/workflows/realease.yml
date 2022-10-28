@@ -3,11 +3,11 @@ name: release
 on:
   push:
     branch:
-      - 'dev/alpha/0.0.1/workflow'
+      - 'main'
 
 jobs:
-  build_release:
-    name: build_release
+  prepare_changelog:
+    name: prepare_changelog
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -23,24 +23,42 @@ jobs:
       - name: version
         run: echo "version=$(bash ./workflow/version.sh $(./bin/scg -version))" >> $GITHUB_OUTPUT
         id: version
-      - name: build artifacts
-        run: | 
-          make build-linux VERSION=${{ steps.version.outputs.version }}
-          make build-windows VERSION=${{ steps.version.outputs.version }}
-          make build-darwin VERSION=${{ steps.version.outputs.version }}
       - name: changelog
         run: make changelog VERSION=$(./bin/scg -version)
+      - uses: actions/upload-artifact@v3
+        with:
+          name: release-changelog
+          path: ./CURRENT-CHANGELOG.md
+      - name: clean
+        run: make clean
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+  build_release:
+    name: build_release
+    needs: prepare_changelog
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.19
+      - name: build artifacts
+        run: |
+          make build-linux VERSION=${{ needs.prepare_changelog.outputs.version }}
+          make build-windows VERSION=${{ needs.prepare_changelog.outputs.version }}
+          make build-darwin VERSION=${{ needs.prepare_changelog.outputs.version }}
       - uses: actions/upload-artifact@v3
         with:
           name: release-artifacts
           path: |
             ./bin/*.tar.gz
             ./bin/*.zip
-            ./CURRENT-CHANGELOG.md
       - name: clean
         run: make clean
-    outputs:
-      version: ${{ steps.version.outputs.version }}
   publish_release:
     name: publish_release
     needs: build_release
@@ -57,16 +75,21 @@ jobs:
         with:
           name: release-artifacts
           path: .
+      - name: load-release-artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: release-changelog
+          path: .
       - name: tag
-        run: make release VERSION=${{ needs.build_release.outputs.version }}
+        run: make release VERSION=${{ needs.prepare_changelog.outputs.version }}
       - name: release
         uses: actions/create-release@v1
         id: create_release
         with:
           draft: true
           prerelease: false
-          release_name: Release ${{ needs.build_release.outputs.version }}
-          tag_name: ${{ needs.build_release.outputs.version }}
+          release_name: Release ${{ needs.prepare_changelog.outputs.version }}
+          tag_name: ${{ needs.prepare_changelog.outputs.version }}
           body_path: ./CURRENT-CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}
