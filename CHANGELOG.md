@@ -8,7 +8,7 @@ This is the initial release.
 * Generate text manager for script, that can add to text vars
 * Generate base structs for scenes
 
-## 0.0.5-alpha
+## 0.0.6-alpha
 
 Some modification and addition of new functionality.
 

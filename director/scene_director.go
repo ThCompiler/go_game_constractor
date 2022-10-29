@@ -123,6 +123,8 @@ func (so *ScriptDirector) reactSceneCommand(command scene.Command) {
 		so.isEndOfScript = true
 		so.currentScene = so.currentScene.Next()
 		break
+	default:
+		so.currentScene = so.currentScene.Next()
 	}
 }
 
