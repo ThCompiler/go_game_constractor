@@ -1,4 +1,6 @@
-## 0.0.1-alpha
+## 0.0.2-alpha
+
+This is the initial release.
 
 ### Supported
 
@@ -6,11 +8,24 @@
 * Generate text manager for script, that can add to text vars
 * Generate base structs for scenes
 
-## 0.0.1
+## 0.0.5-alpha
 
-This is the initial release.
+Some modification and addition of new functionality.
 
-### Known issues
+### Added
 
-* Failure handling is far from ideal
-* Operations can take long time to complete
+* Converts lib number to words and words to number
+* Generate custom matchers
+* Generate custom text error
+* Generate structs for buttons payload
+* Support for button descriptions in scenes
+* Support for error descriptions in scenes
+* Support for matchers descriptions in scenes
+* New positive number matcher with converting words to number
+* CI for repository
+* The application can show its version using the flag ``--version``
+
+### Changes
+
+* Now the goodbye scene described in the body of the script. Only its name is written in the script settings.
+* The generated files are overwritten when the application is re-executed

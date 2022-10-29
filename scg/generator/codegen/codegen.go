@@ -1,5 +1,7 @@
 package codegen
 
+// Code based on goa generator: https://github.com/goadesign/goa
+
 import (
 	"bytes"
 	"fmt"
@@ -86,6 +88,13 @@ func (f *File) Render(dir string) (string, error) {
 		return "", err
 	}
 
+	if _, err = os.Stat(path); err == nil {
+		err = os.Remove(path)
+		if err != nil {
+			return "", err
+		}
+	}
+
 	file, err := os.OpenFile(
 		path,
 		os.O_CREATE|os.O_APPEND|os.O_WRONLY,
@@ -94,6 +103,7 @@ func (f *File) Render(dir string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	for _, s := range f.SectionTemplates {
 		if err = s.Write(file); err != nil {
 			return "", err

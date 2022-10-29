@@ -7,6 +7,10 @@ MAC_OS=darwin
 ARCH=amd64
 VERSION=local
 
+.PHONY: local-build
+local-build: bin-dir
+	go build -o $(BIN_DIR)/$(BIN) github.com/ThCompiler/go_game_constractor/scg/cmd
+
 .PHONY: build
 build: bin-dir
 	if [ -z "$(shell git status --porcelain)" ]; then \

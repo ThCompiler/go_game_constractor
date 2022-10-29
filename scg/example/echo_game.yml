@@ -16,6 +16,8 @@ script:
         number: 'int64'
     nextScene: 'echo'
     isInfoScene: true
+    error:
+      scene: "goodbye"
   echo:
     text:
       string: "I will Repeat you word"
@@ -23,6 +25,8 @@ script:
     nextScene: 'echoRepeat'
     matchers:
       - 'any'
+    error:
+      base: "number"
   echoRepeat:
     text:
       string: "You say {userText}"
@@ -32,3 +36,13 @@ script:
     nextScene: 'echoRepeat'
     matchers:
       - 'any'
+      - name: "Checked"
+        regex: "*"
+      - name: "Agreed"
+        selects:
+          - "da"
+          - "no"
+        replaceMessage: "Da"
+    error:
+      name: "dore"
+      text: "dore"

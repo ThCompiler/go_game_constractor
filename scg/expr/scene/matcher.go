@@ -20,69 +20,97 @@ type RegexMatcher struct {
 }
 
 type SelectMatcher struct {
-	Name    string   `yaml:"name" json:"name" xml:"name"`
-	Selects []string `yaml:"selects_in" json:"selects" xml:"selects"`
+	Name           string   `yaml:"name" json:"name" xml:"name"`
+	Selects        []string `yaml:"selects" json:"selects" xml:"selects"`
+	ReplaceMessage string   `yaml:"replaceMessage" json:"replaceMessage" xml:"replaceMessage"`
 }
 
 type Matcher struct {
-	name          string `yaml:"name" json:"name" xml:"name"`
+	name          string
 	regexMatcher  *RegexMatcher
 	selectMatcher *SelectMatcher
 	typeMatch     typeMatcher
 }
 
-func (m *Matcher) getRegexMatcher() (*RegexMatcher, error) {
-	if m.isRegexMatcher() {
+func (m *Matcher) GetRegexMatcher() (*RegexMatcher, error) {
+	if m.IsRegexMatcher() {
 		return m.regexMatcher, nil
 	}
 	return nil, errorIsNotRegexMatcher
 }
 
-func (m *Matcher) getSelectsMatcher() (*SelectMatcher, error) {
-	if m.isRegexMatcher() {
+func (m *Matcher) GetSelectsMatcher() (*SelectMatcher, error) {
+	if m.IsSelectMatcher() {
 		return m.selectMatcher, nil
 	}
 	return nil, errorIsNotSelectsMatcher
 }
 
-func (m *Matcher) getStandardMatcher() (string, error) {
-	if m.isRegexMatcher() {
+func (m *Matcher) GetStandardMatcher() (string, error) {
+	if m.IsDefaultMatcher() {
 		return m.name, nil
 	}
 	return "", errorIsNotStandardMatcher
 }
 
-func (m *Matcher) isRegexMatcher() bool {
-	return m.typeMatch&regex == 1
+func (m *Matcher) MustSelectsMatcher() SelectMatcher {
+	if m.IsSelectMatcher() {
+		return *m.selectMatcher
+	}
+	panic(errorIsNotSelectsMatcher)
 }
 
-func (m *Matcher) isSelectMatcher() bool {
-	return m.typeMatch&selects == 1
+func (m *Matcher) MustRegexMatcher() RegexMatcher {
+	if m.IsRegexMatcher() {
+		return *m.regexMatcher
+	}
+	panic(errorIsNotRegexMatcher)
 }
 
-func (m *Matcher) isDefaultMatcher() bool {
+func (m *Matcher) MustStandardMatcher() string {
+	if m.IsDefaultMatcher() {
+		return m.name
+	}
+	panic(errorIsNotStandardMatcher)
+}
+
+func (m *Matcher) IsRegexMatcher() bool {
+	return m.typeMatch == regex
+}
+
+func (m *Matcher) IsSelectMatcher() bool {
+	return m.typeMatch == selects
+}
+
+func (m *Matcher) IsDefaultMatcher() bool {
 	return m.typeMatch == standard
 }
 
 func (m *Matcher) UnmarshalYAML(n *yaml.Node) error {
+	tmp := make(map[string]interface{})
 	var err error
-	if err = n.Decode(&m.regexMatcher); err == nil {
-		m.typeMatch = regex
-		return nil
+	if err = n.Decode(&tmp); err != nil {
+		if err = n.Decode(&m.name); err == nil {
+			m.typeMatch = standard
+			return nil
+		}
+		m.name = ""
+		return err
 	}
-	m.regexMatcher = nil
 
-	if err = n.Decode(&m.selectMatcher); err == nil {
-		m.typeMatch = selects
-		return nil
+	if len(tmp) == 2 {
+		if err = n.Decode(&m.regexMatcher); err == nil {
+			m.typeMatch = regex
+			return nil
+		}
+		m.regexMatcher = nil
+	} else {
+		if err = n.Decode(&m.selectMatcher); err == nil {
+			m.typeMatch = selects
+			return nil
+		}
+		m.selectMatcher = nil
 	}
-	m.selectMatcher = nil
-
-	if err = n.Decode(&m.name); err == nil {
-		m.typeMatch = standard
-		return nil
-	}
-	m.name = ""
 
 	return err
 }

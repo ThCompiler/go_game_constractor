@@ -3,7 +3,6 @@ package codegen
 import (
 	"github.com/ThCompiler/go_game_constractor/scg/expr"
 	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-	"path"
 	"path/filepath"
 )
 
@@ -16,14 +15,14 @@ func ScriptStoreFiles(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo
 }
 
 // client returns the files defining the gRPC client.
-func repository(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func repository(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "store", "redis", "repository.go")
 	imports := []*codegen.ImportSpec{
-		{Path: "github.com/gomodule/redigo/redis"},
+		{Path: "github.com/go-redis/redis/v8", Name: "redis"},
+		{Path: "context"},
 		{Path: "github.com/pkg/errors"},
-		{Path: path.Join(rootPkg, "pkg", "logger")},
 	}
 
 	sections = []*codegen.SectionTemplate{
@@ -60,35 +59,26 @@ const scriptStoreT = `type ScriptStore interface {
 	GetText(name string) (string, error)
 	SetText(name string, value string) error
 	DeleteText(name string) error
+	GetAllTextKeyForScript(name string) ([]string, error)
 }
 `
 
-const scriptRedisRepositoryT = `
-type ScriptRepository struct {
-	redisPool *redis.Pool
-	lg        logger.LogFunc
+const scriptRedisRepositoryT = `type ScriptRepository struct {
+	rdc *redis.Client
+	ctx context.Context
 }
 
-func NewScriptRepository(pool *redis.Pool, lg logger.LogFunc) *ScriptRepository {
+func NewScriptRepository(RedisClient *redis.Client) *ScriptRepository {
 	return &ScriptRepository{
-		redisPool: pool,
-		lg:        lg,
+		rdc: RedisClient,
+		ctx: context.Background(),
 	}
 }
 
 func (repo *ScriptRepository) SetText(name string, value string) error {
-	con := repo.redisPool.Get()
-	defer func(con redis.Conn) {
-		err := con.Close()
-		if err != nil {
-			repo.lg(errors.Wrapf(err, "Unsuccessful close connection to redis in set func with key: %s and value: %s",
-				name, value).Error())
-		}
-	}(con)
+	err := repo.rdc.Set(repo.ctx, name, value, 0).Err()
 
-	res, err := redis.String(con.Do("SET", name, value))
-
-	if res != "OK" {
+	if err != nil {
 		return errors.Wrapf(err,
 			"error when try add value with key: %s, and value: %s", name, value)
 	}
@@ -97,16 +87,7 @@ func (repo *ScriptRepository) SetText(name string, value string) error {
 }
 
 func (repo *ScriptRepository) GetText(name string) (string, error) {
-	con := repo.redisPool.Get()
-	defer func(con redis.Conn) {
-		err := con.Close()
-		if err != nil {
-			repo.lg(errors.Wrapf(err, "Unsuccessful close connection to redis in get func with key: %s ",
-				name).Error())
-		}
-	}(con)
-
-	res, err := redis.String(con.Do("GET", name))
+	res, err := repo.rdc.Get(repo.ctx, name).Result()
 	if err != nil {
 		return "", errors.Wrapf(err,
 			"error when try get value with key: %s", name)
@@ -116,16 +97,7 @@ func (repo *ScriptRepository) GetText(name string) (string, error) {
 }
 
 func (repo *ScriptRepository) DeleteText(name string) error {
-	con := repo.redisPool.Get()
-	defer func(con redis.Conn) {
-		err := con.Close()
-		if err != nil {
-			repo.lg(errors.Wrapf(err, "Unsuccessful close connection to redis in delete func with key: %s ",
-				name).Error())
-		}
-	}(con)
-
-	_, err := redis.Int(con.Do("DEL", name))
+	err := repo.rdc.Del(repo.ctx, name).Err()
 
 	if err != nil {
 		return errors.Wrapf(err,
@@ -134,4 +106,19 @@ func (repo *ScriptRepository) DeleteText(name string) error {
 
 	return nil
 }
+
+func (repo *ScriptRepository) GetAllTextKeyForScript(name string) ([]string, error) {
+	res := make([]string, 0)
+	iter := repo.rdc.Scan(repo.ctx, 0, name+"-*", 0).Iterator()
+	for iter.Next(repo.ctx) {
+		res = append(res, iter.Val())
+	}
+
+	if err := iter.Err(); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
 `

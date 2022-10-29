@@ -33,7 +33,7 @@ func saverStore(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 	sections = append(sections, &codegen.SectionTemplate{
 		Name:   "const-key",
 		Source: constInitStructT,
-		Data:   scriptInfo.Name + "-" + uuid.New().String(),
+		Data:   codegen.ToTitle(scriptInfo.Name) + "-" + uuid.New().String(),
 	})
 
 	sections = append(sections, &codegen.SectionTemplate{
@@ -45,6 +45,15 @@ func saverStore(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 		Name:   "saver-script",
 		Source: saveStoreStructT,
 		Data:   scriptInfo.Script,
+		FuncMap: map[string]interface{}{
+			"ToTitle": codegen.ToTitle,
+		},
+	})
+
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "deleter-old-scripts",
+		Source: clearOldStoreStructT,
+		Data:   scriptInfo,
 		FuncMap: map[string]interface{}{
 			"ToTitle": codegen.ToTitle,
 		},
@@ -117,10 +126,10 @@ const constTypeNameStructT = `type SceneTextName string
 `
 
 const constNamesStructT = `const (
-	{{ $script_name := .Name }}{{ range $name, $scene := .Scenes }}
+	{{ $script_name := ToTitle .Name }}{{ range $name, $scene := .Scenes }}
 		// {{ ToTitle $name }}Text and {{ ToTitle $name }}TTS of text for {{ ToTitle $name }} scene
-		{{ ToTitle $name }}Text = "{{ $script_name }}{{ $name }}Text"
-		{{ ToTitle $name }}TTS = "{{ $script_name }}{{ $name }}TTS"
+		{{ ToTitle $name }}Text = "{{ $script_name }}-{{ ToTitle $name }}Text"
+		{{ ToTitle $name }}TTS = "{{ $script_name }}-{{ ToTitle $name }}TTS"
 	{{ end }}
 )`
 
@@ -155,8 +164,23 @@ func saveScripts(st store.ScriptStore) error {
 
 {{ end }}
 	// Set info of saving text
-	if err = st.SetText(checkKey, ""); err != nil {
+	if err = st.SetText(checkKey, checkKey); err != nil {
 		return err
+	}
+
+	return nil
+}
+`
+
+const clearOldStoreStructT = `func clearOldStores(st store.ScriptStore) error {
+	// Get all keys for currentScript of saving text
+	keys, err := st.GetAllTextKeyForScript("{{ ToTitle .Name }}");
+	if err != nil {
+		return err
+	}
+	
+	for _, key := range keys {
+		_ = st.DeleteText(key)
 	}
 
 	return nil
@@ -169,6 +193,10 @@ func SaveScripts(st store.ScriptStore) error {
 		return ScriptAlreadySaveError
 	}
 	
+	err := clearOldStores(st)
+	if err != nil {
+		return err
+	} 
 	return saveScripts(st)
 }
 `

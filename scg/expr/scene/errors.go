@@ -2,7 +2,10 @@ package scene
 
 import (
 	"github.com/ThCompiler/go_game_constractor/scg/go/types"
+	errors2 "github.com/ThCompiler/go_game_constractor/scg/script/errors"
+	"github.com/ThCompiler/go_game_constractor/scg/script/matchers"
 	"github.com/pkg/errors"
+	"strings"
 )
 
 var (
@@ -20,4 +23,14 @@ func errorNotFoundValueInText(notFoundValue string) error {
 	return errors.New("this value \"" + notFoundValue +
 		"\" not found in text. Correct name of value {" + notFoundValue + "}, " +
 		"written without space and bounded by curly braces")
+}
+
+func errorNotSupportedMatherType(matcherName string) error {
+	return errors.New("this matcher name \"" + matcherName +
+		"\" not supported. Supported mathers is: " + strings.Join(matchers.GetSupportedNames(), ", "))
+}
+
+func errorNotSupportedErrorType(errorName string) error {
+	return errors.New("this base error name \"" + errorName +
+		"\" not supported. Supported base errors is: " + strings.Join(errors2.GetSupportedNames(), ", "))
 }

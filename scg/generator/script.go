@@ -10,6 +10,8 @@ import (
 func Script(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) ([]*codegen.File, error) {
 	var files []*codegen.File
 
+	files = append(files, scriptcodegen.MatchersFile(rootPkg, rootDir, scriptInfo)...)
+	files = append(files, scriptcodegen.ErrorsFile(rootPkg, rootDir, scriptInfo)...)
 	files = append(files, scriptcodegen.ScriptFile(rootPkg, rootDir, scriptInfo)...)
 
 	return files, nil
