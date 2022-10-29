@@ -6,6 +6,7 @@ const (
 	NoCommand         = Command(0)
 	ApplyStashedScene = Command(1)
 	FinishScene       = Command(2)
+	StashScene        = Command(3)
 )
 
 type Button struct {

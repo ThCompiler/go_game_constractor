@@ -17,12 +17,11 @@ Some modification and addition of new functionality.
 * Converts lib number to words and words to number
 * Generate custom matchers
 * Generate custom text error
-* Generate structs for buttons payload
-* Support for button descriptions in scenes
 * Support for error descriptions in scenes
 * Support for matchers descriptions in scenes
 * New positive number matcher with converting words to number
 * CI for repository
+* New coomand for scene. *StashScene* for stashing current scene
 * The application can show its version using the flag ``--version``
 
 ### Changes
