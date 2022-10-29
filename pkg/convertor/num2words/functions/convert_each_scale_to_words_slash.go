@@ -90,7 +90,7 @@ func convertOtherScaleToWordsSlash(scaleToConvert objects.NumericDigitTriplet, s
 	}
 	/* Если весь класс равен === 001
 	   и до него не было значений */
-	if scaleToConvert == (objects.NumericDigitTriplet{1, 0, 0}) && isAloneScale {
+	if scaleToConvert == (objects.NumericDigitTriplet{Units: 1, Dozens: 0, Hundreds: 0}) && isAloneScale {
 		// Получится "тысячная" вместо "однотысячная".
 		convertedScale.Units = ""
 	}

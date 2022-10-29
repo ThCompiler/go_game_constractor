@@ -2,9 +2,9 @@ package words
 
 import (
 	"fmt"
+	"github.com/ThCompiler/go_game_constractor/pkg/cleanenv"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/currency"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words/languages"
-	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type wordConstants struct {

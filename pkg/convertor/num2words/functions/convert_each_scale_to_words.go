@@ -27,7 +27,7 @@ func ConvertEachScaleToWords(
 		currentNumberScale := numberScalesArrayLen - arrIndex
 
 		digits := numberScale.ToNumeric()
-		stringDigits := objects.StringDigitTriplet{"", "", ""}
+		stringDigits := objects.StringDigitTriplet{Units: "", Dozens: "", Hundreds: ""}
 
 		// Если класс числа пустой (000)
 		if digits.IsZeros() {
