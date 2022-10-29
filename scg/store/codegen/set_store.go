@@ -22,7 +22,7 @@ func saverStore(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 
 	fpath := filepath.Join(rootDir, "store", "storesaver", "init.go")
 	imports := []*codegen.ImportSpec{
-		{Path: path.Join(rootPkg, "repository"), Name: "store"},
+		{Path: path.Join(rootPkg, "store")},
 		{Path: path.Join(rootPkg, "consts", "textsname"), Name: "consts"},
 	}
 
@@ -33,7 +33,7 @@ func saverStore(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 	sections = append(sections, &codegen.SectionTemplate{
 		Name:   "const-key",
 		Source: constInitStructT,
-		Data:   scriptInfo.Name + "-" + uuid.New().String(),
+		Data:   codegen.ToTitle(scriptInfo.Name) + "-" + uuid.New().String(),
 	})
 
 	sections = append(sections, &codegen.SectionTemplate{
@@ -41,13 +41,19 @@ func saverStore(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 		Source: checkInitStructT,
 	})
 
-	scenes := codegen.CopyStringMap(scriptInfo.Script)
-	scenes[scriptInfo.GoodByeScene.Name] = scriptInfo.GoodByeScene.Scene
-
 	sections = append(sections, &codegen.SectionTemplate{
 		Name:   "saver-script",
 		Source: saveStoreStructT,
-		Data:   scenes,
+		Data:   scriptInfo.Script,
+		FuncMap: map[string]interface{}{
+			"ToTitle": codegen.ToTitle,
+		},
+	})
+
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "deleter-old-scripts",
+		Source: clearOldStoreStructT,
+		Data:   scriptInfo,
 		FuncMap: map[string]interface{}{
 			"ToTitle": codegen.ToTitle,
 		},
@@ -59,6 +65,11 @@ func saverStore(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 	})
 
 	return &codegen.File{Path: fpath, SectionTemplates: sections}
+}
+
+type constData struct {
+	Scenes expr.Script
+	Name   string
 }
 
 func constName(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
@@ -76,13 +87,13 @@ func constName(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.Fi
 		Source: constTypeNameStructT,
 	})
 
-	scenes := codegen.CopyStringMap(scriptInfo.Script)
-	scenes[scriptInfo.GoodByeScene.Name] = scriptInfo.GoodByeScene.Scene
-
 	sections = append(sections, &codegen.SectionTemplate{
 		Name:   "const-name",
 		Source: constNamesStructT,
-		Data:   scenes,
+		Data: constData{
+			Scenes: scriptInfo.Script,
+			Name:   codegen.ToTitle(scriptInfo.Name),
+		},
 		FuncMap: map[string]interface{}{
 			"ToTitle": codegen.ToTitle,
 		},
@@ -115,10 +126,10 @@ const constTypeNameStructT = `type SceneTextName string
 `
 
 const constNamesStructT = `const (
-	{{ range $name, $scene := . }}
+	{{ $script_name := ToTitle .Name }}{{ range $name, $scene := .Scenes }}
 		// {{ ToTitle $name }}Text and {{ ToTitle $name }}TTS of text for {{ ToTitle $name }} scene
-		{{ ToTitle $name }}Text = "{{ $name }}Text"
-		{{ ToTitle $name }}TTS = "{{ $name }}TTS"
+		{{ ToTitle $name }}Text = "{{ $script_name }}-{{ ToTitle $name }}Text"
+		{{ ToTitle $name }}TTS = "{{ $script_name }}-{{ ToTitle $name }}TTS"
 	{{ end }}
 )`
 
@@ -153,8 +164,23 @@ func saveScripts(st store.ScriptStore) error {
 
 {{ end }}
 	// Set info of saving text
-	if err = st.SetText(checkKey, ""); err != nil {
+	if err = st.SetText(checkKey, checkKey); err != nil {
 		return err
+	}
+
+	return nil
+}
+`
+
+const clearOldStoreStructT = `func clearOldStores(st store.ScriptStore) error {
+	// Get all keys for currentScript of saving text
+	keys, err := st.GetAllTextKeyForScript("{{ ToTitle .Name }}");
+	if err != nil {
+		return err
+	}
+	
+	for _, key := range keys {
+		_ = st.DeleteText(key)
 	}
 
 	return nil
@@ -167,6 +193,10 @@ func SaveScripts(st store.ScriptStore) error {
 		return ScriptAlreadySaveError
 	}
 	
+	err := clearOldStores(st)
+	if err != nil {
+		return err
+	} 
 	return saveScripts(st)
 }
 `

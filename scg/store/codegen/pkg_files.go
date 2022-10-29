@@ -9,10 +9,9 @@ import (
 // PkgFiles returns files for pkg dir
 func PkgFiles(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	interfaceLogFile := loggerInterfaces(rootPkg, rootDir, scriptInfo)
-	sceneTextFile := sceneText(rootPkg, rootDir, scriptInfo)
 	stringFormatFile := stringFormat(rootPkg, rootDir, scriptInfo)
 
-	return []*codegen.File{interfaceLogFile, sceneTextFile, stringFormatFile}
+	return []*codegen.File{interfaceLogFile, stringFormatFile}
 }
 
 func loggerInterfaces(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
@@ -28,24 +27,6 @@ func loggerInterfaces(_ string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 	sections = append(sections, &codegen.SectionTemplate{
 		Name:   "logger-interface",
 		Source: loggerStructT,
-	})
-
-	return &codegen.File{Path: fpath, SectionTemplates: sections}
-}
-
-func sceneText(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-	var sections []*codegen.SectionTemplate
-
-	fpath := filepath.Join(rootDir, "pkg", "scene", "text.go")
-	var imports []*codegen.ImportSpec
-
-	sections = []*codegen.SectionTemplate{
-		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Text struct for scene", "scene", imports, false),
-	}
-
-	sections = append(sections, &codegen.SectionTemplate{
-		Name:   "scene-text",
-		Source: sceneTextStructT,
 	})
 
 	return &codegen.File{Path: fpath, SectionTemplates: sections}
@@ -81,12 +62,6 @@ type Interface interface {
 	Warn(message string, args ...interface{})
 	Error(message interface{}, args ...interface{})
 	Fatal(message interface{}, args ...interface{})
-}
-`
-
-const sceneTextStructT = `type Text struct {
-	Text string
-	TTS string
 }
 `
 

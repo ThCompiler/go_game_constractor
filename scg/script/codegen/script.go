@@ -4,11 +4,13 @@ import (
 	"github.com/ThCompiler/go_game_constractor/scg/expr"
 	"github.com/ThCompiler/go_game_constractor/scg/expr/scene"
 	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+	errors2 "github.com/ThCompiler/go_game_constractor/scg/script/errors"
+	"github.com/ThCompiler/go_game_constractor/scg/script/matchers"
 	"path"
 	"path/filepath"
 )
 
-// ScriptFile returns saved text with add values from store
+// ScriptFile returns structs for script
 func ScriptFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	directorConfigFile := directorConfig(rootPkg, rootDir, scriptInfo)
 	scriptFile := scriptScenes(rootPkg, rootDir, scriptInfo)
@@ -53,6 +55,9 @@ func scriptScenes(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *c
 	fpath := filepath.Join(rootDir, "script", "script.go")
 	imports := []*codegen.ImportSpec{
 		codegen.SCGImport(path.Join("director", "scene")),
+		codegen.SCGNamedImport(path.Join("director", "matchers"), "base_matchers"),
+		{Path: path.Join(rootPkg, "script", "matchers")},
+		{Path: path.Join(rootPkg, "script", "errors")},
 		{Path: path.Join(rootPkg, "manager")},
 	}
 
@@ -70,21 +75,13 @@ func scriptScenes(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *c
 			Source: sceneStructT,
 			Data:   sc,
 			FuncMap: map[string]interface{}{
-				"ToTitle":   codegen.ToTitle,
-				"CamelCase": codegen.CamelCase,
+				"ToTitle":              codegen.ToTitle,
+				"CamelCase":            codegen.CamelCase,
+				"ConvertNameToMatcher": matchers.ConvertNameToMatcher,
+				"ConvertNameToError":   errors2.ConvertNameToError,
 			},
 		})
 	}
-
-	sections = append(sections, &codegen.SectionTemplate{
-		Name:   "scene-struct-goodbye",
-		Source: sceneStructT,
-		Data:   scriptInfo.GoodByeScene,
-		FuncMap: map[string]interface{}{
-			"ToTitle":   codegen.ToTitle,
-			"CamelCase": codegen.CamelCase,
-		},
-	})
 
 	return &codegen.File{Path: fpath, SectionTemplates: sections}
 }
@@ -116,24 +113,34 @@ const sceneStructT = `type {{ ToTitle .Name }} struct {
 	}
 	
 	func (sc *{{ ToTitle .Name }}) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
-		//TODO
-		
-		var (
+		{{ if .Text.Values }}var (
 			{{range $nameVar, $typeVar := .Text.Values}}{{$nameVar}} {{$typeVar}}
 			{{end}}
 		)
-		
+		{{end}}
+		//TODO
+
 		text, _ := sc.TextManager.Get{{ ToTitle .Name }}Text(
 			{{range $nameVar, $typeVar := .Text.Values}}{{$nameVar}},
 			{{end}})
 		return scene.Info{
 			Text: text,
-			ExpectedMessages: []scene.MessageMatcher{},
+			ExpectedMessages: []scene.MessageMatcher{ ` + sceneMatchersStructT + ` },
 			Buttons: []scene.Button{},
-			Err: &scene.BaseSceneError{},
+			{{ if .Scene.Error.IsValid }}Err: ` + sceneErrorsStructT + `,{{end}}
 		}, true
 	}
 `
+
+const sceneMatchersStructT = `{{ range .Matchers }}
+	{{ if .IsDefaultMatcher }} base_matchers.{{ConvertNameToMatcher .MustStandardMatcher}},{{end}}{{
+	if .IsRegexMatcher }} matchers.{{ToTitle (.MustRegexMatcher).Name}}Matcher,{{end}}{{
+	if .IsSelectMatcher }} matchers.{{ToTitle (.MustSelectsMatcher).Name}}Matcher,{{end}}{{end}} {{if .Matchers}}
+{{end}}`
+
+const sceneErrorsStructT = `{{with .Scene.Error}}{{ if .IsBase }} base_matchers.{{ConvertNameToError .Base}}{{end}}{{
+	if .IsText }} errors.{{ToTitle .Name}}Error{{end}}{{
+	if .IsScene }}  scene.BaseSceneError{ Scene: &{{ToTitle .Scene}}{TextManager: sc.TextManager} }{{end}}{{end}}`
 
 const directorConfigStruct = `
 const GoodByeCommand = "{{ .GoodByeCommand }}"
@@ -141,7 +148,7 @@ const GoodByeCommand = "{{ .GoodByeCommand }}"
 func New{{ ToTitle .Name }}Script(manager  manager.TextManager) game.SceneDirectorConfig {
 	return game.SceneDirectorConfig{
 		StartScene:   &{{ ToTitle .StartScene }}{manager},
-		GoodbyeScene: &{{ ToTitle .GoodByeScene.Name }}{manager},
+		GoodbyeScene: &{{ ToTitle .GoodByeScene }}{manager},
 		EndCommand:   GoodByeCommand,
 	}
 }

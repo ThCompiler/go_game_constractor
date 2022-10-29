@@ -9,19 +9,14 @@ import (
 type Script map[string]scene.Scene
 
 type ScriptInfo struct {
-	StartScene     string             `yaml:"startScene" json:"start_scene" xml:"startScene"`
-	Name           string             `yaml:"name" json:"name" xml:"name"`
-	GoodByeCommand string             `yaml:"goodByeCommand" json:"good_bye_command" xml:"goodByeCommand"`
-	GoodByeScene   scene.GoodByeScene `yaml:"goodByeScene" json:"good_bye_scene" xml:"goodByeScene"`
-	Script         Script             `yaml:"script" json:"script" xml:"script"`
+	StartScene     string `yaml:"startScene" json:"start_scene" xml:"startScene"`
+	Name           string `yaml:"name" json:"name" xml:"name"`
+	GoodByeCommand string `yaml:"goodByeCommand" json:"good_bye_command" xml:"goodByeCommand"`
+	GoodByeScene   string `yaml:"goodByeScene" json:"good_bye_scene" xml:"goodByeScene"`
+	Script         Script `yaml:"script" json:"script" xml:"script"`
 }
 
-func (si *ScriptInfo) IsValid() (bool, error) {
-	is, err := si.GoodByeScene.IsValid()
-	if !is {
-		return is, err
-	}
-
+func (si *ScriptInfo) IsValid() (is bool, err error) {
 	for _, sc := range si.Script {
 		if is, err = sc.IsValid(); !is {
 			break
@@ -31,8 +26,8 @@ func (si *ScriptInfo) IsValid() (bool, error) {
 		return is, err
 	}
 
-	if _, is = si.Script[si.GoodByeScene.Name]; is {
-		return false, errorNameSceneExists(si.GoodByeScene.Name)
+	if _, is = si.Script[si.GoodByeScene]; !is {
+		return false, StartSceneNotFoundError
 	}
 
 	if _, is = si.Script[si.StartScene]; !is {

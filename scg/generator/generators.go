@@ -15,6 +15,9 @@ type Genfunc func(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) ([
 var Generators = generators
 
 // generators returns the generator functions exposed by the generator
-func generators() []Genfunc {
+func generators(update bool) []Genfunc {
+	if update {
+		return []Genfunc{Store}
+	}
 	return []Genfunc{Store, Script}
 }

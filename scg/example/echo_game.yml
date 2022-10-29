@@ -1,14 +1,13 @@
 name: 'echo_game'
 startScene: "hello"
 goodByeCommand: "GoodeBye"
-goodByeScene:
-  name: "goodbye"
-  scene:
+goodByeScene: "goodbye"
+script:
+  goodbye:
     text:
       string: "GoodyBye"
       tts: "GoodyBye"
-    nextScene: 'goodByeScene'
-script:
+    nextScene: 'goodbye'
   hello:
     text:
       string: "Hello boy. Is number {number}"
@@ -17,6 +16,8 @@ script:
         number: 'int64'
     nextScene: 'echo'
     isInfoScene: true
+    error:
+      scene: "goodbye"
   echo:
     text:
       string: "I will Repeat you word"
@@ -24,12 +25,24 @@ script:
     nextScene: 'echoRepeat'
     matchers:
       - 'any'
+    error:
+      base: "number"
   echoRepeat:
     text:
-      string: "Hello boy. Is number {userText}"
-      tts: "Hello boy. Is number {userText}"
+      string: "You say {userText}"
+      tts: "You say {userText}"
       values:
         userText: 'string'
     nextScene: 'echoRepeat'
     matchers:
       - 'any'
+      - name: "Checked"
+        regex: "*"
+      - name: "Agreed"
+        selects:
+          - "da"
+          - "no"
+        replaceMessage: "Da"
+    error:
+      name: "dore"
+      text: "dore"

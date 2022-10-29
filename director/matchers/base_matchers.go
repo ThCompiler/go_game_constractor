@@ -1,10 +1,8 @@
 package matchers
 
-import "github.com/ThCompiler/go_game_constractor/director/scene"
-
-const (
-	positiveNumberErrorString = "Я не знаю такого положительного числа"
-	numberErrorString         = "Я не знаю такого положительного числа"
+import (
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words2num"
+	"strconv"
 )
 
 var (
@@ -12,12 +10,6 @@ var (
 	PositiveNumberMatcher = NewRegexMather(`^\+?(0*[1-9]\d*(?:[\., ]\d+)*) *(?:\p{Sc}|°[FC])?$`)
 	AnyMatcher            = NewRegexMather(`.*`)
 	FirstWord             = NewRegexMather(`[^\s]+`)
-	PositiveNumberError   = scene.BaseTextError{
-		Message: positiveNumberErrorString,
-	}
-	NumberError = scene.BaseTextError{
-		Message: numberErrorString,
-	}
 )
 
 const (
@@ -35,3 +27,12 @@ var (
 		AgreeString,
 	)
 )
+
+type NumberMatchers struct{}
+
+func (nm NumberMatchers) Match(message string) (bool, string) {
+	res, _ := words2num.Convert(message)
+	return res != 0, strconv.FormatInt(res, 10)
+}
+
+var PositiveNumberInWordsMatcher = NumberMatchers{}

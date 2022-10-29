@@ -1,5 +1,7 @@
 package codegen
 
+// Code based on goa generator: https://github.com/goadesign/goa
+
 import (
 	"bytes"
 	"os"

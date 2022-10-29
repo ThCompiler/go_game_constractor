@@ -1,5 +1,7 @@
 package codegen
 
+// Code based on goa generator: https://github.com/goadesign/goa
+
 // Header returns a Go source file header section template.
 func Header(title, pack string, imports []*ImportSpec, allowEdit bool) *SectionTemplate {
 	return &SectionTemplate{

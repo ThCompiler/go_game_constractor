@@ -1,5 +1,7 @@
 package generator
 
+// Code based on goa generator: https://github.com/goadesign/goa
+
 import (
 	"github.com/ThCompiler/go_game_constractor/scg/expr"
 	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
@@ -11,7 +13,7 @@ import (
 )
 
 // Generate runs the code generation algorithms.
-func Generate(dir string, scriptInfo expr.ScriptInfo) (outputs []string, err1 error) {
+func Generate(dir string, scriptInfo expr.ScriptInfo, update bool) (outputs []string, err1 error) {
 	pkgName := strings.ToLower(codegen.CamelCase(scriptInfo.Name, false, false))
 	// 1. Compute start package import path.
 	var rootPkg string
@@ -51,7 +53,7 @@ func Generate(dir string, scriptInfo expr.ScriptInfo) (outputs []string, err1 er
 	}
 
 	// 2. Retrieve scg generators
-	genfuncs := Generators()
+	genfuncs := Generators(update)
 
 	// 3. Generate initial set of files produced by goa code generators.
 	var genfiles []*codegen.File

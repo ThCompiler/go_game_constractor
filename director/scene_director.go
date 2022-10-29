@@ -43,7 +43,6 @@ func (so *ScriptDirector) PlayScene(req SceneRequest) Result {
 	case marusia.OnInterrupt, strings.ToLower(so.cf.EndCommand):
 		so.stashedScene.Push(so.currentScene)
 		sceneCmd := so.cf.GoodbyeScene.React(ctx)
-		so.currentScene = so.cf.GoodbyeScene.Next()
 		so.reactSceneCommand(sceneCmd)
 
 	default:
@@ -51,7 +50,6 @@ func (so *ScriptDirector) PlayScene(req SceneRequest) Result {
 		if cmd != "" {
 			ctx.Request.SearchedMessage = cmd
 			sceneCmd := so.currentScene.React(ctx)
-			so.currentScene = so.currentScene.Next()
 			so.reactSceneCommand(sceneCmd)
 		} else {
 			Err = sceneInfo.Err
@@ -112,6 +110,10 @@ func (so *ScriptDirector) baseSceneInfo(currentScene scene.Scene, ctx *scene.Con
 
 func (so *ScriptDirector) reactSceneCommand(command scene.Command) {
 	switch command {
+	case scene.StashScene:
+		so.stashedScene.Push(so.currentScene)
+		so.currentScene = so.currentScene.Next()
+		break
 	case scene.ApplyStashedScene:
 		if !so.stashedScene.Empty() {
 			so.currentScene, _ = so.stashedScene.Pop()
@@ -119,6 +121,7 @@ func (so *ScriptDirector) reactSceneCommand(command scene.Command) {
 		break
 	case scene.FinishScene:
 		so.isEndOfScript = true
+		so.currentScene = so.currentScene.Next()
 		break
 	}
 }
