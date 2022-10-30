@@ -20,10 +20,7 @@ type Goodbye struct {
 }
 
 // React function of actions after scene has been played
-// >>>>>>> Generated 
-// func (sc *Goodbye) React(_ *scene.Context) scene.Command {
-// >>>>>>> Generated 
-func (sc *Goodbye) React(ctx *scene.Context) scene.Command {
+func (sc *Goodbye) React(_ *scene.Context) scene.Command {
 	// TODO Write the actions after Goodbye scene has been played
 
 	sc.NextScene = GoodbyeScene // TODO: manually set next scene after reaction
@@ -45,10 +42,7 @@ func (sc *Goodbye) Next() scene.Scene {
 }
 
 // Next function returning info about scene
-// >>>>>>> Generated 
-// func (sc *Goodbye) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
-// >>>>>>> Generated 
-func (sc *Goodbye) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
+func (sc *Goodbye) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 
 	//TODO Write some actions for get data for texts
 

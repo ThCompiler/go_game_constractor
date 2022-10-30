@@ -22,10 +22,7 @@ type Echo struct {
 }
 
 // React function of actions after scene has been played
-// >>>>>>> Generated 
-// func (sc *Echo) React(_ *scene.Context) scene.Command {
-// >>>>>>> Generated 
-func (sc *Echo) React(ctx *scene.Context) scene.Command {
+func (sc *Echo) React(_ *scene.Context) scene.Command {
 	// TODO Write the actions after Echo scene has been played
 
 	sc.NextScene = EchoScene // TODO: manually set next scene after reaction
@@ -47,10 +44,7 @@ func (sc *Echo) Next() scene.Scene {
 }
 
 // Next function returning info about scene
-// >>>>>>> Generated 
-// func (sc *Echo) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
-// >>>>>>> Generated 
-func (sc *Echo) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
+func (sc *Echo) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 
 	//TODO Write some actions for get data for texts
 

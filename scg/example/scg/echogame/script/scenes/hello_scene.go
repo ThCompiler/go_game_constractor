@@ -20,10 +20,7 @@ type Hello struct {
 }
 
 // React function of actions after scene has been played
-// >>>>>>> Generated 
-// func (sc *Hello) React(_ *scene.Context) scene.Command {
-// >>>>>>> Generated 
-func (sc *Hello) React(ctx *scene.Context) scene.Command {
+func (sc *Hello) React(_ *scene.Context) scene.Command {
 	// TODO Write the actions after Hello scene has been played
 
 	sc.NextScene = HelloScene // TODO: manually set next scene after reaction
@@ -45,10 +42,7 @@ func (sc *Hello) Next() scene.Scene {
 }
 
 // Next function returning info about scene
-// >>>>>>> Generated 
-// func (sc *Hello) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
-// >>>>>>> Generated 
-func (sc *Hello) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
+func (sc *Hello) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 	var (
 		number int64
 	)

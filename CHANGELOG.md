@@ -31,7 +31,6 @@ Some modification and addition of new functionality.
 
 ## 0.1.0-alpha
 
-
 ### Added
 
 * Auto generated of choose next scene

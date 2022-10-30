@@ -11,11 +11,10 @@ package scenes
 import (
 	base_matchers "github.com/ThCompiler/go_game_constractor/director/matchers"
 	"github.com/ThCompiler/go_game_constractor/director/scene"
+	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/manager"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/script/errors"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/script/matchers"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/script/payloads"
-
-	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/manager"
 )
 
 // EchoRepeat scene
@@ -25,16 +24,10 @@ type EchoRepeat struct {
 }
 
 // React function of actions after scene has been played
-// >>>>>>> Generated 
-// func (sc *EchoRepeat) React(_ *scene.Context) scene.Command {
-// >>>>>>> Generated 
-func (sc *EchoRepeat) React(ctx *scene.Context) scene.Command {
+func (sc *EchoRepeat) React(_ *scene.Context) scene.Command {
 	// TODO Write the actions after EchoRepeat scene has been played
 
-// >>>>>>> Generated 
-// 	sc.NextScene = EchoRepeatScene // TODO: manually set next scene after reaction
-// >>>>>>> Generated 
-	sc.NextScene = GoodbyeScene // TODO: manually set next scene after reaction
+	sc.NextScene = EchoRepeatScene // TODO: manually set next scene after reaction
 	return scene.NoCommand
 }
 
@@ -56,12 +49,8 @@ func (sc *EchoRepeat) Next() scene.Scene {
 	}
 }
 
-// >>>>>>> Generated 
-// // Next function returning info about scene
-// func (sc *EchoRepeat) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
-// >>>>>>> Generated 
-// GetSceneInfo function returning info about scene
-func (sc *EchoRepeat) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
+// Next function returning info about scene
+func (sc *EchoRepeat) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 	var (
 		userText string
 	)

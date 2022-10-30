@@ -9,11 +9,14 @@ Function for constart game based on script for voice assistent. Example Marusia
 ```(cmd)
 scg --output=./scg/ --script=./scg/example/echo_game.yml
 ```
+
+### Description
+
 #### Args:
-- `--output` - path to dir where need generate files
-- `--script` - path to config file
-- `--version` - show program version
-- `--update` - save user changes in files
+- `-o` `--output=file` - path to dir where need generate files
+- `-s` `--script` - path to config file
+- `-v` `--version` - show program version
+- `-u` `--update` - save user changes in files
 
 #### Note:
 With the `--update` flag, user changes are saved unchanged. 
@@ -21,7 +24,8 @@ Comments are embedded in the code with the code that was generated based on the 
 These comments are limited to the lines ```// >>>>>>> Generated```.
 The decision to apply the changes remains with you, as well as the decision to remove unnecessary functionality.
 
-Example of comments:
+#### Example of comments:
+
 ```go
 package example
 
