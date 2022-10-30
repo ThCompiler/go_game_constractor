@@ -6,15 +6,16 @@ import (
 )
 
 type Scene struct {
-	Text        Text      `yaml:"text" json:"text" xml:"text"`
-	NextScene   string    `yaml:"nextScene" json:"next_scene" xml:"nextScene"`
-	IsInfoScene bool      `yaml:"isInfoScene,omitempty" json:"is_info_scene,omitempty" xml:"isInfoScene,omitempty"`
-	Matchers    []Matcher `yaml:"matchers,omitempty" json:"matchers,omitempty" xml:"matchers,omitempty"`
-	Error       Error     `yaml:"error,omitempty" json:"error,omitempty" xml:"error,omitempty"`
-	Buttons     []Button  `yaml:"buttons,omitempty" json:"buttons,omitempty" xml:"buttons,omitempty"`
+	Text        Text              `yaml:"text" json:"text" xml:"text"`
+	NextScenes  []string          `yaml:"nextScenes,omitempty" json:"next_scenes,omitempty" xml:"nextScenes,omitempty"`
+	IsInfoScene bool              `yaml:"isInfoScene,omitempty" json:"is_info_scene,omitempty" xml:"isInfoScene,omitempty"`
+	Matchers    []Matcher         `yaml:"matchers,omitempty" json:"matchers,omitempty" xml:"matchers,omitempty"`
+	Error       Error             `yaml:"error,omitempty" json:"error,omitempty" xml:"error,omitempty"`
+	Buttons     map[string]Button `yaml:"buttons,omitempty" json:"buttons,omitempty" xml:"buttons,omitempty"`
 }
 
 func (s *Scene) IsValid() (bool, error) {
+
 	is, err := s.isMatchersValid()
 
 	if !is {

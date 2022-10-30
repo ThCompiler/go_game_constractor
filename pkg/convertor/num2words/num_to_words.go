@@ -21,33 +21,33 @@ func Convert(number interface{}, options Options) (string, error) {
 }
 
 func convertNumberToString(number interface{}) string {
-	switch number.(type) {
+	switch convertNumber := number.(type) {
 	case string:
-		return number.(string)
+		return convertNumber
 	case int:
-		return strconv.FormatInt(int64(number.(int)), 10)
+		return strconv.FormatInt(int64(convertNumber), 10)
 	case int8:
-		return strconv.FormatInt(int64(number.(int8)), 10)
+		return strconv.FormatInt(int64(convertNumber), 10)
 	case int16:
-		return strconv.FormatInt(int64(number.(int16)), 10)
+		return strconv.FormatInt(int64(convertNumber), 10)
 	case int32:
-		return strconv.FormatInt(int64(number.(int32)), 10)
+		return strconv.FormatInt(int64(convertNumber), 10)
 	case int64:
-		return strconv.FormatInt(number.(int64), 10)
+		return strconv.FormatInt(convertNumber, 10)
 	case uint:
-		return strconv.FormatUint(uint64(number.(uint)), 10)
+		return strconv.FormatUint(uint64(convertNumber), 10)
 	case uint8:
-		return strconv.FormatUint(uint64(number.(uint8)), 10)
+		return strconv.FormatUint(uint64(convertNumber), 10)
 	case uint16:
-		return strconv.FormatUint(uint64(number.(uint16)), 10)
+		return strconv.FormatUint(uint64(convertNumber), 10)
 	case uint32:
-		return strconv.FormatUint(uint64(number.(uint32)), 10)
+		return strconv.FormatUint(uint64(convertNumber), 10)
 	case uint64:
-		return strconv.FormatUint(number.(uint64), 10)
+		return strconv.FormatUint(convertNumber, 10)
 	case float32:
-		return strconv.FormatFloat(float64(number.(float32)), 'f', -1, 32)
+		return strconv.FormatFloat(float64(convertNumber), 'f', -1, 32)
 	case float64:
-		return strconv.FormatFloat(number.(float64), 'f', -1, 64)
+		return strconv.FormatFloat(convertNumber, 'f', -1, 64)
 	default:
 		return ""
 	}

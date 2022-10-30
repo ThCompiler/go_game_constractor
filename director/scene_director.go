@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// ScriptDirector - implementation game director for script games
 type ScriptDirector struct {
 	stashedScene  stack.Stack[scene.Scene]
 	currentScene  scene.Scene
@@ -16,6 +17,7 @@ type ScriptDirector struct {
 	cf            SceneDirectorConfig
 }
 
+// NewScriptDirector - create new ScriptDirector
 func NewScriptDirector(cf SceneDirectorConfig) *ScriptDirector {
 	return &ScriptDirector{
 		stashedScene:  stack.NewStack[scene.Scene](),
@@ -26,6 +28,7 @@ func NewScriptDirector(cf SceneDirectorConfig) *ScriptDirector {
 	}
 }
 
+// PlayScene - .
 func (so *ScriptDirector) PlayScene(req SceneRequest) Result {
 	ctx := req.toSceneContext(so.ctx)
 
@@ -113,16 +116,13 @@ func (so *ScriptDirector) reactSceneCommand(command scene.Command) {
 	case scene.StashScene:
 		so.stashedScene.Push(so.currentScene)
 		so.currentScene = so.currentScene.Next()
-		break
 	case scene.ApplyStashedScene:
 		if !so.stashedScene.Empty() {
 			so.currentScene, _ = so.stashedScene.Pop()
 		}
-		break
 	case scene.FinishScene:
 		so.isEndOfScript = true
 		so.currentScene = so.currentScene.Next()
-		break
 	default:
 		so.currentScene = so.currentScene.Next()
 	}

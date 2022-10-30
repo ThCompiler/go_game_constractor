@@ -125,15 +125,16 @@ func convertLastScaleToWordsSlash(scaleToConvert objects.NumericDigitTriplet,
 
 	// Получить объект для выбора формы последнего разряда
 	lastDigitDeclensionsObject := words.WordConstants.N2w.OrdinalNumbers.Hundreds
-	if scaleToConvert.Units != 0 { // если разряд сотен
+	switch {
+	case scaleToConvert.Units != 0: // если разряд единиц
 		scaleForCommonConvert.Units = 0
 		digitToConvert = scaleToConvert.Units
 		lastDigitDeclensionsObject = words.WordConstants.N2w.OrdinalNumbers.Units
-	} else if scaleToConvert.Dozens != 0 { // если разряд десятков
+	case scaleToConvert.Dozens != 0: // если разряд десятков
 		scaleForCommonConvert.Dozens = 0
 		digitToConvert = scaleToConvert.Dozens
 		lastDigitDeclensionsObject = words.WordConstants.N2w.OrdinalNumbers.Dozens
-	} else {
+	default: // если разряд сотен
 		scaleForCommonConvert.Hundreds = 0
 	}
 

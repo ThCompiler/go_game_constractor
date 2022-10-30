@@ -15,7 +15,7 @@ func MatchersFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []
 	return []*codegen.File{mathersFile}
 }
 
-func generateMatchers(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateMatchers(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "script", "matchers", "matchers.go")
@@ -71,7 +71,7 @@ func generateMatchers(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo
 		},
 	})
 
-	return &codegen.File{Path: fpath, SectionTemplates: sections}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
 const regexMatchersStructT = `{{ if . }}// RegexMatchers

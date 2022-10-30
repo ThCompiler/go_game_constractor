@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/ChimeraCoder/gojson"
+	"strings"
 )
 
 // ConvertToGoStruct generate golang struct on any unknown types in string
-func ConvertToGoStruct(str interface{}, structName string, packageName string) (string, error) {
+func ConvertToGoStruct(str interface{}, structName string) (string, error) {
 	// imagine any struct as json
 	jsonStr, err := json.Marshal(str)
 	if err != nil {
@@ -20,7 +21,7 @@ func ConvertToGoStruct(str interface{}, structName string, packageName string) (
 		r,
 		gojson.ParseJson,
 		structName,
-		packageName,
+		structName,
 		[]string{"json"},
 		true,
 		true,
@@ -30,6 +31,7 @@ func ConvertToGoStruct(str interface{}, structName string, packageName string) (
 		return "", er
 	}
 
+	res := strings.SplitN(string(result[:]), "\n\n", 2)
 	// convert out to string
-	return string(result[:]), nil
+	return res[1], nil
 }

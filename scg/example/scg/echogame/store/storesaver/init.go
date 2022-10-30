@@ -9,11 +9,11 @@
 package storesaver
 
 import (
-	consts "github.com/ThCompiler/go_game_constractor/scg/scg/echogame/consts/textsname"
-	"github.com/ThCompiler/go_game_constractor/scg/scg/echogame/store"
+	consts "github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/consts/textsname"
+	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/store"
 )
 
-const checkKey = "EchoGame-2be1ba61-e579-441e-9f81-09e1245c36b3"
+const checkKey = "EchoGame-9442eb86-8199-4ed0-b770-818c483b344d"
 
 func checkScriptStore(st store.ScriptStore) bool {
 	text, err := st.GetText(checkKey)

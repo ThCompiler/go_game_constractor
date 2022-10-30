@@ -50,7 +50,7 @@ func usecase(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codege
 	return &codegen.File{Path: fpath, SectionTemplates: sections}
 }
 
-func managerInterface(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func managerInterface(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "manager", "interface.go")

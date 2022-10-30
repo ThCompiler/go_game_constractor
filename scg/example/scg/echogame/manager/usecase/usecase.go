@@ -10,9 +10,9 @@ package usecase
 
 import (
 	"github.com/ThCompiler/go_game_constractor/director/scene"
-	consts "github.com/ThCompiler/go_game_constractor/scg/scg/echogame/consts/textsname"
-	"github.com/ThCompiler/go_game_constractor/scg/scg/echogame/pkg/str"
-	store "github.com/ThCompiler/go_game_constractor/scg/scg/echogame/store"
+	consts "github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/consts/textsname"
+	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/pkg/str"
+	store "github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/store"
 )
 
 type TextUsecase struct {

@@ -22,9 +22,23 @@ Some modification and addition of new functionality.
 * New positive number matcher with converting words to number
 * CI for repository
 * New coomand for scene. *StashScene* for stashing current scene
-* The application can show its version using the flag ``--version``
+* The application can show its version using the ``--version`` flag
 
 ### Changes
 
 * Now the goodbye scene described in the body of the script. Only its name is written in the script settings.
 * The generated files are overwritten when the application is re-executed
+
+## 0.1.0-alpha
+
+### Added
+
+* Auto generated of choose next scene
+* Auto generated of button payloads
+* Button support
+* Saving user changes in script structures after its regeneration with the ``--update`` flag
+
+### Changes
+
+* Moved example to another dir
+* Without the ``--update`` flag, all files will be regenerated with loss of changes

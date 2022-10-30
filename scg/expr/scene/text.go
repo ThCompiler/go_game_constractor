@@ -22,7 +22,7 @@ func (t *Text) IsValid() (bool, error) {
 
 func (t *Text) checkTextOnContainsValues() (err error) {
 	err = nil
-	for key, _ := range t.Values {
+	for key := range t.Values {
 		if !strings.Contains(t.Text, "{"+key+"}") {
 			err = errorNotFoundValueInText(key)
 			break

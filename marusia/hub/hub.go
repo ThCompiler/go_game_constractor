@@ -104,7 +104,7 @@ func (h *ScriptHub) StopHub() {
 }
 
 func (h *ScriptHub) detachAll() {
-	for key, _ := range h.directors {
+	for key := range h.directors {
 		delete(h.directors, key)
 	}
 }
@@ -121,9 +121,7 @@ func (h *ScriptHub) runScene(msg *sceneMessage) {
 }
 
 func (h *ScriptHub) applyDirectorDetaching(drt *director) {
-	if _, ok := h.directors[drt.sessionId]; ok {
-		delete(h.directors, drt.sessionId)
-	}
+	delete(h.directors, drt.sessionId)
 }
 
 func (h *ScriptHub) Run() {
@@ -133,22 +131,17 @@ func (h *ScriptHub) Run() {
 			if ok {
 				h.directors[drt.sessionId] = drt
 			}
-			break
 		case drt, ok := <-h.dettacher:
 			if ok {
 				h.applyDirectorDetaching(drt)
 			}
-			break
 		case msg, ok := <-h.broadcast:
 			if ok {
 				h.runScene(msg)
 			}
-			break
 		case <-h.stopHub:
 			h.detachAll()
 			return
-		default:
-			break
 		}
 	}
 }
