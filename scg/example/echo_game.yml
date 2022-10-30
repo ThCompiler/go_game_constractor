@@ -7,14 +7,16 @@ script:
     text:
       string: "GoodyBye"
       tts: "GoodyBye"
-    nextScene: 'goodbye'
+    nextScenes:
+      - 'goodbye'
   hello:
     text:
       string: "Hello boy. Is number {number}"
       tts: "Hello boy. Is number {number}"
       values:
         number: 'int64'
-    nextScene: 'echo'
+    nextScenes:
+      - 'echo'
     isInfoScene: true
     error:
       scene: "goodbye"
@@ -22,7 +24,19 @@ script:
     text:
       string: "I will Repeat you word"
       tts: "I will Repeat you word"
-    nextScene: 'echoRepeat'
+    nextScenes:
+      - 'echoRepeat'
+    buttons:
+      Dore:
+        text: "Привет"
+        payload:
+          kore: "Ds"
+          sore: "Dsd"
+      jore:
+        text: "Привет"
+        payload:
+          kore: "Ds"
+          sore: "Dsd"
     matchers:
       - 'any'
     error:
@@ -33,7 +47,16 @@ script:
       tts: "You say {userText}"
       values:
         userText: 'string'
-    nextScene: 'echoRepeat'
+    nextScenes:
+      - 'echoRepeat'
+      - 'echo'
+    buttons:
+      dore:
+        text: "Привет"
+        payload:
+          joke: "Ds"
+          sore:
+            nore: "kak"
     matchers:
       - 'any'
       - name: "Checked"

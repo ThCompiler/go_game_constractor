@@ -12,6 +12,7 @@ func Script(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) ([]*code
 
 	files = append(files, scriptcodegen.MatchersFile(rootPkg, rootDir, scriptInfo)...)
 	files = append(files, scriptcodegen.ErrorsFile(rootPkg, rootDir, scriptInfo)...)
+	files = append(files, scriptcodegen.PayloadsFile(rootPkg, rootDir, scriptInfo)...)
 	files = append(files, scriptcodegen.ScriptFile(rootPkg, rootDir, scriptInfo)...)
 
 	return files, nil

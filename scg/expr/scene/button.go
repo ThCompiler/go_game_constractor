@@ -1,9 +1,9 @@
 package scene
 
-type payload interface{}
+type Payload interface{}
 
 type Button struct {
-	Name    string  `yaml:"name" xml:"name" json:"name"`
+	Text    string  `yaml:"text" xml:"text" json:"text"`
 	URL     string  `yaml:"url,omitempty" xml:"url,omitempty" json:"url,omitempty"`
-	Payload payload `yaml:"payload,omitempty" json:"payload,omitempty" xml:"payload,omitempty"`
+	Payload Payload `yaml:"payload,omitempty" json:"payload,omitempty" xml:"payload,omitempty"`
 }

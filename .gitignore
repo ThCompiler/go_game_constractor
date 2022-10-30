@@ -4,6 +4,7 @@ vendor/
 # Go workspace file
 go.work
 
+scg/scg
 bin
 
 ## JetBrains

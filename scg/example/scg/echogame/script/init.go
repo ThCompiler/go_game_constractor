@@ -10,15 +10,20 @@ package script
 
 import (
 	game "github.com/ThCompiler/go_game_constractor/director"
-	"github.com/ThCompiler/go_game_constractor/scg/scg/echogame/manager"
+	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/manager"
+	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/script/scenes"
 )
 
 const GoodByeCommand = "GoodeBye"
 
 func NewEchoGameScript(manager manager.TextManager) game.SceneDirectorConfig {
 	return game.SceneDirectorConfig{
-		StartScene:   &Hello{manager},
-		GoodbyeScene: &Goodbye{manager},
-		EndCommand:   GoodByeCommand,
+		StartScene: &scenes.Hello{
+			TextManager: manager,
+		},
+		GoodbyeScene: &scenes.Goodbye{
+			TextManager: manager,
+		},
+		EndCommand: GoodByeCommand,
 	}
 }

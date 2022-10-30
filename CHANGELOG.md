@@ -28,3 +28,15 @@ Some modification and addition of new functionality.
 
 * Now the goodbye scene described in the body of the script. Only its name is written in the script settings.
 * The generated files are overwritten when the application is re-executed
+
+## 0.1.0-alpha
+
+### Added
+
+* Auto generated of choose next scene
+* Auto generated of button payloads
+* Button support
+
+### Changes
+
+* Moved example to another dir
