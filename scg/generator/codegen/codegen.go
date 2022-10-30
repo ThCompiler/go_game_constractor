@@ -3,6 +3,7 @@ package codegen
 // Code based on goa generator: https://github.com/goadesign/goa
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
 	"go/ast"
@@ -39,6 +40,9 @@ type (
 		// FinalizeFunc is called after the file has been generated. It
 		// is given the absolute path to the file as argument.
 		FinalizeFunc func(string) error
+		// IsUpdatable indicates whether the file should be updated if one
+		// already exists at the given path.
+		IsUpdatable bool
 	}
 
 	// A SectionTemplate is a template and accompanying render data. The
@@ -72,15 +76,30 @@ func (f *File) Section(name string) []*SectionTemplate {
 // path to dir. If a file already exists with the computed path then Render
 // happens the smallest integer value greater than 1 to make it unique. Renders
 // returns the computed path.
-func (f *File) Render(dir string) (string, error) {
+func (f *File) Render(dir string, update bool) (string, error) {
 	base, err := filepath.Abs(dir)
 	if err != nil {
 		return "", err
 	}
+
 	path := filepath.Join(base, f.Path)
-	if f.SkipExist {
-		if _, err = os.Stat(path); err == nil {
-			return "", nil
+
+	// If file already exists
+	if _, err = os.Stat(path); err == nil {
+		if update && f.IsUpdatable {
+			err = f.renderWithUpdate(path)
+			if err != nil {
+				return "", err
+			}
+			return path, nil
+		} else {
+			if f.SkipExist {
+				return "", nil
+			}
+			err = os.Remove(path)
+			if err != nil {
+				return "", err
+			}
 		}
 	}
 
@@ -88,28 +107,9 @@ func (f *File) Render(dir string) (string, error) {
 		return "", err
 	}
 
-	if _, err = os.Stat(path); err == nil {
-		err = os.Remove(path)
-		if err != nil {
-			return "", err
-		}
-	}
+	err = f.baseRender(path)
 
-	file, err := os.OpenFile(
-		path,
-		os.O_CREATE|os.O_APPEND|os.O_WRONLY,
-		0644,
-	)
 	if err != nil {
-		return "", err
-	}
-
-	for _, s := range f.SectionTemplates {
-		if err = s.Write(file); err != nil {
-			return "", err
-		}
-	}
-	if err = file.Close(); err != nil {
 		return "", err
 	}
 
@@ -128,6 +128,176 @@ func (f *File) Render(dir string) (string, error) {
 	}
 
 	return path, nil
+}
+
+func (f *File) baseRender(path string) error {
+	file, err := os.OpenFile(
+		path,
+		os.O_CREATE|os.O_APPEND|os.O_WRONLY,
+		0644,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	for _, s := range f.SectionTemplates {
+		if err = s.Write(file); err != nil {
+			_ = file.Close()
+			return err
+		}
+	}
+
+	if err = file.Close(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (f *File) renderWithUpdate(path string) error {
+	fileStrings, err := getFileLines(path)
+	if err != nil {
+		return err
+	}
+
+	generatedStrings, err := f.getGenLines(path)
+	if err != nil {
+		return err
+	}
+
+	differ := NewDiffer(generatedStrings, fileStrings)
+
+	diff := differ.GetLineStates()
+
+	file, err := os.OpenFile(
+		path,
+		os.O_WRONLY,
+		0644,
+	)
+
+	if err != nil {
+		return err
+	}
+
+up:
+	for _, df := range diff {
+		if df.Tag == Equal {
+			for _, line := range generatedStrings[df.firstStart:df.firstEnd] {
+				if _, err = file.WriteString(line + "\n"); err != nil {
+					break up
+				}
+			}
+			continue
+		}
+
+		if df.Tag == Replace || df.Tag == Delete {
+			if _, err = file.WriteString("// >>>>>>> Generated \n"); err != nil {
+				break up
+			}
+
+			for _, line := range generatedStrings[df.firstStart:df.firstEnd] {
+				if _, err = file.WriteString("// " + line + "\n"); err != nil {
+					break up
+				}
+			}
+
+			if _, err = file.WriteString("// >>>>>>> Generated \n"); err != nil {
+				break up
+			}
+		}
+
+		if df.Tag == Replace || df.Tag == Insert {
+			for _, line := range fileStrings[df.secondStart:df.secondEnd] {
+				if _, err = file.WriteString(line + "\n"); err != nil {
+					break up
+				}
+			}
+		}
+	}
+
+	if err != nil {
+		_ = file.Close()
+		return err
+	}
+
+	if err = file.Close(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (f *File) getGenLines(path string) ([]string, error) {
+	dummy, err := os.CreateTemp(filepath.Dir(path), "temp.*.go")
+	if err != nil {
+		return nil, err
+	}
+
+	for _, s := range f.SectionTemplates {
+		if err = s.Write(dummy); err != nil {
+			_ = dummy.Close()
+			return nil, err
+		}
+	}
+
+	if err = dummy.Close(); err != nil {
+		return nil, err
+	}
+
+	// Format Go source files
+	if err = finalizeGoSource(dummy.Name()); err != nil {
+		return nil, err
+	}
+
+	res, err := getFileLines(dummy.Name())
+
+	if err != nil {
+		return nil, err
+	}
+
+	if err = os.Remove(dummy.Name()); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func getFileLines(path string) ([]string, error) {
+	file, err := os.OpenFile(
+		path,
+		os.O_RDONLY,
+		0644,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	fileStrings, err := readLines(file)
+	if err != nil {
+		_ = file.Close()
+		return nil, err
+	}
+
+	if err = file.Close(); err != nil {
+		return nil, err
+	}
+
+	return fileStrings, nil
+}
+
+func readLines(r io.Reader) ([]string, error) {
+	stringLines := make([]string, 0)
+	newScanner := bufio.NewScanner(r)
+	for newScanner.Scan() {
+		stringLines = append(stringLines, newScanner.Text())
+	}
+
+	if err := newScanner.Err(); err != nil {
+		return nil, err
+	}
+	return stringLines, nil
 }
 
 // Write writes the section to the given writer.

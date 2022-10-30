@@ -15,18 +15,24 @@ import (
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/script/payloads"
 )
 
+// Echo scene
 type Echo struct {
 	TextManager manager.TextManager
 	NextScene   SceneName
 }
 
-func (sc *Echo) React(_ *scene.Context) scene.Command {
-	// TODO
+// React function of actions after scene has been played
+// >>>>>>> Generated 
+// func (sc *Echo) React(_ *scene.Context) scene.Command {
+// >>>>>>> Generated 
+func (sc *Echo) React(ctx *scene.Context) scene.Command {
+	// TODO Write the actions after Echo scene has been played
 
 	sc.NextScene = EchoScene // TODO: manually set next scene after reaction
 	return scene.NoCommand
 }
 
+// Next function returning next scene
 func (sc *Echo) Next() scene.Scene {
 	switch sc.NextScene {
 	case EchoRepeatScene:
@@ -40,9 +46,13 @@ func (sc *Echo) Next() scene.Scene {
 	}
 }
 
+// Next function returning info about scene
+// >>>>>>> Generated 
+// func (sc *Echo) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
+// >>>>>>> Generated 
 func (sc *Echo) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
 
-	//TODO
+	//TODO Write some actions for get data for texts
 
 	text, _ := sc.TextManager.GetEchoText()
 	return scene.Info{

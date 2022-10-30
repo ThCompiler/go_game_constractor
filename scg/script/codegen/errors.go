@@ -15,7 +15,7 @@ func ErrorsFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*c
 	return []*codegen.File{errorsFile}
 }
 
-func generateTextErrors(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateTextErrors(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "script", "errors", "errors.go")
@@ -44,7 +44,7 @@ func generateTextErrors(rootPkg string, rootDir string, scriptInfo expr.ScriptIn
 		},
 	})
 
-	return &codegen.File{Path: fpath, SectionTemplates: sections}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
 const textErrorStructT = `{{ if . }}// text errors

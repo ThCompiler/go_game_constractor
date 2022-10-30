@@ -27,7 +27,7 @@ func PayloadsFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []
 	return payloadFiles
 }
 
-func generatePayloads(rootPkg string,
+func generatePayloads(_ string,
 	rootDir string,
 	scriptName string,
 	sceneName string,
@@ -57,5 +57,5 @@ func generatePayloads(rootPkg string,
 		}
 	}
 
-	return &codegen.File{Path: fpath, SectionTemplates: sections}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }

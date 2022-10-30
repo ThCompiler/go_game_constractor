@@ -68,7 +68,7 @@ func Generate(dir string, scriptInfo expr.ScriptInfo, update bool) (outputs []st
 	// 4. Write the files.
 	written := make(map[string]struct{})
 	for _, f := range genfiles {
-		filename, err := f.Render(dir)
+		filename, err := f.Render(dir, update)
 		if err != nil {
 			return nil, err
 		}

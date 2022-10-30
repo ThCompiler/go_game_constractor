@@ -49,10 +49,10 @@ func directorConfig(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) 
 		},
 	})
 
-	return &codegen.File{Path: fpath, SectionTemplates: sections}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
-func sceneNames(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func sceneNames(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "script", "scenes", "names.go")
@@ -72,7 +72,7 @@ func sceneNames(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 		},
 	})
 
-	return &codegen.File{Path: fpath, SectionTemplates: sections}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
 type sceneWithName struct {
@@ -109,7 +109,7 @@ func scriptScenes(rootPkg string, rootDir string, scriptName string, sceneInfo s
 		},
 	})
 
-	return &codegen.File{Path: fpath, SectionTemplates: sections}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
 var ln = 0
@@ -131,7 +131,7 @@ type {{ ToTitle .Name }} struct {
 }
 
 // React function of actions after scene has been played
-func (sc *{{ ToTitle .Name }}) React(ctx *scene.Context) scene.Command {
+func (sc *{{ ToTitle .Name }}) React(_ *scene.Context) scene.Command {
 	// TODO Write the actions after {{ ToTitle .Name }} scene has been played
 
 	sc.NextScene = {{ ToTitle .Name }}Scene // TODO: manually set next scene after reaction
@@ -153,7 +153,7 @@ func (sc *{{ ToTitle .Name }}) Next() scene.Scene {
 }
 
 // Next function returning info about scene
-func (sc *{{ ToTitle .Name }}) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
+func (sc *{{ ToTitle .Name }}) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 	{{ if .Text.Values }}var (
 		{{range $nameVar, $typeVar := .Text.Values}}{{$nameVar}} {{$typeVar}}
 		{{end}}
