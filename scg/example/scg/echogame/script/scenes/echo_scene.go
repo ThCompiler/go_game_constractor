@@ -46,7 +46,7 @@ func (sc *Echo) Next() scene.Scene {
 // Next function returning info about scene
 func (sc *Echo) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 
-	//TODO Write some actions for get data for texts
+	// TODO Write some actions for get data for texts
 
 	text, _ := sc.TextManager.GetEchoText()
 	return scene.Info{

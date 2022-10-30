@@ -159,7 +159,7 @@ func (sc *{{ ToTitle .Name }}) GetSceneInfo(_ *scene.Context) (scene.Info, bool)
 		{{end}}
 	)
 	{{end}}
-	//TODO Write some actions for get data for texts
+	// TODO Write some actions for get data for texts
 
 	text, _ := sc.TextManager.Get{{ ToTitle .Name }}Text(
 		{{range $nameVar, $typeVar := .Text.Values}}{{$nameVar}},

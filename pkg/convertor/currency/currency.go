@@ -61,10 +61,4 @@ type CustomCurrency struct {
 	FractionalPartNameDeclensions Declensions `yaml:"fractionalPartNameDeclensions"`
 
 	CurrencyNounGender NounGender `yaml:"currencyNounGender"`
-
-	/**
-	 * Minimal length of fractional part\
-	 * Default: `2`
-	 */
-	fractionalPartMinLength int64 `yaml:"fractionalPartMinLength"`
 }

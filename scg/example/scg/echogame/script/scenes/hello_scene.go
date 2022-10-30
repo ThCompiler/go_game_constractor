@@ -47,7 +47,7 @@ func (sc *Hello) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 		number int64
 	)
 
-	//TODO Write some actions for get data for texts
+	// TODO Write some actions for get data for texts
 
 	text, _ := sc.TextManager.GetHelloText(
 		number,

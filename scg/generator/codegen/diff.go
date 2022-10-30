@@ -164,11 +164,12 @@ func (diff *Differ) GetLineStates() []LinesState {
 	diff.lineStates = make([]LinesState, 0, len(matches))
 	for _, m := range matches {
 		tag := Tag(0)
-		if i < m.firstIndex && j < m.secondIndex {
+		switch {
+		case i < m.firstIndex && j < m.secondIndex:
 			tag = Replace
-		} else if i < m.firstIndex {
+		case i < m.firstIndex:
 			tag = Delete
-		} else if j < m.secondIndex {
+		case j < m.secondIndex:
 			tag = Insert
 		}
 

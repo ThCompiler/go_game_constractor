@@ -7,7 +7,7 @@ var linkNameWithErrorName = map[string]string{
 
 func GetSupportedNames() []string {
 	supported := make([]string, 0)
-	for key, _ := range linkNameWithErrorName {
+	for key := range linkNameWithErrorName {
 		supported = append(supported, key)
 	}
 

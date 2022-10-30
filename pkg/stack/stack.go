@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-var EmptyStack = errors.New("empty Stack")
+var ErrorEmptyStack = errors.New("empty Stack")
 
 type Stack[T any] []T
 
@@ -28,7 +28,7 @@ func (st *Stack[T]) Empty() bool {
 
 func (st *Stack[T]) Pop() (T, error) {
 	if st.Empty() {
-		return st.zeroT(), EmptyStack
+		return st.zeroT(), ErrorEmptyStack
 	}
 	size := len(*st)
 	top := (*st)[size-1]
@@ -38,7 +38,7 @@ func (st *Stack[T]) Pop() (T, error) {
 
 func (st *Stack[T]) Top() (T, error) {
 	if st.Empty() {
-		return st.zeroT(), EmptyStack
+		return st.zeroT(), ErrorEmptyStack
 	}
 	return (*st)[0], nil
 }

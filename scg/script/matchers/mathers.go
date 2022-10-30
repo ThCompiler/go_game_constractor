@@ -11,7 +11,7 @@ var linkNameWithMatherName = map[string]string{
 
 func GetSupportedNames() []string {
 	supported := make([]string, 0)
-	for key, _ := range linkNameWithMatherName {
+	for key := range linkNameWithMatherName {
 		supported = append(supported, key)
 	}
 
@@ -23,6 +23,7 @@ func IsCorrectNameOfMather(name string) bool {
 	return is
 }
 
+// ConvertNameToMatcher
 func ConvertNameToMatcher(name string) string {
 	return linkNameWithMatherName[name]
 }

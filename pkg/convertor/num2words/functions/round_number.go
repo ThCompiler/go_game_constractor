@@ -36,7 +36,7 @@ func RoundNumber(number objects.Number, precision int64) objects.Number {
 					}
 					// Если любая другая цифра
 				} else {
-					numberPartToRound[i] = numberPartToRound[i] + 1
+					numberPartToRound[i]++
 					increaseDigit = false
 					break
 				}

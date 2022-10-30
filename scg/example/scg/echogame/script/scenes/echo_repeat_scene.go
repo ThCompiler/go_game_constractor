@@ -55,7 +55,7 @@ func (sc *EchoRepeat) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 		userText string
 	)
 
-	//TODO Write some actions for get data for texts
+	// TODO Write some actions for get data for texts
 
 	text, _ := sc.TextManager.GetEchoRepeatText(
 		userText,
