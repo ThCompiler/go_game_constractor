@@ -49,9 +49,10 @@ func (so *ScriptDirector) PlayScene(req SceneRequest) Result {
 		so.reactSceneCommand(sceneCmd)
 
 	default:
-		cmd := so.matchCommands(req.Command, sceneInfo.ExpectedMessages)
+		cmd, name := so.matchCommands(req.Command, sceneInfo.ExpectedMessages)
 		if cmd != "" {
 			ctx.Request.SearchedMessage = cmd
+			ctx.Request.NameMatcher = name
 			sceneCmd := so.currentScene.React(ctx)
 			so.reactSceneCommand(sceneCmd)
 		} else {
@@ -128,11 +129,11 @@ func (so *ScriptDirector) reactSceneCommand(command scene.Command) {
 	}
 }
 
-func (so *ScriptDirector) matchCommands(command string, commands []scene.MessageMatcher) string {
+func (so *ScriptDirector) matchCommands(command string, commands []scene.MessageMatcher) (string, string) {
 	for _, cmd := range commands {
 		if matched, msg := cmd.Match(command); matched {
-			return msg
+			return msg, cmd.GetMatchedName()
 		}
 	}
-	return ""
+	return "", ""
 }

@@ -9,17 +9,18 @@ import (
 type Script map[string]scene.Scene
 
 type ScriptInfo struct {
-	StartScene     string `yaml:"startScene" json:"start_scene" xml:"startScene"`
-	Name           string `yaml:"name" json:"name" xml:"name"`
-	GoodByeCommand string `yaml:"goodByeCommand" json:"good_bye_command" xml:"goodByeCommand"`
-	GoodByeScene   string `yaml:"goodByeScene" json:"good_bye_scene" xml:"goodByeScene"`
-	Script         Script `yaml:"script" json:"script" xml:"script"`
+	StartScene     string                   `yaml:"startScene" json:"start_scene" xml:"startScene"`
+	Name           string                   `yaml:"name" json:"name" xml:"name"`
+	GoodByeCommand string                   `yaml:"goodByeCommand" json:"good_bye_command" xml:"goodByeCommand"`
+	GoodByeScene   string                   `yaml:"goodByeScene" json:"good_bye_scene" xml:"goodByeScene"`
+	UserMatchers   map[string]scene.Matcher `yaml:"matchers,omitempty" json:"matchers,omitempty" xml:"matchers,omitempty"`
+	Script         Script                   `yaml:"script" json:"script" xml:"script"`
 }
 
 func (si *ScriptInfo) IsValid() (is bool, err error) {
 	unknownScene := ""
 	for _, sc := range si.Script {
-		if is, err = sc.IsValid(); !is {
+		if is, err = sc.IsValid(si.UserMatchers); !is {
 			break
 		}
 		for _, name := range sc.NextScenes {

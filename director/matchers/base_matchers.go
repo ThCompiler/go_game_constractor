@@ -5,15 +5,22 @@ import (
 	"strconv"
 )
 
+const (
+	NumberMatchedString         = "number"
+	PositiveNumberMatchedString = "positive_number"
+	AnyMatchedString            = "any"
+	FirstWordMatchedString      = "first_word"
+)
+
 var (
-	NumberMatcher         = NewRegexMather(`[\-]{0,1}[0-9]+[\.][0-9]+|[\-]{0,1}[0-9]+`)
-	PositiveNumberMatcher = NewRegexMather(`^\+?(0*[1-9]\d*(?:[\., ]\d+)*) *(?:\p{Sc}|°[FC])?$`)
-	AnyMatcher            = NewRegexMather(`.*`)
-	FirstWord             = NewRegexMather(`[^\s]+`)
+	NumberMatcher         = NewRegexMather(`[\-]{0,1}[0-9]+[\.][0-9]+|[\-]{0,1}[0-9]+`, NumberMatchedString)
+	PositiveNumberMatcher = NewRegexMather(`^\+?(0*[1-9]\d*(?:[\., ]\d+)*) *(?:\p{Sc}|°[FC])?$`, PositiveNumberMatchedString)
+	AnyMatcher            = NewRegexMather(`.*`, AnyMatchedString)
+	FirstWordMatcher      = NewRegexMather(`[^\s]+`, FirstWordMatchedString)
 )
 
 const (
-	AgreeString = "Точно!"
+	AgreeMatchedString = "Точно!"
 )
 
 var (
@@ -24,7 +31,7 @@ var (
 			"Да",
 			"Ага",
 		},
-		AgreeString,
+		AgreeMatchedString,
 	)
 )
 

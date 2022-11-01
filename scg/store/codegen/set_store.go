@@ -155,10 +155,10 @@ const saveStoreStructT = `
 func saveScripts(st store.ScriptStore) error {
 	var err error
 {{ range $name, $scene := . }} // Set text for {{ ToTitle $name }} scene
-	if err = st.SetText(consts.{{ ToTitle $name }}Text, "{{ $scene.Text.Text }}"); err != nil {
+	if err = st.SetText(consts.{{ ToTitle $name }}Text, ` + "`{{ $scene.Text.Text }}`" + `); err != nil {
 		return err
 	}
-	if err = st.SetText(consts.{{ ToTitle $name }}TTS, "{{ $scene.Text.TTS }}"); err != nil {
+	if err = st.SetText(consts.{{ ToTitle $name }}TTS, ` + "`{{ $scene.Text.TTS }}`" + `); err != nil {
 		return err
 	} 
 
