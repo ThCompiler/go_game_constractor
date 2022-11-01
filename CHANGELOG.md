@@ -54,3 +54,16 @@ Some modification and addition of new functionality.
 
 * Move creation of matchers to main part of config
 * Bugs fix
+
+## 0.1.3-alpha
+
+### Added
+
+* Check the message from the button separately from the matching
+
+### Changes
+
+* Correct name of number matcher in words
+* Move creation of matchers to main part of config
+* For an information scene, you need to specify only one following scene in the `nextScene` field
+* For a non-informational scene, you need to specify the following scenes/scene only in the `nextScenes` field

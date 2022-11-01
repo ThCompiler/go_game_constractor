@@ -7,6 +7,7 @@ import (
 
 type Scene struct {
 	Text        Text              `yaml:"text" json:"text" xml:"text"`
+	NextScene   string            `yaml:"nextScene,omitempty" json:"next_scene,omitempty" xml:"nextScene,omitempty"`
 	NextScenes  []string          `yaml:"nextScenes,omitempty" json:"next_scenes,omitempty" xml:"nextScenes,omitempty"`
 	IsInfoScene bool              `yaml:"isInfoScene,omitempty" json:"is_info_scene,omitempty" xml:"isInfoScene,omitempty"`
 	Matchers    []string          `yaml:"matchers,omitempty" json:"matchers,omitempty" xml:"matchers,omitempty"`
@@ -15,6 +16,13 @@ type Scene struct {
 }
 
 func (s *Scene) IsValid(userMatchers map[string]Matcher) (bool, error) {
+	if s.IsInfoScene && len(s.NextScenes) != 0 && s.NextScene == "" {
+		return false, errorEmptyNextSceneWithInfoScene
+	}
+
+	if !s.IsInfoScene && len(s.NextScenes) == 0 && s.NextScene != "" {
+		return false, errorEmptyNextScenesWithNoInfoScene
+	}
 
 	is, err := s.isMatchersValid(userMatchers)
 
