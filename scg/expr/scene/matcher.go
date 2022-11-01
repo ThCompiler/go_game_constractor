@@ -100,7 +100,8 @@ func (m *Matcher) UnmarshalYAML(n *yaml.Node) error {
 	}
 
 	if len(tmp) == 2 {
-		if err = n.Decode(&m.regexMatcher); err == nil {
+		_, is := tmp["regex"]
+		if err = n.Decode(&m.regexMatcher); err == nil && is {
 			m.typeMatch = regex
 			return nil
 		}

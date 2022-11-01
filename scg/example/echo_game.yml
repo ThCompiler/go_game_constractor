@@ -5,7 +5,7 @@ goodByeScene: "goodbye"
 matchers:
   Checked:
     regex: "*"
-    NameMatched: "da"
+    nameMatched: "da"
   Agreed:
     selects:
       - "da"
