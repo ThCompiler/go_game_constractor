@@ -106,10 +106,16 @@ func scriptScenes(rootPkg string, rootDir string, scriptName string, sceneInfo s
 			"CamelCase":            codegen.CamelCase,
 			"ConvertNameToMatcher": matchers.ConvertNameToMatcher,
 			"ConvertNameToError":   errors2.ConvertNameToError,
+			"IsBaseMather":         matchers.IsCorrectNameOfMather,
+			"HaveMatchedString":    haveMatchedString,
 		},
 	})
 
 	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
+}
+
+func haveMatchedString(scene sceneWithName) bool {
+	return len(scene.Matchers) != 0 || len(scene.Buttons) != 0
 }
 
 var ln = 0
@@ -124,15 +130,31 @@ func storeLen(l int) bool {
 	return false
 }
 
-const sceneStructT = `// {{ ToTitle .Name }} scene
+const sceneStructT = `{{ $sceneName := .Name }}{{ if .Buttons }} 
+const ( {{ range $name, $button := .Buttons }}
+	// {{ ToTitle $name }}{{ ToTitle $sceneName }}ButtonText - text for button {{ ToTitle $name }}
+	{{ ToTitle $name }}{{ ToTitle $sceneName }}ButtonText = "{{ $button.Text }}"{{end}}
+)
+{{end}}// {{ ToTitle .Name }} scene
 type {{ ToTitle .Name }} struct {
 	TextManager    manager.TextManager
 	NextScene 	   SceneName
 }
 
 // React function of actions after scene has been played
-func (sc *{{ ToTitle .Name }}) React(_ *scene.Context) scene.Command {
-	// TODO Write the actions after {{ ToTitle .Name }} scene has been played
+func (sc *{{ ToTitle .Name }}) React({{ if HaveMatchedString . }}ctx{{else}}_{{end}} *scene.Context) scene.Command { 
+	// TODO Write the actions after {{ ToTitle .Name }} scene has been played {{ if HaveMatchedString . }}
+	switch { 
+		{{ if .Buttons }}// Buttons select 
+		{{end}}{{ range $name, $button := .Buttons }} case ctx.Request.NameMatched == {{ ToTitle $name }}{{ ToTitle $sceneName }}ButtonText && ctx.Request.WasButton:
+
+		{{end}}{{ if .Matchers }}
+		// Matcher select 
+		{{end}}{{ range .Matchers }} case ctx.Request.NameMatched == {{ if (IsBaseMather .) }}base_matchers.{{ToTitle .}}MatchedString{{
+		else}}matchers.{{ToTitle .}}MatchedString{{end}}:
+
+	{{end}}}{{end}}
+	
 
 	sc.NextScene = {{ ToTitle .Name }}Scene // TODO: manually set next scene after reaction
 	return scene.NoCommand
@@ -152,7 +174,7 @@ func (sc *{{ ToTitle .Name }}) Next() scene.Scene {
 	}
 }
 
-// Next function returning info about scene
+// GetSceneInfo function returning info about scene
 func (sc *{{ ToTitle .Name }}) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 	{{ if .Text.Values }}var (
 		{{range $nameVar, $typeVar := .Text.Values}}{{$nameVar}} {{$typeVar}}
@@ -174,14 +196,13 @@ func (sc *{{ ToTitle .Name }}) GetSceneInfo(_ *scene.Context) (scene.Info, bool)
 `
 
 const sceneMatchersStructT = `{{ range .Matchers }}
-	{{ if .IsDefaultMatcher }} base_matchers.{{ConvertNameToMatcher .MustStandardMatcher}},{{end}}{{
-	if .IsRegexMatcher }} matchers.{{ToTitle (.MustRegexMatcher).Name}}Matcher,{{end}}{{
-	if .IsSelectMatcher }} matchers.{{ToTitle (.MustSelectsMatcher).Name}}Matcher,{{end}}{{end}} {{if .Matchers}}
+	{{ if IsBaseMather . }} base_matchers.{{ConvertNameToMatcher .}},{{
+	else}} matchers.{{ToTitle .}}Matcher,{{end}}{{end}} {{if .Matchers}}
 {{end}}`
 
 const sceneButtonsStructT = `{{ $sceneName := .Name }}{{ range $name, $button := .Buttons }}
 { 
-	Title: "{{ $button.Text }}", {{ if $button.URL }}
+	Title: {{ ToTitle $name }}{{ ToTitle $sceneName}}ButtonText, {{ if $button.URL }}
 	URL: "{{ $button.URL }}", {{end}} {{ if $button.Payload }}
 	Payload: &payloads.{{ ToTitle $sceneName}}{{ ToTitle $name }}Payload{},{{end}}
 }, {{end}} {{ if .Buttons }}

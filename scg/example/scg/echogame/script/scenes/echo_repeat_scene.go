@@ -17,6 +17,11 @@ import (
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/script/payloads"
 )
 
+const (
+	// DoreEchoRepeatButtonText - text for button Dore
+	DoreEchoRepeatButtonText = "Привет"
+)
+
 // EchoRepeat scene
 type EchoRepeat struct {
 	TextManager manager.TextManager
@@ -24,8 +29,20 @@ type EchoRepeat struct {
 }
 
 // React function of actions after scene has been played
-func (sc *EchoRepeat) React(_ *scene.Context) scene.Command {
+func (sc *EchoRepeat) React(ctx *scene.Context) scene.Command {
 	// TODO Write the actions after EchoRepeat scene has been played
+	switch {
+	// Buttons select
+	case ctx.Request.NameMatched == DoreEchoRepeatButtonText && ctx.Request.WasButton:
+
+		// Matcher select
+	case ctx.Request.NameMatched == base_matchers.AnyMatchedString:
+
+	case ctx.Request.NameMatched == matchers.CheckedMatchedString:
+
+	case ctx.Request.NameMatched == matchers.AgreedMatchedString:
+
+	}
 
 	sc.NextScene = EchoRepeatScene // TODO: manually set next scene after reaction
 	return scene.NoCommand
@@ -49,7 +66,7 @@ func (sc *EchoRepeat) Next() scene.Scene {
 	}
 }
 
-// Next function returning info about scene
+// GetSceneInfo function returning info about scene
 func (sc *EchoRepeat) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 	var (
 		userText string
@@ -69,7 +86,7 @@ func (sc *EchoRepeat) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 		},
 		Buttons: []scene.Button{
 			{
-				Title:   "Привет",
+				Title:   DoreEchoRepeatButtonText,
 				Payload: &payloads.EchoRepeatDorePayload{},
 			},
 		},

@@ -42,3 +42,15 @@ Some modification and addition of new functionality.
 
 * Moved example to another dir
 * Without the ``--update`` flag, all files will be regenerated with loss of changes
+
+## 0.1.2-alpha
+
+### Added
+
+* Selectors between expected string in scene react
+* Name for regex matched user input
+
+### Changes
+
+* Move creation of matchers to main part of config
+* Bugs fix

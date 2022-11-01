@@ -13,7 +13,7 @@ import (
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/store"
 )
 
-const checkKey = "EchoGame-9442eb86-8199-4ed0-b770-818c483b344d"
+const checkKey = "EchoGame-32a92797-ee8a-4346-9bff-3905ddfa706e"
 
 func checkScriptStore(st store.ScriptStore) bool {
 	text, err := st.GetText(checkKey)
@@ -26,34 +26,34 @@ func checkScriptStore(st store.ScriptStore) bool {
 func saveScripts(st store.ScriptStore) error {
 	var err error
 	// Set text for Echo scene
-	if err = st.SetText(consts.EchoText, "I will Repeat you word"); err != nil {
+	if err = st.SetText(consts.EchoText, `I will Repeat you word`); err != nil {
 		return err
 	}
-	if err = st.SetText(consts.EchoTTS, "I will Repeat you word"); err != nil {
+	if err = st.SetText(consts.EchoTTS, `I will Repeat you word`); err != nil {
 		return err
 	}
 
 	// Set text for EchoRepeat scene
-	if err = st.SetText(consts.EchoRepeatText, "You say {userText}"); err != nil {
+	if err = st.SetText(consts.EchoRepeatText, `You say {userText}`); err != nil {
 		return err
 	}
-	if err = st.SetText(consts.EchoRepeatTTS, "You say {userText}"); err != nil {
+	if err = st.SetText(consts.EchoRepeatTTS, `You say {userText}`); err != nil {
 		return err
 	}
 
 	// Set text for Goodbye scene
-	if err = st.SetText(consts.GoodbyeText, "GoodyBye"); err != nil {
+	if err = st.SetText(consts.GoodbyeText, `GoodyBye`); err != nil {
 		return err
 	}
-	if err = st.SetText(consts.GoodbyeTTS, "GoodyBye"); err != nil {
+	if err = st.SetText(consts.GoodbyeTTS, `GoodyBye`); err != nil {
 		return err
 	}
 
 	// Set text for Hello scene
-	if err = st.SetText(consts.HelloText, "Hello boy. Is number {number}"); err != nil {
+	if err = st.SetText(consts.HelloText, `Hello boy. Is number {number}`); err != nil {
 		return err
 	}
-	if err = st.SetText(consts.HelloTTS, "Hello boy. Is number {number}"); err != nil {
+	if err = st.SetText(consts.HelloTTS, `Hello boy. Is number {number}`); err != nil {
 		return err
 	}
 

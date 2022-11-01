@@ -15,8 +15,9 @@ const (
 )
 
 type RegexMatcher struct {
-	Name  string `yaml:"name" json:"name" xml:"name"`
-	Regex string `yaml:"regex" json:"regex" xml:"regex"`
+	Name        string `yaml:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
+	Regex       string `yaml:"regex" json:"regex" xml:"regex"`
+	NameMatched string `yaml:"nameMatched" json:"name_matched" xml:"nameMatched"`
 }
 
 type SelectMatcher struct {
@@ -104,7 +105,7 @@ func (m *Matcher) UnmarshalYAML(n *yaml.Node) error {
 			return nil
 		}
 		m.regexMatcher = nil
-	} else {
+
 		if err = n.Decode(&m.selectMatcher); err == nil {
 			m.typeMatch = selects
 			return nil

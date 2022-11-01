@@ -10,23 +10,16 @@ package matchers
 
 import "github.com/ThCompiler/go_game_constractor/director/matchers"
 
+// name matched string for RegexMatchers
+const (
+	CheckedMatchedString = ""
+
+	AgreedMatchedString = ""
+)
+
 // RegexMatchers
 var (
-	CheckedMatcher = matchers.NewRegexMather("*")
-)
+	CheckedMatcher = matchers.NewRegexMather("*", CheckedMatchedString)
 
-// replace string for SelectsMatchers
-const (
-	AgreedMatcherString = "Da"
-)
-
-// SelectsMatchers
-var (
-	AgreedMatcher = matchers.NewSelectorMatcher(
-		[]string{
-			"da",
-			"no",
-		},
-		AgreedMatcherString,
-	)
+	AgreedMatcher = matchers.NewRegexMather("", AgreedMatchedString)
 )

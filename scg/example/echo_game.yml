@@ -2,6 +2,15 @@ name: 'echo_game'
 startScene: "hello"
 goodByeCommand: "GoodeBye"
 goodByeScene: "goodbye"
+matchers:
+  Checked:
+    regex: "*"
+    NameMatched: "da"
+  Agreed:
+    selects:
+      - "da"
+      - "no"
+    replaceMessage: "Da"
 script:
   goodbye:
     text:
@@ -59,13 +68,8 @@ script:
             nore: "kak"
     matchers:
       - 'any'
-      - name: "Checked"
-        regex: "*"
-      - name: "Agreed"
-        selects:
-          - "da"
-          - "no"
-        replaceMessage: "Da"
+      - 'Checked'
+      - "Agreed"
     error:
       name: "dore"
       text: "dore"

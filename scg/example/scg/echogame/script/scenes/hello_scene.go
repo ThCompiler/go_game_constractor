@@ -41,7 +41,7 @@ func (sc *Hello) Next() scene.Scene {
 	}
 }
 
-// Next function returning info about scene
+// GetSceneInfo function returning info about scene
 func (sc *Hello) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 	var (
 		number int64

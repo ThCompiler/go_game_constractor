@@ -13,6 +13,7 @@ type UserInfo struct {
 
 type Request struct {
 	SearchedMessage string
+	NameMatched     string
 	FullMessage     string
 	WasButton       bool
 	Payload         json.RawMessage

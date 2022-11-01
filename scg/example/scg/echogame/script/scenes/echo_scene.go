@@ -15,6 +15,13 @@ import (
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/script/payloads"
 )
 
+const (
+	// DoreEchoButtonText - text for button Dore
+	DoreEchoButtonText = "Привет"
+	// JoreEchoButtonText - text for button Jore
+	JoreEchoButtonText = "Привет"
+)
+
 // Echo scene
 type Echo struct {
 	TextManager manager.TextManager
@@ -22,8 +29,18 @@ type Echo struct {
 }
 
 // React function of actions after scene has been played
-func (sc *Echo) React(_ *scene.Context) scene.Command {
+func (sc *Echo) React(ctx *scene.Context) scene.Command {
 	// TODO Write the actions after Echo scene has been played
+	switch {
+	// Buttons select
+	case ctx.Request.NameMatched == DoreEchoButtonText && ctx.Request.WasButton:
+
+	case ctx.Request.NameMatched == JoreEchoButtonText && ctx.Request.WasButton:
+
+		// Matcher select
+	case ctx.Request.NameMatched == base_matchers.AnyMatchedString:
+
+	}
 
 	sc.NextScene = EchoScene // TODO: manually set next scene after reaction
 	return scene.NoCommand
@@ -43,7 +60,7 @@ func (sc *Echo) Next() scene.Scene {
 	}
 }
 
-// Next function returning info about scene
+// GetSceneInfo function returning info about scene
 func (sc *Echo) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 
 	// TODO Write some actions for get data for texts
@@ -56,11 +73,11 @@ func (sc *Echo) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 		},
 		Buttons: []scene.Button{
 			{
-				Title:   "Привет",
+				Title:   DoreEchoButtonText,
 				Payload: &payloads.EchoDorePayload{},
 			},
 			{
-				Title:   "Привет",
+				Title:   JoreEchoButtonText,
 				Payload: &payloads.EchoJorePayload{},
 			},
 		},

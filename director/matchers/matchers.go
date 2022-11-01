@@ -6,18 +6,24 @@ import (
 )
 
 type RegexMatcher struct {
-	pattern *regexp.Regexp
+	pattern     *regexp.Regexp
+	nameMatched string
 }
 
-func NewRegexMather(pattern string) *RegexMatcher {
+func NewRegexMather(pattern string, nameMatched string) *RegexMatcher {
 	return &RegexMatcher{
-		pattern: regexp.MustCompile(pattern),
+		pattern:     regexp.MustCompile(pattern),
+		nameMatched: nameMatched,
 	}
 }
 
 func (rm *RegexMatcher) Match(message string) (bool, string) {
 	res := rm.pattern.FindString(message)
 	return res != "", res
+}
+
+func (rm *RegexMatcher) GetMatchedName() string {
+	return rm.nameMatched
 }
 
 type SelectorMatcher struct {
@@ -32,17 +38,21 @@ func NewSelectorMatcher(variants []string, replaceMessage string) *SelectorMatch
 	}
 }
 
-func (rm *SelectorMatcher) Match(message string) (bool, string) {
+func (sm *SelectorMatcher) Match(message string) (bool, string) {
 	found := ""
-	for _, variant := range rm.variants {
+	for _, variant := range sm.variants {
 		if strings.EqualFold(variant, message) {
-			if rm.replaceMessage == "" {
+			if sm.replaceMessage == "" {
 				found = message
 			} else {
-				found = rm.replaceMessage
+				found = sm.replaceMessage
 			}
 			break
 		}
 	}
 	return found != "", found
+}
+
+func (sm *SelectorMatcher) GetMatchedName() string {
+	return sm.replaceMessage
 }

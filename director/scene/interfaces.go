@@ -14,4 +14,5 @@ type Scene interface {
 
 type MessageMatcher interface {
 	Match(message string) (isMatch bool, searchedString string)
+	GetMatchedName() string
 }
