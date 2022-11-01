@@ -19,13 +19,21 @@ type ScriptInfo struct {
 
 func (si *ScriptInfo) IsValid() (is bool, err error) {
 	unknownScene := ""
+up:
 	for _, sc := range si.Script {
 		if is, err = sc.IsValid(si.UserMatchers); !is {
 			break
 		}
+
+		if _, is = si.Script[sc.NextScene]; sc.IsInfoScene && !is {
+			unknownScene = sc.NextScene
+			break
+		}
+
 		for _, name := range sc.NextScenes {
 			if _, is = si.Script[name]; !is {
 				unknownScene = name
+				break up
 			}
 		}
 	}

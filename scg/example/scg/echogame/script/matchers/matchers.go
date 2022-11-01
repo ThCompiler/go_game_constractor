@@ -12,7 +12,7 @@ import "github.com/ThCompiler/go_game_constractor/director/matchers"
 
 // name matched string for RegexMatchers
 const (
-	CheckedMatchedString = ""
+	CheckedMatchedString = "da"
 )
 
 // RegexMatchers

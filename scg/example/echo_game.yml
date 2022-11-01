@@ -24,8 +24,7 @@ script:
       tts: "Hello boy. Is number {number}"
       values:
         number: 'int64'
-    nextScenes:
-      - 'echo'
+    nextScene: 'echo'
     isInfoScene: true
     error:
       scene: "goodbye"

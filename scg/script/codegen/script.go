@@ -141,7 +141,7 @@ type {{ ToTitle .Name }} struct {
 	NextScene 	   SceneName
 }
 
-// React function of actions after scene has been played
+// React function of actions after scene has been played {{ if not .IsInfoScene }}
 func (sc *{{ ToTitle .Name }}) React({{ if HaveMatchedString . }}ctx{{else}}_{{end}} *scene.Context) scene.Command { 
 	// TODO Write the actions after {{ ToTitle .Name }} scene has been played {{ if HaveMatchedString . }}
 	switch { 
@@ -158,10 +158,13 @@ func (sc *{{ ToTitle .Name }}) React({{ if HaveMatchedString . }}ctx{{else}}_{{e
 
 	sc.NextScene = {{ ToTitle .Name }}Scene // TODO: manually set next scene after reaction
 	return scene.NoCommand
-}
+}{{else}}
+func (sc *{{ ToTitle .Name }}) React(_ *scene.Context) scene.Command { 
+	return scene.NoCommand
+}{{end}}
 
 // Next function returning next scene
-func (sc *{{ ToTitle .Name }}) Next() scene.Scene {
+func (sc *{{ ToTitle .Name }}) Next() scene.Scene { {{ if not .IsInfoScene }}
 	{{ if .NextScenes }}switch sc.NextScene { 
 		{{ range .NextScenes }} case {{ ToTitle . }}Scene:
 			return &{{ ToTitle . }}{
@@ -171,7 +174,11 @@ func (sc *{{ ToTitle .Name }}) Next() scene.Scene {
 
 	return &{{ ToTitle .Name }}{
 			TextManager: sc.TextManager,
-	}
+	} {{ else }}{{ if .NextScene }}
+	return &{{ ToTitle .NextScene }}{ {{ else }}
+	return &{{ ToTitle .Name }}{ {{ end }}
+			TextManager: sc.TextManager,
+	} {{ end }}
 }
 
 // GetSceneInfo function returning info about scene
@@ -191,7 +198,7 @@ func (sc *{{ ToTitle .Name }}) GetSceneInfo(_ *scene.Context) (scene.Info, bool)
 		ExpectedMessages: []scene.MessageMatcher{ ` + sceneMatchersStructT + ` },
 		Buttons: []scene.Button{ ` + sceneButtonsStructT + ` },
 		{{ if .Scene.Error.IsValid }}Err: ` + sceneErrorsStructT + `,{{end}}
-	}, true
+	}, {{ not .IsInfoScene }}
 }
 `
 

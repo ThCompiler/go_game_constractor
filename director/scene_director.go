@@ -5,6 +5,7 @@ import (
 	"github.com/ThCompiler/go_game_constractor/director/scene"
 	"github.com/ThCompiler/go_game_constractor/marusia"
 	"github.com/ThCompiler/go_game_constractor/pkg/stack"
+	"github.com/ThCompiler/go_game_constractor/pkg/stringutilits"
 	"strings"
 )
 
@@ -46,15 +47,20 @@ func (so *ScriptDirector) PlayScene(req SceneRequest) Result {
 	case marusia.OnInterrupt, strings.ToLower(so.cf.EndCommand):
 		so.stashedScene.Push(so.currentScene)
 		sceneCmd := so.cf.GoodbyeScene.React(ctx)
-		so.reactSceneCommand(sceneCmd)
+		so.reactSceneCommand(sceneCmd, so.cf.GoodbyeScene.Next())
 
 	default:
-		cmd, name := so.matchCommands(req.Command, sceneInfo.ExpectedMessages)
+		var cmd, name string
+		if req.WasButton {
+			cmd, name = so.matchButton(req.Command, sceneInfo.Buttons)
+		} else {
+			cmd, name = so.matchCommands(req.Command, sceneInfo.ExpectedMessages)
+		}
 		if cmd != "" {
 			ctx.Request.SearchedMessage = cmd
 			ctx.Request.NameMatched = name
 			sceneCmd := so.currentScene.React(ctx)
-			so.reactSceneCommand(sceneCmd)
+			so.reactSceneCommand(sceneCmd, so.currentScene.Next())
 		} else {
 			Err = sceneInfo.Err
 		}
@@ -112,20 +118,20 @@ func (so *ScriptDirector) baseSceneInfo(currentScene scene.Scene, ctx *scene.Con
 	return currentScene, info
 }
 
-func (so *ScriptDirector) reactSceneCommand(command scene.Command) {
+func (so *ScriptDirector) reactSceneCommand(command scene.Command, nextScene scene.Scene) {
 	switch command {
 	case scene.StashScene:
 		so.stashedScene.Push(so.currentScene)
-		so.currentScene = so.currentScene.Next()
+		so.currentScene = nextScene
 	case scene.ApplyStashedScene:
 		if !so.stashedScene.Empty() {
 			so.currentScene, _ = so.stashedScene.Pop()
 		}
 	case scene.FinishScene:
 		so.isEndOfScript = true
-		so.currentScene = so.currentScene.Next()
+		so.currentScene = nextScene
 	default:
-		so.currentScene = so.currentScene.Next()
+		so.currentScene = nextScene
 	}
 }
 
@@ -133,6 +139,15 @@ func (so *ScriptDirector) matchCommands(command string, commands []scene.Message
 	for _, cmd := range commands {
 		if matched, msg := cmd.Match(command); matched {
 			return msg, cmd.GetMatchedName()
+		}
+	}
+	return "", ""
+}
+
+func (so *ScriptDirector) matchButton(command string, buttons []scene.Button) (string, string) {
+	for _, button := range buttons {
+		if command == stringutilits.ClearStringFromPunctuation(button.Title) {
+			return command, button.Title
 		}
 	}
 	return "", ""

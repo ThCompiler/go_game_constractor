@@ -9,9 +9,11 @@ import (
 )
 
 var (
-	errorIsNotRegexMatcher    = errors.New("this matcher is not regex, but you try get regex matcher")
-	errorIsNotSelectsMatcher  = errors.New("this matcher is not selects, but you try get selects matcher")
-	errorIsNotStandardMatcher = errors.New("this matcher is not standard, but you try get standard matcher")
+	errorIsNotRegexMatcher              = errors.New("this matcher is not regex, but you try get regex matcher")
+	errorIsNotSelectsMatcher            = errors.New("this matcher is not selects, but you try get selects matcher")
+	errorIsNotStandardMatcher           = errors.New("this matcher is not standard, but you try get standard matcher")
+	errorEmptyNextSceneWithInfoScene    = errors.New("if scene is info scene use only flag NextScene")
+	errorEmptyNextScenesWithNoInfoScene = errors.New("if scene is not info scene use only flag NextScenes")
 )
 
 func errorUnknownTypeOfValue(notSupportedType string) error {

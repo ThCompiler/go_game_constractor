@@ -1,12 +1,12 @@
 package matchers
 
 var linkNameWithMatherName = map[string]string{
-	"number":                "NumberMatcher",
-	"positive_number":       "PositiveNumberMatcher",
-	"positive_number_words": "PositiveNumberInWordsMatcher",
-	"any":                   "AnyMatcher",
-	"first_word":            "FirstWord",
-	"agree":                 "Agree",
+	"number":                   "NumberMatcher",
+	"positive_number":          "PositiveNumberMatcher",
+	"positive_number_in_words": "PositiveNumberInWordsMatcher",
+	"any":                      "AnyMatcher",
+	"first_word":               "FirstWord",
+	"agree":                    "Agree",
 }
 
 func GetSupportedNames() []string {
