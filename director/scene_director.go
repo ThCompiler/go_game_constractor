@@ -52,7 +52,7 @@ func (so *ScriptDirector) PlayScene(req SceneRequest) Result {
 		cmd, name := so.matchCommands(req.Command, sceneInfo.ExpectedMessages)
 		if cmd != "" {
 			ctx.Request.SearchedMessage = cmd
-			ctx.Request.NameMatcher = name
+			ctx.Request.NameMatched = name
 			sceneCmd := so.currentScene.React(ctx)
 			so.reactSceneCommand(sceneCmd)
 		} else {
