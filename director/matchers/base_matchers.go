@@ -6,10 +6,11 @@ import (
 )
 
 const (
-	NumberMatchedString         = "number"
-	PositiveNumberMatchedString = "positive_number"
-	AnyMatchedString            = "any"
-	FirstWordMatchedString      = "first_word"
+	NumberMatchedString                = "number"
+	PositiveNumberMatchedString        = "positive_number"
+	AnyMatchedString                   = "any"
+	FirstWordMatchedString             = "first_word"
+	PositiveNumberInWordsMatchedString = "positive_number_in_words"
 )
 
 var (
@@ -40,6 +41,10 @@ type NumberMatchers struct{}
 func (nm NumberMatchers) Match(message string) (bool, string) {
 	res, _ := words2num.Convert(message)
 	return res != 0, strconv.FormatInt(res, 10)
+}
+
+func (nm NumberMatchers) GetMatchedName() string {
+	return PositiveNumberInWordsMatchedString
 }
 
 var PositiveNumberInWordsMatcher = NumberMatchers{}
