@@ -146,7 +146,7 @@ func (so *ScriptDirector) matchCommands(command string, commands []scene.Message
 
 func (so *ScriptDirector) matchButton(command string, buttons []scene.Button) (string, string) {
 	for _, button := range buttons {
-		if command == stringutilits.ClearStringFromPunctuation(button.Title) {
+		if command == strings.ToLower(stringutilits.ClearStringFromPunctuation(button.Title)) {
 			return command, button.Title
 		}
 	}
