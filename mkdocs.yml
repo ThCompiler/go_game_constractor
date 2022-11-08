@@ -1,0 +1,12 @@
+site_name: Go Game Constractor
+repo_url: https://github.com/ThCompiler/go_game_constractor
+nav:
+  - Главная: index.md
+  - Мануал по генератору: manual.md
+theme:
+  name: material
+  language: ru
+  features:
+    - search.suggest
+    - search.highlight
+    - navigation.instant
