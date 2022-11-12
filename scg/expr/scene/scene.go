@@ -8,7 +8,7 @@ import (
 type Scene struct {
 	Text        Text              `yaml:"text" json:"text" xml:"text"`
 	NextScene   string            `yaml:"nextScene,omitempty" json:"next_scene,omitempty" xml:"nextScene,omitempty"`
-	NextScenes  []string          `yaml:"nextScenes,omitempty" json:"next_scenes,omitempty" xml:"nextScenes,omitempty"`
+	NextScenes  []string          `yaml:"nextScenes,omitempty" json:"next_scenes.md,omitempty" xml:"nextScenes,omitempty"`
 	IsInfoScene bool              `yaml:"isInfoScene,omitempty" json:"is_info_scene,omitempty" xml:"isInfoScene,omitempty"`
 	Matchers    []string          `yaml:"matchers,omitempty" json:"matchers,omitempty" xml:"matchers,omitempty"`
 	Error       Error             `yaml:"error,omitempty" json:"error,omitempty" xml:"error,omitempty"`
