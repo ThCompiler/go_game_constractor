@@ -15,7 +15,7 @@ title: "Структуры"
 
 # SceneMessage
 
-Структура с данными, которые используются в сцене. Заполняется из [request](#request-marusia)
+Структура с данными, которые используются в сцене. Заполняется из [request](lib_marusia_structs.md#request-marusia)
 
 | Поле        | Тип                   | Описание                       |
 |-------------|-----------------------|--------------------------------|
@@ -24,17 +24,30 @@ title: "Структуры"
 | `answer`    | `object`              | Ответ пользователю после сцены |
 | `rq`        | [`request`](#request) | Запрос                         |
 
-type sceneMessage struct {
-userId string
-sessionId string
-answer chan PlayedSceneResult
-rq request
-}
-
 # Director
-
+Директор используется для управления сценами.
+```go
 type director struct {
-hub       *ScriptHub
-op drt.Director
-sessionId string
+	// Движок сервера
+	hub       *ScriptHub
+	// Реализация сцены - метода PlayScene
+	op        drt.Director
+	// Id сессии
+	sessionId string
 }
+
+type Director interface {
+    PlayScene(command SceneRequest) Result
+}
+```
+# ScriptHub
+Является "движком" сервера
+```go
+type ScriptHub struct {
+    directors map[string]*director
+    broadcast chan *sceneMessage
+    attacher  chan *director
+    dettacher chan *director
+    stopHub   chan bool
+}
+```
