@@ -6,13 +6,13 @@ nav:
   - Установка: install.md
   - Быстрый старт: manual.md
   - Генератор:
-      Описание: gen_info.md
-      Поля файла описания: script.md
+      - Описание: gen_info.md
+      - Поля файла описания: gen_fields.md
   - Библиотека:
-      Описание: lib_info.md
-      Ключевые понятия: lib_words.md
-      Структуры общения с голосовым помощником: lib_marusia_structs.md
-      Структуры: lib_structs.md
+      - Описание: lib_info.md
+      - Ключевые понятия: lib_words.md
+      - Структуры общения с голосовым помощником: lib_marusia_structs.md
+      - Структуры: lib_structs.md
   - Ссылки: links.md
 theme:
   name: material

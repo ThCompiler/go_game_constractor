@@ -74,7 +74,9 @@ Some modification and addition of new functionality.
 
 * Documentation on github.io
 * Create redis client package
+* Help flag `-h --help` and flag `--http-server' fot generation base http-server
 
 ### Changes
 
 * Generalize marusia handler
+* New help text

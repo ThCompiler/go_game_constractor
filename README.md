@@ -9,14 +9,19 @@ Function for constart game based on script for voice assistent. Example Marusia
 ```(cmd)
 scg --output=./scg/ --script=./scg/example/echo_game.yml
 ```
+### Usage
+```(cmd)
+scg ( (-o | --output=<file>) (-s | --script=<file>) | [options] | (-v | --version) | (-h | --help) )
+```
 
-### Description
+#### Options:
+- `-o --output=<file>` - path to dir where need generate files
+- `-s --script=<file>` - path to config file
+- `-v --version` - show program version
+- `-u --update` - save user changes in files
+- `-h --help` - help info
+- `--http-server` - generates a basic http server
 
-#### Args:
-- `-o` `--output=file` - path to dir where need generate files
-- `-s` `--script` - path to config file
-- `-v` `--version` - show program version
-- `-u` `--update` - save user changes in files
 
 #### Note:
 With the `--update` flag, user changes are saved unchanged. 
