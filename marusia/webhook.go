@@ -6,9 +6,7 @@ Get code from github.com/SevereCloud/vksdk. And rewrite to gin handler
 
 import (
 	"encoding/json"
-	"github.com/ThCompiler/go_game_constractor/pkg/ginutilits"
 	"github.com/ThCompiler/go_game_constractor/pkg/logger"
-	"github.com/gin-gonic/gin"
 	"mime"
 	"net/http"
 )
@@ -325,26 +323,26 @@ func (wh *Webhook) OnEvent(f eventFunc) {
 }
 
 // HandleFunc обработчик http запросов.
-func (wh *Webhook) HandleFunc(c *gin.Context) {
-	mediatype, _, _ := mime.ParseMediaType(c.Request.Header.Get("Content-Type"))
+func (wh *Webhook) HandleFunc(c HttpContext) {
+	mediatype, _, _ := mime.ParseMediaType(c.GetHeader("Content-Type"))
 	if mediatype != "application/json" {
-		wh.l.Error(http.StatusText(http.StatusBadRequest), "http - marusia handler")
-		ginutilits.ErrorResponse(c, http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+		wh.l.Error("%s + "+http.StatusText(http.StatusBadRequest), "http - marusia handler, bad body type")
+		c.SendErrorResponse(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
 		return
 	}
 
 	var req Request
 
-	if err := c.ShouldBindJSON(&req); err != nil {
+	if err := c.ParseRequest(&req); err != nil {
 		wh.l.Error(err, "http - marusia handler")
-		ginutilits.ErrorResponse(c, http.StatusBadRequest, "invalid request body")
+		c.SendErrorResponse(http.StatusBadRequest, "invalid request body")
 		return
 	}
 
 	resp, err := wh.event(req)
 
 	if err != nil {
-		ginutilits.ErrorResponse(c, http.StatusInternalServerError, err.Error())
+		c.SendErrorResponse(http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -359,6 +357,6 @@ func (wh *Webhook) HandleFunc(c *gin.Context) {
 	}
 
 	// Возвращаем данные
-	c.Header("Content-Type", "application/json; encoding=utf-8")
-	c.JSON(http.StatusOK, fullResponse)
+	c.SetHeader("Content-Type", "application/json; encoding=utf-8")
+	c.SendResponse(http.StatusOK, fullResponse)
 }

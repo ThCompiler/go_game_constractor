@@ -67,3 +67,14 @@ Some modification and addition of new functionality.
 * Move creation of matchers to main part of config
 * For an information scene, you need to specify only one following scene in the `nextScene` field
 * For a non-informational scene, you need to specify the following scenes/scene only in the `nextScenes` field
+
+## 0.1.4-alpha
+
+### Added
+
+* Documentation on github.io
+* Create redis client package
+
+### Changes
+
+* Generalize marusia handler

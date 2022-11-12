@@ -1,5 +1,6 @@
 site_name: Go Game Constractor
 repo_url: https://github.com/ThCompiler/go_game_constractor
+repo_name: ThCompiler/go_game_constractor
 nav:
   - Главная: index.md
   - Установка: install.md
