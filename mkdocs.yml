@@ -4,14 +4,15 @@ repo_name: ThCompiler/go_game_constractor
 nav:
   - Главная: index.md
   - Установка: install.md
+  - Быстрый старт: manual.md
   - Генератор:
-      - gen_info.md
-      - Быстрый старт: manual.md
-      - Поля конфиг файла: script.md
+      Описание: gen_info.md
+      Поля файла описания: script.md
   - Библиотека:
-      - lib_info.md
-      - Ключевые понятия: lib_words.md
-      - Структуры: lib_structs.md
+      Описание: lib_info.md
+      Ключевые понятия: lib_words.md
+      Структуры общения с голосовым помощником: lib_marusia_structs.md
+      Структуры: lib_structs.md
   - Ссылки: links.md
 theme:
   name: material
