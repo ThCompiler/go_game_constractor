@@ -7,7 +7,7 @@ nav:
   - Генератор:
       - gen_info.md
       - Быстрый старт: manual.md
-      - Поля файла описания: script.md
+      - Поля конфиг файла: script.md
   - Библиотека:
       - lib_info.md
       - Ключевые понятия: lib_words.md
