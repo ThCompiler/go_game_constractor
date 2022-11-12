@@ -5,9 +5,13 @@ nav:
   - Главная: index.md
   - Установка: install.md
   - Генератор:
-      Быстрый старт: manual.md
-      Поля файла описания: script.md
-  - Библиотека: lib.md
+      - gen_info.md
+      - Быстрый старт: manual.md
+      - Поля файла описания: script.md
+  - Библиотека:
+      - lib_info.md
+      - Ключевые понятия: lib_words.md
+      - Структуры: lib_structs.md
   - Ссылки: links.md
 theme:
   name: material
