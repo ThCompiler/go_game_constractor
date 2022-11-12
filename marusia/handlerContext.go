@@ -16,7 +16,7 @@ type HttpContext interface {
 }
 
 type GinHttpContext struct {
-	gin.Context
+	*gin.Context
 }
 
 func (gc *GinHttpContext) GetHeader(headerName string) string {
@@ -24,7 +24,7 @@ func (gc *GinHttpContext) GetHeader(headerName string) string {
 }
 
 func (gc *GinHttpContext) SendErrorResponse(code int, errorText string) {
-	ginutilits.ErrorResponse(&gc.Context, code, errorText)
+	ginutilits.ErrorResponse(gc.Context, code, errorText)
 }
 
 func (gc *GinHttpContext) ParseRequest(req interface{}) error {
@@ -40,7 +40,7 @@ func (gc *GinHttpContext) SendResponse(code int, response any) {
 }
 
 type BaseHttpContext struct {
-	Req  http.Request
+	Req  *http.Request
 	Resp http.ResponseWriter
 }
 

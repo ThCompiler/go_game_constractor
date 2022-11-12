@@ -42,9 +42,10 @@ func (sc *EchoRepeat) React(ctx *scene.Context) scene.Command {
 
 	case ctx.Request.NameMatched == matchers.AgreedMatchedString:
 
+	default:
+		sc.NextScene = EchoRepeatScene
 	}
 
-	sc.NextScene = EchoRepeatScene // TODO: manually set next scene after reaction
 	return scene.NoCommand
 }
 

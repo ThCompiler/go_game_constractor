@@ -40,9 +40,10 @@ func (sc *Echo) React(ctx *scene.Context) scene.Command {
 		// Matcher select
 	case ctx.Request.NameMatched == base_matchers.AnyMatchedString:
 
+	default:
+		sc.NextScene = EchoScene
 	}
 
-	sc.NextScene = EchoScene // TODO: manually set next scene after reaction
 	return scene.NoCommand
 }
 

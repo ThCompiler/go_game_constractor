@@ -7,6 +7,7 @@ Get code from github.com/SevereCloud/vksdk. And rewrite to gin handler
 import (
 	"encoding/json"
 	"github.com/ThCompiler/go_game_constractor/pkg/logger"
+	"github.com/gin-gonic/gin"
 	"mime"
 	"net/http"
 )
@@ -359,4 +360,14 @@ func (wh *Webhook) HandleFunc(c HttpContext) {
 	// Возвращаем данные
 	c.SetHeader("Content-Type", "application/json; encoding=utf-8")
 	c.SendResponse(http.StatusOK, fullResponse)
+}
+
+// GinHandleFunc обработчик http запросов для gin.Context.
+func (wh *Webhook) GinHandleFunc(c *gin.Context) {
+	wh.HandleFunc(&GinHttpContext{Context: c})
+}
+
+// BaseHttpHandleFunc обработчик http запросов для gin.Context.
+func (wh *Webhook) BaseHttpHandleFunc(w http.ResponseWriter, r *http.Request) {
+	wh.HandleFunc(&BaseHttpContext{Req: r, Resp: w})
 }

@@ -153,10 +153,12 @@ func (sc *{{ ToTitle .Name }}) React({{ if HaveMatchedString . }}ctx{{else}}_{{e
 		{{end}}{{ range .Matchers }} case ctx.Request.NameMatched == {{ if (IsBaseMather .) }}base_matchers.{{ToTitle .}}MatchedString{{
 		else}}matchers.{{ToTitle .}}MatchedString{{end}}:
 
-	{{end}}}{{end}}
-	
+	{{end}}default:
+		sc.NextScene = {{ ToTitle .Name }}Scene
+	}
+	{{else}}
 
-	sc.NextScene = {{ ToTitle .Name }}Scene // TODO: manually set next scene after reaction
+	sc.NextScene = {{ ToTitle .Name }}Scene // TODO: manually set next scene after reaction{{end}}
 	return scene.NoCommand
 }{{else}}
 func (sc *{{ ToTitle .Name }}) React(_ *scene.Context) scene.Command { 

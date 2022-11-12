@@ -9,12 +9,12 @@ import (
 
 // ConfigFile returns config file
 func ConfigFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
-	mainFile := generateMain(rootPkg, rootDir, scriptInfo)
+	configFile := generateConfig(rootPkg, rootDir, scriptInfo)
 
-	return []*codegen.File{mainFile}
+	return []*codegen.File{configFile}
 }
 
-func generateCon(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateConfig(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "cmd", "main.go")
@@ -31,7 +31,7 @@ func generateCon(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *co
 
 	sections = append(sections, &codegen.SectionTemplate{
 		Name:   "main-file",
-		Source: mainFileStructT,
+		Source: configFileStructT,
 		Data:   scriptInfo,
 		FuncMap: map[string]interface{}{
 			"ToTitle": codegen.ToTitle,

@@ -75,8 +75,10 @@ Some modification and addition of new functionality.
 * Documentation on github.io
 * Create redis client package
 * Help flag `-h --help` and flag `--http-server' fot generation base http-server
+* Webhook implementation for gin and base http handler
 
 ### Changes
 
 * Generalize marusia handler
 * New help text
+* Adjusted the default setting of the next scene in the React function

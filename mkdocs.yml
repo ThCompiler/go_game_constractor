@@ -1,6 +1,7 @@
 site_name: Go Game Constractor
 repo_url: https://github.com/ThCompiler/go_game_constractor
 repo_name: ThCompiler/go_game_constractor
+copyright: Copyright &copy; 2022 TBD team
 nav:
   - Главная: index.md
   - Установка: install.md
@@ -13,6 +14,7 @@ nav:
       - Ключевые понятия: lib_words.md
       - Структуры общения с голосовым помощником: lib_marusia_structs.md
       - Структуры: lib_structs.md
+      - Дополнительно: lib_hints.md
   - Ссылки: links.md
 theme:
   name: material
@@ -21,6 +23,8 @@ theme:
     - search.suggest
     - search.highlight
     - navigation.instant
+    - navigation.indexes
+    - toc.follow
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
@@ -43,3 +47,14 @@ theme:
         name: Переключить на светлую тему
   icon:
     repo: fontawesome/brands/github-alt
+  logo: icon/logo.png
+
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ThCompiler/go_game_constractor
+      name: github repository
+
+  version:
+    provider: mike

@@ -1,8 +1,9 @@
-package marusia
+package webhook
 
 import (
 	game "github.com/ThCompiler/go_game_constractor/director"
 	"github.com/ThCompiler/go_game_constractor/director/scene"
+	"github.com/ThCompiler/go_game_constractor/marusia"
 	"github.com/ThCompiler/go_game_constractor/marusia/hub"
 	"github.com/ThCompiler/go_game_constractor/pkg/logger"
 	"time"
@@ -10,14 +11,13 @@ import (
 
 const RequestTime = 60 * time.Second
 
-func NewDefaultMarusiaWebhook(l logger.Interface, runnerHub hub.ScriptRunner, sdc game.SceneDirectorConfig) *Webhook {
-	wh := &Webhook{
-		l: l,
-	}
-	wh.OnEvent(func(r Request) (resp Response, err error) {
+func NewDefaultMarusiaWebhook(l logger.Interface, runnerHub hub.ScriptRunner, sdc game.SceneDirectorConfig) *marusia.Webhook {
+	wh := marusia.NewWebhook(l)
+
+	wh.OnEvent(func(r marusia.Request) (resp marusia.Response, err error) {
 		err = nil
 
-		if r.Request.Command == OnStart || r.Request.Command == "debug" {
+		if r.Request.Command == marusia.OnStart || r.Request.Command == "debug" {
 			runnerHub.AttachDirector(r.Session.SessionID, game.NewScriptDirector(sdc))
 		}
 
@@ -36,17 +36,17 @@ func NewDefaultMarusiaWebhook(l logger.Interface, runnerHub hub.ScriptRunner, sd
 					answer.WorkedDirector.Close()
 				}
 			} else {
-				err = BadDirectorAnswer
+				err = ErrorBadDirectorAnswer
 			}
 			break
 		case <-ticker.C:
-			err = TooLongRunning
+			err = ErrorTooLongRunning
 			break
 		}
 		ticker.Stop()
 
 		if err != nil {
-			wh.l.Error(err)
+			l.Error(err)
 		}
 		return
 	})
@@ -54,10 +54,10 @@ func NewDefaultMarusiaWebhook(l logger.Interface, runnerHub hub.ScriptRunner, sd
 	return wh
 }
 
-func toMarusiaButtons(buttons []scene.Button) []Button {
-	res := make([]Button, 0)
+func toMarusiaButtons(buttons []scene.Button) []marusia.Button {
+	res := make([]marusia.Button, 0)
 	for _, button := range buttons {
-		res = append(res, Button{
+		res = append(res, marusia.Button{
 			Title:   button.Title,
 			URL:     button.URL,
 			Payload: button.Payload,
