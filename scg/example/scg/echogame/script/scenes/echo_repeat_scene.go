@@ -9,8 +9,9 @@
 package scenes
 
 import (
-	base_matchers "github.com/ThCompiler/go_game_constractor/director/matchers"
-	"github.com/ThCompiler/go_game_constractor/director/scene"
+	"github.com/ThCompiler/go_game_constractor/director"
+	base_matchers "github.com/ThCompiler/go_game_constractor/director/scriptdirector/matchers"
+	"github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/manager"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/script/errors"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/script/matchers"
@@ -85,7 +86,7 @@ func (sc *EchoRepeat) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 			matchers.CheckedMatcher,
 			matchers.AgreedMatcher,
 		},
-		Buttons: []scene.Button{
+		Buttons: []director.Button{
 			{
 				Title:   DoreEchoRepeatButtonText,
 				Payload: &payloads.EchoRepeatDorePayload{},

@@ -23,7 +23,7 @@ func usecase(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codege
 	imports := []*codegen.ImportSpec{
 		{Path: path.Join(rootPkg, "store"), Name: "store"},
 		{Path: path.Join(rootPkg, "pkg", "str")},
-		codegen.SCGImport(path.Join("director", "scene")),
+		codegen.SCGImport(path.Join("director")),
 		{Path: path.Join(rootPkg, "consts", "textsname"), Name: "consts"},
 	}
 
@@ -55,7 +55,7 @@ func managerInterface(_ string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 
 	fpath := filepath.Join(rootDir, "manager", "interface.go")
 	imports := []*codegen.ImportSpec{
-		codegen.SCGImport(path.Join("director", "scene")),
+		codegen.SCGImport(path.Join("director")),
 	}
 
 	sections = []*codegen.SectionTemplate{
@@ -92,7 +92,7 @@ const scriptTextManagerT = `type TextManager interface {
 	// Get{{ ToTitle $name }}Text get text for {{$name}} scene with variables {{$lenValues := len $scene.Text.Values}}
 	Get{{ ToTitle $name }}Text({{ if $lenValues }}{{
 	range $nameVar, $typeVar := $scene.Text.Values}}{{$nameVar}} {{$typeVar}}{{
-	if not (IsLast $lenValues) }}, {{end}}{{end}}{{end}}) (scene.Text, error)
+	if not (IsLast $lenValues) }}, {{end}}{{end}}{{end}}) (director.Text, error)
 	{{ end }}
 }
 `
@@ -101,15 +101,15 @@ const usecaseFuncStructT = ` {{ range $name, $scene := .Script }}
 	// Get{{ ToTitle $name }}Text get text for {{$name}} scene with variables {{$lenValues := len $scene.Text.Values}}
 	func (tu *TextUsecase) Get{{ ToTitle $name }}Text({{ if $lenValues }}{{
 	range $nameVar, $typeVar := $scene.Text.Values}}{{$nameVar}} {{$typeVar}}{{
-	if not (IsLast $lenValues) }}, {{end}}{{end}}{{end}}) (scene.Text, error) {
+	if not (IsLast $lenValues) }}, {{end}}{{end}}{{end}}) (director.Text, error) {
 		text, err := tu.store.GetText(consts.{{ ToTitle $name }}Text)
 		if err != nil {
-			return scene.Text{}, nil
+			return director.Text{}, nil
 		}
 
 		tts, err := tu.store.GetText(consts.{{ ToTitle $name }}TTS)
 		if err != nil {
-			return scene.Text{}, nil
+			return director.Text{}, nil
 		}
 		
 		{{ if $lenValues }} args := []interface{}{
@@ -117,11 +117,11 @@ const usecaseFuncStructT = ` {{ range $name, $scene := .Script }}
 			{{end}}
 		}
 		
-		res := scene.Text{
+		res := director.Text{
 			BaseText: str.StringFormat(text, args...),
 			TextToSpeech: str.StringFormat(tts, args...),
 		}{{ else }}
-		res := scene.Text{
+		res := director.Text{
 			BaseText: text,
 			TextToSpeech: tts,
 		} {{end}}

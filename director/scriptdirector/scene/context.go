@@ -3,12 +3,20 @@ package scene
 import (
 	"context"
 	"encoding/json"
+	"github.com/ThCompiler/go_game_constractor/marusia"
 	"time"
 )
 
 type UserInfo struct {
 	UserId    string
 	SessionId string
+	UserVKId  string
+}
+
+// NLU - parsing user input to language token
+type NLU struct {
+	Tokens   []string
+	Entities []string
 }
 
 type Request struct {
@@ -16,7 +24,9 @@ type Request struct {
 	NameMatched     string
 	FullMessage     string
 	WasButton       bool
+	ApplicationType marusia.ApplicationType
 	Payload         json.RawMessage
+	NLU             NLU
 }
 
 type Context struct {

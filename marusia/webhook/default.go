@@ -1,27 +1,26 @@
 package webhook
 
 import (
-	game "github.com/ThCompiler/go_game_constractor/director"
-	"github.com/ThCompiler/go_game_constractor/director/scene"
+	sd "github.com/ThCompiler/go_game_constractor/director/scriptdirector"
 	"github.com/ThCompiler/go_game_constractor/marusia"
-	"github.com/ThCompiler/go_game_constractor/marusia/hub"
+	"github.com/ThCompiler/go_game_constractor/marusia/runner"
 	"github.com/ThCompiler/go_game_constractor/pkg/logger"
 	"time"
 )
 
 const RequestTime = 60 * time.Second
 
-func NewDefaultMarusiaWebhook(l logger.Interface, runnerHub hub.ScriptRunner, sdc game.SceneDirectorConfig) *marusia.Webhook {
+func NewDefaultMarusiaWebhook(l logger.Interface, runnerHub runner.ScriptRunner, sdc sd.SceneDirectorConfig) *marusia.Webhook {
 	wh := marusia.NewWebhook(l)
 
 	wh.OnEvent(func(r marusia.Request) (resp marusia.Response, err error) {
 		err = nil
 
 		if r.Request.Command == marusia.OnStart || r.Request.Command == "debug" {
-			runnerHub.AttachDirector(r.Session.SessionID, game.NewScriptDirector(sdc))
+			runnerHub.AttachDirector(r.Session.SessionID, sd.NewScriptDirector(sdc))
 		}
 
-		ans := runnerHub.RunScene(r)
+		ans := runnerHub.RunScene(ToHubRequest(r))
 
 		ticker := time.NewTicker(RequestTime)
 		select {
@@ -54,7 +53,7 @@ func NewDefaultMarusiaWebhook(l logger.Interface, runnerHub hub.ScriptRunner, sd
 	return wh
 }
 
-func toMarusiaButtons(buttons []scene.Button) []marusia.Button {
+func toMarusiaButtons(buttons []runner.Button) []marusia.Button {
 	res := make([]marusia.Button, 0)
 	for _, button := range buttons {
 		res = append(res, marusia.Button{

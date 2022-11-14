@@ -9,7 +9,8 @@
 package scenes
 
 import (
-	"github.com/ThCompiler/go_game_constractor/director/scene"
+	"github.com/ThCompiler/go_game_constractor/director"
+	"github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/manager"
 )
 
@@ -45,7 +46,7 @@ func (sc *Hello) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 	return scene.Info{
 		Text:             text,
 		ExpectedMessages: []scene.MessageMatcher{},
-		Buttons:          []scene.Button{},
+		Buttons:          []director.Button{},
 		Err:              scene.BaseSceneError{Scene: &Goodbye{TextManager: sc.TextManager}},
 	}, false
 }

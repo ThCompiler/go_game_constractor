@@ -1,32 +1,14 @@
 package hub
 
 import (
-	"encoding/json"
 	drt "github.com/ThCompiler/go_game_constractor/director"
-	"github.com/ThCompiler/go_game_constractor/marusia"
+	"github.com/ThCompiler/go_game_constractor/marusia/runner"
 )
 
-type request struct {
-	command      string
-	fullUserText string
-	payload      json.RawMessage
-	wasButton    bool
-}
-
-func fromMarusiaRequest(rqm marusia.RequestIn) *request {
-	return &request{
-		command:      rqm.Command,
-		fullUserText: rqm.OriginalUtterance,
-		payload:      rqm.Payload,
-		wasButton:    rqm.Type == marusia.ButtonPressed,
-	}
-}
-
 type sceneMessage struct {
-	userId    string
 	sessionId string
-	answer    chan PlayedSceneResult
-	rq        request
+	answer    chan runner.PlayedSceneResult
+	req       runner.Request
 }
 
 type director struct {
@@ -48,16 +30,7 @@ func (c *director) Close() {
 }
 
 func (c *director) PlayScene(msg sceneMessage) drt.Result {
-	res := c.op.PlayScene(drt.SceneRequest{
-		Command:      msg.rq.command,
-		FullUserText: msg.rq.fullUserText,
-		WasButton:    msg.rq.wasButton,
-		Payload:      msg.rq.payload,
-		Info: drt.UserInfo{
-			UserId:    msg.userId,
-			SessionId: msg.sessionId,
-		},
-	})
+	res := c.op.PlayScene(ToDirectorRequest(msg.req))
 
 	return res
 }
@@ -88,12 +61,11 @@ func (h *ScriptHub) detachDirector(drt *director) {
 	h.dettacher <- drt
 }
 
-func (h *ScriptHub) RunScene(rq marusia.Request) chan PlayedSceneResult {
-	answer := make(chan PlayedSceneResult)
+func (h *ScriptHub) RunScene(req runner.Request) chan runner.PlayedSceneResult {
+	answer := make(chan runner.PlayedSceneResult)
 	h.broadcast <- &(sceneMessage{
-		userId:    rq.Session.UserID,
-		sessionId: rq.Session.SessionID,
-		rq:        *fromMarusiaRequest(rq.Request),
+		sessionId: req.Session.SessionID,
+		req:       req,
 		answer:    answer,
 	})
 	return answer
@@ -111,9 +83,9 @@ func (h *ScriptHub) detachAll() {
 
 func (h *ScriptHub) runScene(msg *sceneMessage) {
 	if drt, ok := h.directors[msg.sessionId]; ok {
-		go func(ans chan PlayedSceneResult, drt *director) {
-			ans <- PlayedSceneResult{
-				Result:         drt.PlayScene(*msg),
+		go func(ans chan runner.PlayedSceneResult, drt *director) {
+			ans <- runner.PlayedSceneResult{
+				Result:         ToRunnerResult(drt.PlayScene(*msg)),
 				WorkedDirector: drt,
 			}
 		}(msg.answer, drt)

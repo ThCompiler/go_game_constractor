@@ -6,6 +6,7 @@ Get code from github.com/SevereCloud/vksdk. And rewrite to gin handler
 
 import (
 	"encoding/json"
+	"github.com/ThCompiler/go_game_constractor/pkg/language"
 	"github.com/ThCompiler/go_game_constractor/pkg/logger"
 	"github.com/gin-gonic/gin"
 	"mime"
@@ -15,6 +16,17 @@ import (
 // Version версия протокола.
 const Version = "1.0"
 
+// ApplicationType тип приложения.
+type ApplicationType string
+
+// Возможные значения.
+const (
+	Mobile  ApplicationType = "mobile"  // мобильное приложение
+	Speaker ApplicationType = "speaker" // колонка
+	VK      ApplicationType = "VK"      // страница вк
+	Other   ApplicationType = "other"   // колонка
+)
+
 // RequestType тип ввода.
 type RequestType string
 
@@ -23,12 +35,6 @@ const (
 	SimpleUtterance RequestType = "SimpleUtterance" // голосовой ввод
 	ButtonPressed   RequestType = "ButtonPressed"   //  нажатие кнопки
 )
-
-// NLU - Natural Language Understanding.
-type NLU struct {
-	Tokens   []string `json:"tokens"`
-	Entities []string `json:"entities"`
-}
 
 // Типичные команды голосового ввода.
 const (
@@ -64,7 +70,7 @@ type RequestIn struct {
 
 	// Объект, содержащий слова и именованные сущности, которые Маруся
 	// извлекла из запроса пользователя.
-	NLU NLU `json:"nlu"`
+	NLU language.NLU `json:"nlu"`
 }
 
 // Screen структура для Interfaces.
@@ -107,10 +113,6 @@ type Session struct {
 	// Уникальный идентификатор сессии, максимум 64 символа.
 	SessionID string `json:"session_id"`
 
-	// Идентификатор экземпляра приложения, в котором пользователь общается с
-	// Марусей, максимум 64 символа.
-	UserID string `json:"user_id"`
-
 	// Идентификатор вызываемого скилла, присвоенный при создании.
 	// Соответствует полю "Маруся ID" в настройках скилла.
 	SkillID string `json:"skill_id"`
@@ -125,6 +127,39 @@ type Session struct {
 	// Идентификатор сообщения в рамках сессии, максимум 8 символов.
 	// Инкрементируется с каждым следующим запросом.
 	MessageID int `json:"message_id"`
+
+	// Данные об экземпляре приложения.
+	Application Application `json:"application"`
+
+	// Авторизационный токен Маруси.
+	AuthToken string `json:"auth_token"`
+
+	// Данные о пользователе. Передаётся, только если пользователь авторизован.
+	User User `json:"user,omitempty"`
+}
+
+// Application данные о приложении.
+type Application struct {
+	// Идентификатор экземпляра приложения, в котором пользователь общается с Марусей (максимум 64 символа).
+	// Уникален в разрезе: «скилл + приложение (устройство)».
+	ApplicationID string `json:"application_id"`
+
+	// Тип приложения (устройства). Возможные значения:
+	//  • mobile;
+	//  • speaker;
+	//  • VK;
+	//  • other.
+	ApplicationType ApplicationType `json:"application_type"`
+}
+
+// User данные о пользователе.
+type User struct {
+	// Идентификатор аккаунта пользователя (максимум 64 символа). Уникален в разрезе: «скилл + аккаунт».
+	UserID string `json:"user_id"`
+
+	// Идентификатор аккаунта пользователя в ВК, работает только если данное поле было включено разработчиками ВК навыков Маруси.
+	// Не работает в отладки и локально.
+	UserVKID string `json:"user_vk_id,omitempty"`
 }
 
 // Request структура запроса.
@@ -176,11 +211,11 @@ const (
 	ItemsList CardType = "ItemsList"
 )
 
-// TODO: CardItem элемент карточки.
-// type CardItem struct {
-// 	// ID изображения из раздела "Медиа-файлы" настроек в VKApps.
-// 	ImageID int `json:"image_id"`
-// }
+// CardItem элемент карточки.
+type CardItem struct {
+	// ID изображения из раздела "Медиа-файлы" настроек в VKApps.
+	ImageID int `json:"image_id"`
+}
 
 // Card описание карточки — сообщения с поддержкой изображений.
 type Card struct {
@@ -197,8 +232,8 @@ type Card struct {
 	// (игнорируется для типа ItemsList).
 	ImageID int `json:"image_id,omitempty"`
 
-	// TODO: Список изображений, каждый элемент является объектом формата BigImage.
-	// Items []CardItem `json:"items,omitempty"`
+	// Список изображений, каждый элемент является объектом формата BigImage.
+	Items []CardItem `json:"items,omitempty"`
 }
 
 // NewBigImage возвращает карточку с картинкой.
@@ -211,26 +246,26 @@ func NewBigImage(title, description string, imageID int) *Card {
 	}
 }
 
-// TODO: NewItemsList возвращает карточку с набором картинок.
-// func NewItemsList(title, description string, items []CardItem) *Card {
-// 	return &Card{
-// 		Type:        ItemsList,
-// 		Title:       title,
-// 		Description: description,
-// 		Items:       items,
-// 	}
-// }
+// NewItemsList возвращает карточку с набором картинок.
+func NewItemsList(title, description string, items []CardItem) *Card {
+	return &Card{
+		Type:        ItemsList,
+		Title:       title,
+		Description: description,
+		Items:       items,
+	}
+}
 
-// TODO: NewImageList возвращает карточку с набором картинок.
-// func NewImageList(title, description string, imageIDs ...int) *Card {
-// 	items := make([]CardItem, len(imageIDs))
+// NewImageList возвращает карточку с набором картинок.
+func NewImageList(title, description string, imageIDs ...int) *Card {
+	items := make([]CardItem, len(imageIDs))
 
-// 	for i := 0; i < len(imageIDs); i++ {
-// 		items[i].ImageID = imageIDs[i]
-// 	}
+	for i := 0; i < len(imageIDs); i++ {
+		items[i].ImageID = imageIDs[i]
+	}
 
-// 	return NewItemsList(title, description, items)
-// }
+	return NewItemsList(title, description, items)
+}
 
 // Response данные для ответа пользователю.
 type Response struct {
@@ -352,7 +387,7 @@ func (wh *Webhook) HandleFunc(c HttpContext) {
 		Session: responseSession{
 			SessionID: req.Session.SessionID,
 			MessageID: req.Session.MessageID,
-			UserID:    req.Session.UserID,
+			UserID:    req.Session.Application.ApplicationID,
 		},
 		Version: Version,
 	}

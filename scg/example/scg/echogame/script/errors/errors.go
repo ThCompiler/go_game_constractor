@@ -8,7 +8,7 @@
 
 package errors
 
-import "github.com/ThCompiler/go_game_constractor/director/scene"
+import "github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
 
 // text errors
 var (

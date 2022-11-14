@@ -8,11 +8,11 @@
 
 package payloads
 
-type EchoDorePayload struct {
+type EchoJorePayload struct {
 	Kore string `json:"kore"`
 	Sore string `json:"sore"`
 }
-type EchoJorePayload struct {
+type EchoDorePayload struct {
 	Kore string `json:"kore"`
 	Sore string `json:"sore"`
 }

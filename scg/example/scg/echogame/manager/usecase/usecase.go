@@ -9,7 +9,7 @@
 package usecase
 
 import (
-	"github.com/ThCompiler/go_game_constractor/director/scene"
+	"github.com/ThCompiler/go_game_constractor/director"
 	consts "github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/consts/textsname"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/pkg/str"
 	store "github.com/ThCompiler/go_game_constractor/scg/example/scg/echogame/store"
@@ -26,18 +26,18 @@ func NewTextUsecase(store store.ScriptStore) *TextUsecase {
 }
 
 // GetEchoText get text for echo scene with variables
-func (tu *TextUsecase) GetEchoText() (scene.Text, error) {
+func (tu *TextUsecase) GetEchoText() (director.Text, error) {
 	text, err := tu.store.GetText(consts.EchoText)
 	if err != nil {
-		return scene.Text{}, nil
+		return director.Text{}, nil
 	}
 
 	tts, err := tu.store.GetText(consts.EchoTTS)
 	if err != nil {
-		return scene.Text{}, nil
+		return director.Text{}, nil
 	}
 
-	res := scene.Text{
+	res := director.Text{
 		BaseText:     text,
 		TextToSpeech: tts,
 	}
@@ -46,22 +46,22 @@ func (tu *TextUsecase) GetEchoText() (scene.Text, error) {
 }
 
 // GetEchoRepeatText get text for echoRepeat scene with variables
-func (tu *TextUsecase) GetEchoRepeatText(userText string) (scene.Text, error) {
+func (tu *TextUsecase) GetEchoRepeatText(userText string) (director.Text, error) {
 	text, err := tu.store.GetText(consts.EchoRepeatText)
 	if err != nil {
-		return scene.Text{}, nil
+		return director.Text{}, nil
 	}
 
 	tts, err := tu.store.GetText(consts.EchoRepeatTTS)
 	if err != nil {
-		return scene.Text{}, nil
+		return director.Text{}, nil
 	}
 
 	args := []interface{}{
 		"userText", userText,
 	}
 
-	res := scene.Text{
+	res := director.Text{
 		BaseText:     str.StringFormat(text, args...),
 		TextToSpeech: str.StringFormat(tts, args...),
 	}
@@ -70,18 +70,18 @@ func (tu *TextUsecase) GetEchoRepeatText(userText string) (scene.Text, error) {
 }
 
 // GetGoodbyeText get text for goodbye scene with variables
-func (tu *TextUsecase) GetGoodbyeText() (scene.Text, error) {
+func (tu *TextUsecase) GetGoodbyeText() (director.Text, error) {
 	text, err := tu.store.GetText(consts.GoodbyeText)
 	if err != nil {
-		return scene.Text{}, nil
+		return director.Text{}, nil
 	}
 
 	tts, err := tu.store.GetText(consts.GoodbyeTTS)
 	if err != nil {
-		return scene.Text{}, nil
+		return director.Text{}, nil
 	}
 
-	res := scene.Text{
+	res := director.Text{
 		BaseText:     text,
 		TextToSpeech: tts,
 	}
@@ -90,22 +90,22 @@ func (tu *TextUsecase) GetGoodbyeText() (scene.Text, error) {
 }
 
 // GetHelloText get text for hello scene with variables
-func (tu *TextUsecase) GetHelloText(number int64) (scene.Text, error) {
+func (tu *TextUsecase) GetHelloText(number int64) (director.Text, error) {
 	text, err := tu.store.GetText(consts.HelloText)
 	if err != nil {
-		return scene.Text{}, nil
+		return director.Text{}, nil
 	}
 
 	tts, err := tu.store.GetText(consts.HelloTTS)
 	if err != nil {
-		return scene.Text{}, nil
+		return director.Text{}, nil
 	}
 
 	args := []interface{}{
 		"number", number,
 	}
 
-	res := scene.Text{
+	res := director.Text{
 		BaseText:     str.StringFormat(text, args...),
 		TextToSpeech: str.StringFormat(tts, args...),
 	}

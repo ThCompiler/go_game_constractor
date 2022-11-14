@@ -8,7 +8,7 @@
 
 package matchers
 
-import "github.com/ThCompiler/go_game_constractor/director/matchers"
+import "github.com/ThCompiler/go_game_constractor/director/scriptdirector/matchers"
 
 // name matched string for RegexMatchers
 const (

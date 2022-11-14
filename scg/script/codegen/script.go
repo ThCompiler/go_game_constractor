@@ -85,8 +85,9 @@ func scriptScenes(rootPkg string, rootDir string, scriptName string, sceneInfo s
 
 	fpath := filepath.Join(rootDir, "script", "scenes", codegen.SnakeCase(sceneInfo.Name)+"_scene.go")
 	imports := []*codegen.ImportSpec{
-		codegen.SCGImport(path.Join("director", "scene")),
-		codegen.SCGNamedImport(path.Join("director", "matchers"), "base_matchers"),
+		codegen.SCGImport(path.Join("director")),
+		codegen.SCGImport(path.Join("director", "scriptdirector", "scene")),
+		codegen.SCGNamedImport(path.Join("director", "scriptdirector", "matchers"), "base_matchers"),
 		{Path: path.Join(rootPkg, "script", "matchers")},
 		{Path: path.Join(rootPkg, "script", "errors")},
 		{Path: path.Join(rootPkg, "script", "payloads")},
@@ -198,7 +199,7 @@ func (sc *{{ ToTitle .Name }}) GetSceneInfo(_ *scene.Context) (scene.Info, bool)
 	return scene.Info{
 		Text: text,
 		ExpectedMessages: []scene.MessageMatcher{ ` + sceneMatchersStructT + ` },
-		Buttons: []scene.Button{ ` + sceneButtonsStructT + ` },
+		Buttons: []director.Button{ ` + sceneButtonsStructT + ` },
 		{{ if .Scene.Error.IsValid }}Err: ` + sceneErrorsStructT + `,{{end}}
 	}, {{ not .IsInfoScene }}
 }

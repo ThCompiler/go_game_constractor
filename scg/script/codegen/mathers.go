@@ -20,7 +20,7 @@ func generateMatchers(_ string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 
 	fpath := filepath.Join(rootDir, "script", "matchers", "matchers.go")
 	imports := []*codegen.ImportSpec{
-		codegen.SCGImport(path.Join("director", "matchers")),
+		codegen.SCGImport(path.Join("director", "scriptdirector", "matchers")),
 	}
 
 	sections = []*codegen.SectionTemplate{

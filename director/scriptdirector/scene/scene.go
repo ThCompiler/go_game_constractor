@@ -1,5 +1,7 @@
 package scene
 
+import "github.com/ThCompiler/go_game_constractor/director"
+
 type Command uint64
 
 const (
@@ -9,20 +11,9 @@ const (
 	StashScene        = Command(3)
 )
 
-type Button struct {
-	Title   string
-	URL     string
-	Payload interface{}
-}
-
-type Text struct {
-	BaseText     string
-	TextToSpeech string
-}
-
 type Info struct {
-	Text             Text
-	Buttons          []Button
+	Text             director.Text
+	Buttons          []director.Button
 	ExpectedMessages []MessageMatcher
 	Err              Error
 }

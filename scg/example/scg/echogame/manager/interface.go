@@ -8,19 +8,19 @@
 
 package manager
 
-import "github.com/ThCompiler/go_game_constractor/director/scene"
+import "github.com/ThCompiler/go_game_constractor/director"
 
 type TextManager interface {
 
 	// GetEchoText get text for echo scene with variables
-	GetEchoText() (scene.Text, error)
+	GetEchoText() (director.Text, error)
 
 	// GetEchoRepeatText get text for echoRepeat scene with variables
-	GetEchoRepeatText(userText string) (scene.Text, error)
+	GetEchoRepeatText(userText string) (director.Text, error)
 
 	// GetGoodbyeText get text for goodbye scene with variables
-	GetGoodbyeText() (scene.Text, error)
+	GetGoodbyeText() (director.Text, error)
 
 	// GetHelloText get text for hello scene with variables
-	GetHelloText(number int64) (scene.Text, error)
+	GetHelloText(number int64) (director.Text, error)
 }

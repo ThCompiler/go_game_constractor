@@ -20,7 +20,7 @@ func generateTextErrors(_ string, rootDir string, scriptInfo expr.ScriptInfo) *c
 
 	fpath := filepath.Join(rootDir, "script", "errors", "errors.go")
 	imports := []*codegen.ImportSpec{
-		codegen.SCGImport(path.Join("director", "scene")),
+		codegen.SCGImport(path.Join("director", "scriptdirector", "scene")),
 	}
 
 	sections = []*codegen.SectionTemplate{

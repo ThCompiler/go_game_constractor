@@ -1,13 +1,21 @@
-package director
+package scriptdirector
 
 import (
 	"context"
-	"github.com/ThCompiler/go_game_constractor/director/scene"
+	"github.com/ThCompiler/go_game_constractor/director"
+	"github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
 	"github.com/ThCompiler/go_game_constractor/marusia"
 	"github.com/ThCompiler/go_game_constractor/pkg/stack"
 	"github.com/ThCompiler/go_game_constractor/pkg/stringutilits"
 	"strings"
 )
+
+// SceneDirectorConfig - config for director
+type SceneDirectorConfig struct {
+	StartScene   scene.Scene
+	GoodbyeScene scene.Scene
+	EndCommand   string
+}
 
 // ScriptDirector - implementation game director for script games
 type ScriptDirector struct {
@@ -30,8 +38,8 @@ func NewScriptDirector(cf SceneDirectorConfig) *ScriptDirector {
 }
 
 // PlayScene - .
-func (so *ScriptDirector) PlayScene(req SceneRequest) Result {
-	ctx := req.toSceneContext(so.ctx)
+func (so *ScriptDirector) PlayScene(req director.SceneRequest) director.Result {
+	ctx := toSceneContext(req, so.ctx)
 
 	sceneInfo := scene.Info{}
 	if so.currentScene != nil {
@@ -40,21 +48,22 @@ func (so *ScriptDirector) PlayScene(req SceneRequest) Result {
 
 	Err := scene.Error(nil)
 
-	switch strings.ToLower(req.Command) {
-	case marusia.OnStart, "debug":
+	switch {
+	case strings.EqualFold(marusia.OnStart, req.Request.Command) || req.Info.IsNewSession:
 		so.currentScene = so.cf.StartScene
 
-	case marusia.OnInterrupt, strings.ToLower(so.cf.EndCommand):
+	case strings.EqualFold(marusia.OnInterrupt, req.Request.Command),
+		strings.EqualFold(stringutilits.ClearStringFromPunctuation(so.cf.EndCommand), req.Request.Command):
 		so.stashedScene.Push(so.currentScene)
 		sceneCmd := so.cf.GoodbyeScene.React(ctx)
 		so.reactSceneCommand(sceneCmd, so.cf.GoodbyeScene.Next())
 
 	default:
 		var cmd, name string
-		if req.WasButton {
-			cmd, name = so.matchButton(req.Command, sceneInfo.Buttons)
+		if req.Request.WasButton {
+			cmd, name = so.matchButton(req.Request.Command, sceneInfo.Buttons)
 		} else {
-			cmd, name = so.matchCommands(req.Command, sceneInfo.ExpectedMessages)
+			cmd, name = so.matchCommands(req.Request.Command, sceneInfo.ExpectedMessages)
 		}
 		if cmd != "" {
 			ctx.Request.SearchedMessage = cmd
@@ -88,11 +97,11 @@ func (so *ScriptDirector) PlayScene(req SceneRequest) Result {
 	}
 
 	if !so.isEndOfScript {
-		info.Buttons = append(info.Buttons, scene.Button{Title: so.cf.EndCommand})
+		info.Buttons = append(info.Buttons, director.Button{Title: so.cf.EndCommand})
 	}
 
 	so.ctx = ctx.Context
-	return Result{
+	return director.Result{
 		Text:          info.Text,
 		Buttons:       info.Buttons,
 		IsEndOfScript: so.isEndOfScript,
@@ -106,7 +115,7 @@ func (so *ScriptDirector) baseSceneInfo(currentScene scene.Scene, ctx *scene.Con
 		oldInfo := info
 		info, withReact = currentScene.GetSceneInfo(ctx)
 		info = scene.Info{
-			Text: scene.Text{
+			Text: director.Text{
 				BaseText:     oldInfo.Text.BaseText + "\n" + info.Text.BaseText,
 				TextToSpeech: oldInfo.Text.TextToSpeech + "\n" + info.Text.TextToSpeech,
 			},
@@ -144,9 +153,9 @@ func (so *ScriptDirector) matchCommands(command string, commands []scene.Message
 	return "", ""
 }
 
-func (so *ScriptDirector) matchButton(command string, buttons []scene.Button) (string, string) {
+func (so *ScriptDirector) matchButton(command string, buttons []director.Button) (string, string) {
 	for _, button := range buttons {
-		if command == stringutilits.ClearStringFromPunctuation(button.Title) {
+		if strings.EqualFold(command, stringutilits.ClearStringFromPunctuation(button.Title)) {
 			return command, button.Title
 		}
 	}
