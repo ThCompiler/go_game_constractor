@@ -10,6 +10,7 @@ import (
     "github.com/pkg/errors"
     "os"
     "path"
+    "path/filepath"
 )
 
 type wordConstants struct {
@@ -59,46 +60,46 @@ func LoadWordsConstantsFromFile(lang languages.Language, resourcesDirPath string
         W2n: wordsConstantsForWords{},
     }
 
-    dir := resourcesDirPath + "/" + string(lang)
+    dir := filepath.Join(resourcesDirPath, string(lang))
 
     // Sign
-    err := cleanenv.ReadConfig(dir+"/sign.yml", &WordConstants.N2w.Sign)
+    err := cleanenv.ReadConfig(filepath.Join(dir, "sign.yml"), &WordConstants.N2w.Sign)
     if err != nil {
         return fmt.Errorf("error load %s sign: %w", lang, err)
     }
 
     // Digit words
-    err = cleanenv.ReadConfig(dir+"/digit_words.yml", &WordConstants.N2w.DigitWords)
+    err = cleanenv.ReadConfig(filepath.Join(dir, "digit_words.yml"), &WordConstants.N2w.DigitWords)
     if err != nil {
         return fmt.Errorf("error load %s digit words: %w", lang, err)
     }
 
     // Fractional unit
-    err = cleanenv.ReadConfig(dir+"/fractional_unit.yml", &WordConstants.N2w.FractionalUnit)
+    err = cleanenv.ReadConfig(filepath.Join(dir, "fractional_unit.yml"), &WordConstants.N2w.FractionalUnit)
     if err != nil {
         return fmt.Errorf("error load %s fractional unit: %w", lang, err)
     }
 
     // Unit scales names
-    err = cleanenv.ReadConfig(dir+"/unit_scales_names.yml", &WordConstants.N2w.UnitScalesNames)
+    err = cleanenv.ReadConfig(filepath.Join(dir, "unit_scales_names.yml"), &WordConstants.N2w.UnitScalesNames)
     if err != nil {
         return fmt.Errorf("error load %s unit scales names: %w", lang, err)
     }
 
     // Slash number unit prefixes
-    err = cleanenv.ReadConfig(dir+"/slash_number_unit_prefixes.yml", &WordConstants.N2w.SlashNumberUnitPrefixes)
+    err = cleanenv.ReadConfig(filepath.Join(dir, "slash_number_unit_prefixes.yml"), &WordConstants.N2w.SlashNumberUnitPrefixes)
     if err != nil {
         return fmt.Errorf("error load %s slash number unit prefixes: %w", lang, err)
     }
 
     // Currencies strings
-    err = cleanenv.ReadConfig(dir+"/currencies_strings.yml", &WordConstants.N2w.CurrenciesStrings)
+    err = cleanenv.ReadConfig(filepath.Join(dir, "currencies_strings.yml"), &WordConstants.N2w.CurrenciesStrings)
     if err != nil {
         return fmt.Errorf("error load %s currencies strings: %w", lang, err)
     }
 
     // Ordinal numbers
-    err = cleanenv.ReadConfig(dir+"/ordinal_numbers.yml", &WordConstants.N2w.OrdinalNumbers)
+    err = cleanenv.ReadConfig(filepath.Join(dir, "ordinal_numbers.yml"), &WordConstants.N2w.OrdinalNumbers)
     if err != nil {
         return fmt.Errorf("error load %s ordinal numbers: %w", lang, err)
     }

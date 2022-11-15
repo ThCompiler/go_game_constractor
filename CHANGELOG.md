@@ -98,6 +98,7 @@ Some modification and addition of new functionality.
 * Generating handler functional
 * Generating entry point of server
 * Loading resources for convert package
+* `ARM` and `i386` build architecture for `Windows`, `MacOs`, `Linux`
 
 ### Changes
 
