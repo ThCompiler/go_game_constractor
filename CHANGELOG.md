@@ -74,11 +74,47 @@ Some modification and addition of new functionality.
 
 * Documentation on github.io
 * Create redis client package
-* Help flag `-h --help` and flag `--http-server' fot generation base http-server
+* Help flag `-h --help` and flag `--http-server` fot generation base http-server
 * Webhook implementation for gin and base http handler
+* `Application` fields to marusia request
+* `UserVKId` field to marusia request
+* `CardItems` field to marusia request
+* Own entity for runner
+* Сase-independent comparison button name
+* A check that the skill was launched based on the `new` field of the voice assistant request
+* New fields for `SessionInfo`(formerly `UserInfo`): `UserVKID` and `IsNewSession`
+* `Application` structs for scene `Request`
+* Struct `UserInput`
+* New field `Request` for `SceneRequest` instead of the [moved](#moved_fields) fields
+* New field `UserVKID` for struct `UserInfo` in package `scene`
+* New field `UserVKID` for struct `Request` in package `scene`
+* New logger based on zap logger
+* Http middleware for logger based on gin
+* Context for request from marusia (сurrently it is used only for transmitting the logger, but it is possible to transmit something else)
+* Generating server functional
+* Generating app functional
+* Generating config functional
+* Generating logger functional
+* Generating handler functional
+* Generating entry point of server
+* Loading resources for convert package
+* `ARM` and `i386` build architecture for `Windows`, `MacOs`, `Linux`
 
 ### Changes
 
-* Generalize marusia handler
+* Generalized marusia handler
 * New help text
 * Adjusted the default setting of the next scene in the React function
+* Moved `UserId` from the session field of the request to the independent `User` structure in the `Session` field of the request
+* Renamed package `hub` to `runner`
+* ScriptDirector moved to package `scriptdirector`
+* Renamed `UserInfo` to `SessionInfo`
+* <a id="moved_fields"></a>The fields `Command`, `FullUserText`, `WasButton`, `Payload` have been moved from `SceneRequest` to struct `UserInput`
+* The structs `Text` and `Button` have been moved from package `scene` to package `director`
+* Used new Logger into webhook
+* Reformatted Directory structure(see in [documentation](https://thcompiler.github.io/go_game_constractor/manual/))
+* Some bug fixed in other generation
+
+### Remove
+
+* A check that the skill was launched based on receiving the `debug` message from the user

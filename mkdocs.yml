@@ -28,13 +28,14 @@ theme:
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
+      primary: teal
       toggle:
         icon: material/brightness-auto
         name: Переключить на тёмную тему
 
     # Palette toggle for light mode
     - scheme: default
-      primary: white
+      primary: grey
       toggle:
         icon: material/weather-sunny
         name: Переключить на тему системы
@@ -47,6 +48,8 @@ theme:
         name: Переключить на светлую тему
   icon:
     repo: fontawesome/brands/github-alt
+
+  favicon: icon/logo.png
   logo: icon/logo.png
 
 

@@ -96,7 +96,7 @@ jobs:
           body_path: ./CURRENT-CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}
-      - name: upload linux artifact
+      - name: upload linux-amd64 artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -105,7 +105,34 @@ jobs:
           asset_path: ./bin/scg.linux-amd64.tar.gz
           asset_name: scg.linux-amd64.tar.gz
           asset_content_type: application/gzip
-      - name: upload darwin artifact
+      - name: upload linux-arm64 artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/scg.linux-arm64.tar.gz
+          asset_name: scg.linux-arm64.tar.gz
+          asset_content_type: application/gzip
+      - name: upload linux-arm artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/scg.linux-arm.tar.gz
+          asset_name: scg.linux-arm.tar.gz
+          asset_content_type: application/gzip
+      - name: upload linux-i386 artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/scg.linux-386.tar.gz
+          asset_name: scg.linux-i386.tar.gz
+          asset_content_type: application/gzip
+      - name: upload darwin-amd64 artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -114,7 +141,16 @@ jobs:
           asset_path: ./bin/scg.darwin-amd64.tar.gz
           asset_name: scg.darwin-amd64.tar.gz
           asset_content_type: application/gzip
-      - name: upload windows artifact
+      - name: upload darwin-arm64 artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/scg.darwin-arm64.tar.gz
+          asset_name: scg.darwin-arm64.tar.gz
+          asset_content_type: application/gzip
+      - name: upload windows-amd64 artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -122,4 +158,31 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./bin/scg.windows-amd64.zip
           asset_name: scg.windows-amd64.zip
+          asset_content_type: application/zip
+      - name: upload windows-arm64 artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/scg.windows-arm64.zip
+          asset_name: scg.windows-arm64.zip
+          asset_content_type: application/zip
+      - name: upload windows-arm artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/scg.windows-arm.zip
+          asset_name: scg.windows-arm.zip
+          asset_content_type: application/zip
+      - name: upload windows-i386 artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/scg.windows-386.zip
+          asset_name: scg.windows-i386.zip
           asset_content_type: application/zip

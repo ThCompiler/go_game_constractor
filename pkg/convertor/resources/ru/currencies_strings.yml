@@ -1,0 +1,81 @@
+currencies:
+  number:
+    currencyNameCases: ['целая', 'целых', 'целых']
+    currencyNameDeclensions:
+      nominative: ['целая', '']
+      genitive: ['целой', 'целых']
+      dative: ['целой', 'целым']
+      accusative: ['целую', 'целые']
+      instrumental: ['целой', 'целыми']
+      prepositional: ['целой', 'целых']
+    fractionalPartNameCases: ['', '', '']
+    fractionalPartNameDeclensions:
+      nominative: ['', '']
+      genitive: ['', '']
+      dative: ['', '']
+      accusative: ['', '']
+      instrumental: ['', '']
+      prepositional: ['', '']
+    currencyNounGender:
+      integer: 'female'
+      fractionalPart: 'female'
+  rub:
+    currencyNameCases: ['рубль', 'рубля', 'рублей']
+    currencyNameDeclensions:
+      nominative: ['рубль', '']
+      genitive: ['рубля', 'рублей']
+      dative: ['рублю', 'рублям']
+      accusative: ['рубль', '']
+      instrumental: ['рублём', 'рублями']
+      prepositional: ['рубле', 'рублях']
+    fractionalPartNameCases: ['копейка', 'копейки', 'копеек']
+    fractionalPartNameDeclensions:
+      nominative: ['копейка', '']
+      genitive: ['копейки', 'копеек']
+      dative: ['копейке', 'копейкам']
+      accusative: ['копейку', '']
+      instrumental: ['копейкой', 'копейками']
+      prepositional: ['копейке', 'копейках']
+    currencyNounGender:
+      integer: 'male'
+      fractionalPart: 'female'
+  usd:
+    currencyNameCases: ['доллар', 'доллара', 'долларов']
+    currencyNameDeclensions:
+      nominative: ['доллар', '']
+      genitive: ['доллара', 'долларов']
+      dative: ['доллару', 'долларам']
+      accusative: ['доллар', '']
+      instrumental: ['долларом', 'долларами']
+      prepositional: ['долларе', 'долларах']
+    fractionalPartNameCases: ['цент', 'цента', 'центов']
+    fractionalPartNameDeclensions:
+      nominative: ['цент', '']
+      genitive: ['цента', 'центов']
+      dative: ['центу', 'центам']
+      accusative: ['цент', '']
+      instrumental: ['центом', 'центами']
+      prepositional: ['центе', 'центах']
+    currencyNounGender:
+      integer: 'male'
+      fractionalPart: 'male'
+  eur:
+    currencyNameCases: ['евро', 'евро', 'евро']
+    currencyNameDeclensions:
+      nominative: ['евро', '']
+      genitive: ['евро', 'евро']
+      dative: ['евро', 'евро']
+      accusative: ['евро', '']
+      instrumental: ['евро', 'евро']
+      prepositional: ['евро', 'евро']
+    fractionalPartNameCases: ['цент', 'цента', 'центов']
+    fractionalPartNameDeclensions:
+      nominative: ['цент', '']
+      genitive: ['цента', 'центов']
+      dative: ['центу', 'центам']
+      accusative: ['цент', '']
+      instrumental: ['центом', 'центами']
+      prepositional: ['центе', 'центах']
+    currencyNounGender:
+      integer: 'male'
+      fractionalPart: 'male'

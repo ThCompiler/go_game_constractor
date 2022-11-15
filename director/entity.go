@@ -1,52 +1,66 @@
 package director
 
 import (
-	"context"
-	"encoding/json"
-	"github.com/ThCompiler/go_game_constractor/director/scene"
+    "context"
+    "encoding/json"
+    "github.com/ThCompiler/go_game_constractor/marusia"
+    "github.com/ThCompiler/go_game_constractor/pkg/language"
 )
+
+type Button struct {
+    Title   string
+    URL     string
+    Payload interface{}
+}
+
+type Text struct {
+    BaseText     string
+    TextToSpeech string
+}
 
 // Result - of play scene
 type Result struct {
-	Text          scene.Text
-	Buttons       []scene.Button
-	IsEndOfScript bool
+    Text          Text
+    Buttons       []Button
+    IsEndOfScript bool
 }
 
-// SceneDirectorConfig - config for director
-type SceneDirectorConfig struct {
-	StartScene   scene.Scene
-	GoodbyeScene scene.Scene
-	EndCommand   string
+// SessionInfo - info about user for scene
+type SessionInfo struct {
+    UserId    string
+    SessionId string
+
+    // VK ID user
+    UserVKId string
+
+    IsNewSession bool
 }
 
-// UserInfo - info about user for scene
-type UserInfo struct {
-	UserId    string
-	SessionId string
+// Application info about app.
+type Application struct {
+    // ID of app
+    ApplicationID string
+
+    // Types of app:
+    //  • mobile;
+    //  • speaker;
+    //  • VK;
+    //  • other.
+    ApplicationType marusia.ApplicationType
+}
+
+type UserInput struct {
+    Command      string
+    FullUserText string
+    WasButton    bool
+    Payload      json.RawMessage
+    NLU          language.NLU
 }
 
 // SceneRequest - request from user for scene
 type SceneRequest struct {
-	Command      string
-	FullUserText string
-	WasButton    bool
-	Payload      json.RawMessage
-	Info         UserInfo
-}
-
-func (sr *SceneRequest) toSceneContext(ctx context.Context) *scene.Context {
-	return scene.NewContext(
-		scene.Request{
-			SearchedMessage: sr.Command,
-			FullMessage:     sr.FullUserText,
-			WasButton:       sr.WasButton,
-			Payload:         sr.Payload,
-		},
-		scene.UserInfo{
-			UserId:    sr.Info.UserId,
-			SessionId: sr.Info.SessionId,
-		},
-		ctx,
-	)
+    Request       UserInput
+    Info          SessionInfo
+    Application   Application
+    GlobalContext context.Context
 }
