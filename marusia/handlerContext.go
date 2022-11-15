@@ -1,67 +1,77 @@
 package marusia
 
 import (
-	"encoding/json"
-	"github.com/ThCompiler/go_game_constractor/pkg/ginutilits"
-	"github.com/gin-gonic/gin"
-	"net/http"
+    "context"
+    "encoding/json"
+    "github.com/ThCompiler/go_game_constractor/pkg/ginutilits"
+    "github.com/gin-gonic/gin"
+    "net/http"
 )
 
 type HttpContext interface {
-	GetHeader(headerName string) string
-	SendErrorResponse(code int, errorText string)
-	SetHeader(headerName string, value string)
-	SendResponse(code int, response any)
-	ParseRequest(req interface{}) error
+    GetHeader(headerName string) string
+    SendErrorResponse(code int, errorText string)
+    SetHeader(headerName string, value string)
+    SendResponse(code int, response any)
+    ParseRequest(req interface{}) error
+    GetContext() context.Context
 }
 
 type GinHttpContext struct {
-	*gin.Context
+    *gin.Context
 }
 
 func (gc *GinHttpContext) GetHeader(headerName string) string {
-	return gc.Request.Header.Get(headerName)
+    return gc.Request.Header.Get(headerName)
 }
 
 func (gc *GinHttpContext) SendErrorResponse(code int, errorText string) {
-	ginutilits.ErrorResponse(gc.Context, code, errorText)
+    ginutilits.ErrorResponse(gc.Context, code, errorText)
 }
 
 func (gc *GinHttpContext) ParseRequest(req interface{}) error {
-	return gc.ShouldBindJSON(req)
+    return gc.ShouldBindJSON(req)
 }
 
 func (gc *GinHttpContext) SetHeader(headerName string, value string) {
-	gc.Header(headerName, value)
+    gc.Header(headerName, value)
 }
 
 func (gc *GinHttpContext) SendResponse(code int, response any) {
-	gc.JSON(code, response)
+    gc.JSON(code, response)
+}
+
+func (gc *GinHttpContext) GetContext() context.Context {
+    return gc
 }
 
 type BaseHttpContext struct {
-	Req  *http.Request
-	Resp http.ResponseWriter
+    Req  *http.Request
+    Resp http.ResponseWriter
 }
 
-func (gc *BaseHttpContext) GetHeader(headerName string) string {
-	return gc.Req.Header.Get(headerName)
+func (bhc *BaseHttpContext) GetHeader(headerName string) string {
+    return bhc.Req.Header.Get(headerName)
 }
 
-func (gc *BaseHttpContext) SendErrorResponse(code int, errorText string) {
-	http.Error(gc.Resp, errorText, code)
+func (bhc *BaseHttpContext) SendErrorResponse(code int, errorText string) {
+    http.Error(bhc.Resp, errorText, code)
 }
 
-func (gc *BaseHttpContext) ParseRequest(req interface{}) error {
-	return json.NewDecoder(gc.Req.Body).Decode(&req)
+func (bhc *BaseHttpContext) ParseRequest(req interface{}) error {
+    return json.NewDecoder(bhc.Req.Body).Decode(&req)
 }
 
-func (gc *BaseHttpContext) SetHeader(headerName string, value string) {
-	gc.Resp.Header().Set(headerName, value)
+func (bhc *BaseHttpContext) SetHeader(headerName string, value string) {
+    bhc.Resp.Header().Set(headerName, value)
 }
 
-func (gc *BaseHttpContext) SendResponse(code int, response any) {
-	gc.Resp.WriteHeader(code)
+func (bhc *BaseHttpContext) SendResponse(code int, response any) {
+    bhc.Resp.WriteHeader(code)
 
-	_ = json.NewEncoder(gc.Resp).Encode(response)
+    _ = json.NewEncoder(bhc.Resp).Encode(response)
+}
+
+func (bhc *BaseHttpContext) GetContext() context.Context {
+    return bhc.Req.Context()
 }

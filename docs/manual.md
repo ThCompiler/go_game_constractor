@@ -112,33 +112,32 @@ scg --output=./ --script=./skill.yml --http-server
 В папке проекта появится папка `scg` с папкой нашего скилла:
 ```
 - scg
-    - skill_name
-        - cmd
-        - internal
-            - texts
-                - store
-                    - redis
-                    - storesaver
-                - consts
-                    - textsname
-                - manager
-                    - usecase
-            - app
-            - controller
-                - http
-                    - v1
-            - script
-                - errors
-                - matchers
-                - payloads
-                - scenes
-        - config
-            - resources
-        - pkg
-            - logger
-            - str
-            - httpserver
-            - ginutilits
+    - cmd
+    - internal
+        - texts
+            - store
+                - redis
+                - storesaver
+            - consts
+                - textsname
+            - manager
+                - usecase
+        - skill_name
+        - controller
+            - http
+                - v1
+        - script
+            - errors
+            - matchers
+            - payloads
+            - scenes
+    - config
+        - resources
+    - pkg
+        - logger
+        - str
+        - httpserver
+        - ginutilits
 ```
 
 ## Четвёртый шаг: Настройка хранилища текстов

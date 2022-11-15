@@ -1,134 +1,134 @@
 package codegen
 
 import (
-	"github.com/ThCompiler/go_game_constractor/scg/expr"
-	"github.com/ThCompiler/go_game_constractor/scg/expr/scene"
-	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-	errors2 "github.com/ThCompiler/go_game_constractor/scg/script/errors"
-	"github.com/ThCompiler/go_game_constractor/scg/script/matchers"
-	"path"
-	"path/filepath"
+    "github.com/ThCompiler/go_game_constractor/scg/expr"
+    "github.com/ThCompiler/go_game_constractor/scg/expr/scene"
+    "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+    errors2 "github.com/ThCompiler/go_game_constractor/scg/script/errors"
+    "github.com/ThCompiler/go_game_constractor/scg/script/matchers"
+    "path"
+    "path/filepath"
 )
 
 // ScriptFile returns structs for script
 func ScriptFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
-	directorConfigFile := directorConfig(rootPkg, rootDir, scriptInfo)
-	scriptFiles := make([]*codegen.File, 0)
-	for key, value := range scriptInfo.Script {
-		scriptFiles = append(scriptFiles, scriptScenes(rootPkg, rootDir, scriptInfo.Name, sceneWithName{
-			Scene: value,
-			Name:  key,
-		}))
-	}
-	sceneNamesFile := sceneNames(rootPkg, rootDir, scriptInfo)
+    directorConfigFile := directorConfig(rootPkg, rootDir, scriptInfo)
+    scriptFiles := make([]*codegen.File, 0)
+    for key, value := range scriptInfo.Script {
+        scriptFiles = append(scriptFiles, scriptScenes(rootPkg, rootDir, scriptInfo.Name, sceneWithName{
+            Scene: value,
+            Name:  key,
+        }))
+    }
+    sceneNamesFile := sceneNames(rootPkg, rootDir, scriptInfo)
 
-	return append([]*codegen.File{directorConfigFile, sceneNamesFile}, scriptFiles...)
+    return append([]*codegen.File{directorConfigFile, sceneNamesFile}, scriptFiles...)
 }
 
 func directorConfig(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-	var sections []*codegen.SectionTemplate
+    var sections []*codegen.SectionTemplate
 
-	fpath := filepath.Join(rootDir, "script", "init.go")
-	imports := []*codegen.ImportSpec{
-		{Path: path.Join(rootPkg, "manager")},
-		{Path: path.Join(rootPkg, "script", "scenes")},
-		codegen.SCGNamedImport("director", "game"),
-	}
+    fpath := filepath.Join(rootDir, "internal", "script", "init.go")
+    imports := []*codegen.ImportSpec{
+        {Path: path.Join(rootPkg, "internal", "texts", "manager")},
+        {Path: path.Join(rootPkg, "internal", "script", "scenes")},
+        codegen.SCGNamedImport(path.Join("director", "scriptdirector"), "game"),
+    }
 
-	sections = []*codegen.SectionTemplate{
-		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Director config", "script", imports, false),
-	}
+    sections = []*codegen.SectionTemplate{
+        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Director config", "script", imports, false),
+    }
 
-	sections = append(sections, &codegen.SectionTemplate{
-		Name:   "director-config",
-		Source: directorConfigStructT,
-		Data:   scriptInfo,
-		FuncMap: map[string]interface{}{
-			"ToTitle": codegen.ToTitle,
-			"IsLast":  storeLen,
-		},
-	})
+    sections = append(sections, &codegen.SectionTemplate{
+        Name:   "director-config",
+        Source: directorConfigStructT,
+        Data:   scriptInfo,
+        FuncMap: map[string]interface{}{
+            "ToTitle": codegen.ToTitle,
+            "IsLast":  storeLen,
+        },
+    })
 
-	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
+    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
 func sceneNames(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-	var sections []*codegen.SectionTemplate
+    var sections []*codegen.SectionTemplate
 
-	fpath := filepath.Join(rootDir, "script", "scenes", "names.go")
-	var imports []*codegen.ImportSpec
+    fpath := filepath.Join(rootDir, "internal", "script", "scenes", "names.go")
+    var imports []*codegen.ImportSpec
 
-	sections = []*codegen.SectionTemplate{
-		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Scenes Name", "scenes", imports, false),
-	}
+    sections = []*codegen.SectionTemplate{
+        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Scenes Name", "scenes", imports, false),
+    }
 
-	sections = append(sections, &codegen.SectionTemplate{
-		Name:   "scenes-name",
-		Source: scenesConstantConfigStructT,
-		Data:   scriptInfo,
-		FuncMap: map[string]interface{}{
-			"ToTitle": codegen.ToTitle,
-			"ToSnake": codegen.SnakeCase,
-		},
-	})
+    sections = append(sections, &codegen.SectionTemplate{
+        Name:   "scenes-name",
+        Source: scenesConstantConfigStructT,
+        Data:   scriptInfo,
+        FuncMap: map[string]interface{}{
+            "ToTitle": codegen.ToTitle,
+            "ToSnake": codegen.SnakeCase,
+        },
+    })
 
-	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
+    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
 type sceneWithName struct {
-	scene.Scene
-	Name string
+    scene.Scene
+    Name string
 }
 
 func scriptScenes(rootPkg string, rootDir string, scriptName string, sceneInfo sceneWithName) *codegen.File {
-	var sections []*codegen.SectionTemplate
+    var sections []*codegen.SectionTemplate
 
-	fpath := filepath.Join(rootDir, "script", "scenes", codegen.SnakeCase(sceneInfo.Name)+"_scene.go")
-	imports := []*codegen.ImportSpec{
-		codegen.SCGImport(path.Join("director")),
-		codegen.SCGImport(path.Join("director", "scriptdirector", "scene")),
-		codegen.SCGNamedImport(path.Join("director", "scriptdirector", "matchers"), "base_matchers"),
-		{Path: path.Join(rootPkg, "script", "matchers")},
-		{Path: path.Join(rootPkg, "script", "errors")},
-		{Path: path.Join(rootPkg, "script", "payloads")},
-		{Path: path.Join(rootPkg, "manager")},
-	}
+    fpath := filepath.Join(rootDir, "internal", "script", "scenes", codegen.SnakeCase(sceneInfo.Name)+"_scene.go")
+    imports := []*codegen.ImportSpec{
+        codegen.SCGImport(path.Join("director")),
+        codegen.SCGImport(path.Join("director", "scriptdirector", "scene")),
+        codegen.SCGNamedImport(path.Join("pkg", "logger", "http"), "loghttp"),
+        codegen.SCGNamedImport(path.Join("director", "scriptdirector", "matchers"), "base_matchers"),
+        {Path: path.Join(rootPkg, "internal", "script", "matchers")},
+        {Path: path.Join(rootPkg, "internal", "script", "errors")},
+        {Path: path.Join(rootPkg, "internal", "script", "payloads")},
+        {Path: path.Join(rootPkg, "internal", "texts", "manager")},
+    }
 
-	sections = []*codegen.SectionTemplate{
-		codegen.Header(codegen.ToTitle(scriptName)+"-SceneStructs", "scenes", imports, true),
-	}
+    sections = []*codegen.SectionTemplate{
+        codegen.Header(codegen.ToTitle(scriptName)+"-SceneStructs", "scenes", imports, true),
+    }
 
-	sections = append(sections, &codegen.SectionTemplate{
-		Name:   "scene-struct-" + sceneInfo.Name,
-		Source: sceneStructT,
-		Data:   sceneInfo,
-		FuncMap: map[string]interface{}{
-			"ToTitle":              codegen.ToTitle,
-			"CamelCase":            codegen.CamelCase,
-			"ConvertNameToMatcher": matchers.ConvertNameToMatcher,
-			"ConvertNameToError":   errors2.ConvertNameToError,
-			"IsBaseMather":         matchers.IsCorrectNameOfMather,
-			"HaveMatchedString":    haveMatchedString,
-		},
-	})
+    sections = append(sections, &codegen.SectionTemplate{
+        Name:   "scene-struct-" + sceneInfo.Name,
+        Source: sceneStructT,
+        Data:   sceneInfo,
+        FuncMap: map[string]interface{}{
+            "ToTitle":              codegen.ToTitle,
+            "ConvertNameToMatcher": matchers.ConvertNameToMatcher,
+            "ConvertNameToError":   errors2.ConvertNameToError,
+            "IsBaseMather":         matchers.IsCorrectNameOfMather,
+            "HaveMatchedString":    haveMatchedString,
+        },
+    })
 
-	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
+    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
 func haveMatchedString(scene sceneWithName) bool {
-	return len(scene.Matchers) != 0 || len(scene.Buttons) != 0
+    return len(scene.Matchers) != 0 || len(scene.Buttons) != 0
 }
 
 var ln = 0
 
 func storeLen(l int) bool {
-	ln++
-	if l == ln {
-		ln = 0
-		return true
-	}
+    ln++
+    if l == ln {
+        ln = 0
+        return true
+    }
 
-	return false
+    return false
 }
 
 const sceneStructT = `{{ $sceneName := .Name }}{{ if .Buttons }} 
@@ -138,6 +138,7 @@ const ( {{ range $name, $button := .Buttons }}
 )
 {{end}}// {{ ToTitle .Name }} scene
 type {{ ToTitle .Name }} struct {
+	loghttp.LogObject
 	TextManager    manager.TextManager
 	NextScene 	   SceneName
 }

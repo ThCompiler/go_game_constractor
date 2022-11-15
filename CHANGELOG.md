@@ -87,7 +87,17 @@ Some modification and addition of new functionality.
 * Struct `UserInput`
 * New field `Request` for `SceneRequest` instead of the [moved](#moved_fields) fields
 * New field `UserVKID` for struct `UserInfo` in package `scene`
-* * New field `UserVKID` for struct `Request` in package `scene`
+* New field `UserVKID` for struct `Request` in package `scene`
+* New logger based on zap logger
+* Http middleware for logger based on gin
+* Context for request from marusia (сurrently it is used only for transmitting the logger, but it is possible to transmit something else)
+* Generating server functional
+* Generating app functional
+* Generating config functional
+* Generating logger functional
+* Generating handler functional
+* Generating entry point of server
+* Loading resources for convert package
 
 ### Changes
 
@@ -100,6 +110,9 @@ Some modification and addition of new functionality.
 * Renamed `UserInfo` to `SessionInfo`
 * <a id="moved_fields"></a>The fields `Command`, `FullUserText`, `WasButton`, `Payload` have been moved from `SceneRequest` to struct `UserInput`
 * The structs `Text` and `Button` have been moved from package `scene` to package `director`
+* Used new Logger into webhook
+* Reformatted Directory structure(see in [documentation](https://thcompiler.github.io/go_game_constractor/manual/))
+* Some bug fixed in other generation
 
 ### Remove
 

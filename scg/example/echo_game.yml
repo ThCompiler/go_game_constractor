@@ -4,7 +4,7 @@ goodByeCommand: "GoodeBye"
 goodByeScene: "goodbye"
 matchers:
   Checked:
-    regex: "*"
+    regex: ".*"
     nameMatched: "da"
   Agreed:
     selects:

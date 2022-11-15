@@ -1,90 +1,90 @@
 package codegen
 
 import (
-	"github.com/ThCompiler/go_game_constractor/scg/expr"
-	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-	"github.com/google/uuid"
-	"path"
-	"path/filepath"
+    "github.com/ThCompiler/go_game_constractor/scg/expr"
+    "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+    "github.com/google/uuid"
+    "path"
+    "path/filepath"
 )
 
 // TextManagerFile returns saved text with add values from store
 func TextManagerFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
-	usecaseFile := usecase(rootPkg, rootDir, scriptInfo)
-	interfaceFile := managerInterface(rootPkg, rootDir, scriptInfo)
+    usecaseFile := usecase(rootPkg, rootDir, scriptInfo)
+    interfaceFile := managerInterface(rootPkg, rootDir, scriptInfo)
 
-	return []*codegen.File{interfaceFile, usecaseFile}
+    return []*codegen.File{interfaceFile, usecaseFile}
 }
 
 func usecase(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-	var sections []*codegen.SectionTemplate
+    var sections []*codegen.SectionTemplate
 
-	fpath := filepath.Join(rootDir, "manager", "usecase", "usecase.go")
-	imports := []*codegen.ImportSpec{
-		{Path: path.Join(rootPkg, "store"), Name: "store"},
-		{Path: path.Join(rootPkg, "pkg", "str")},
-		codegen.SCGImport(path.Join("director")),
-		{Path: path.Join(rootPkg, "consts", "textsname"), Name: "consts"},
-	}
+    fpath := filepath.Join(rootDir, "internal", "texts", "manager", "usecase", "usecase.go")
+    imports := []*codegen.ImportSpec{
+        {Path: path.Join(rootPkg, "internal", "texts", "store"), Name: "store"},
+        {Path: path.Join(rootPkg, "pkg", "str")},
+        codegen.SCGImport(path.Join("director")),
+        {Path: path.Join(rootPkg, "internal", "texts", "consts", "textsname"), Name: "consts"},
+    }
 
-	sections = []*codegen.SectionTemplate{
-		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Text usecase", "usecase", imports, false),
-	}
+    sections = []*codegen.SectionTemplate{
+        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Text usecase", "usecase", imports, false),
+    }
 
-	sections = append(sections, &codegen.SectionTemplate{
-		Name:   "usecase-type",
-		Source: usecaseTypeStructT,
-		Data:   scriptInfo.Name + "-" + uuid.New().String(),
-	})
+    sections = append(sections, &codegen.SectionTemplate{
+        Name:   "usecase-type",
+        Source: usecaseTypeStructT,
+        Data:   scriptInfo.Name + "-" + uuid.New().String(),
+    })
 
-	sections = append(sections, &codegen.SectionTemplate{
-		Name:   "usecase-func",
-		Source: usecaseFuncStructT,
-		Data:   scriptInfo,
-		FuncMap: map[string]interface{}{
-			"ToTitle": codegen.ToTitle,
-			"IsLast":  storeLen,
-		},
-	})
+    sections = append(sections, &codegen.SectionTemplate{
+        Name:   "usecase-func",
+        Source: usecaseFuncStructT,
+        Data:   scriptInfo,
+        FuncMap: map[string]interface{}{
+            "ToTitle": codegen.ToTitle,
+            "IsLast":  storeLen,
+        },
+    })
 
-	return &codegen.File{Path: fpath, SectionTemplates: sections}
+    return &codegen.File{Path: fpath, SectionTemplates: sections}
 }
 
 func managerInterface(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-	var sections []*codegen.SectionTemplate
+    var sections []*codegen.SectionTemplate
 
-	fpath := filepath.Join(rootDir, "manager", "interface.go")
-	imports := []*codegen.ImportSpec{
-		codegen.SCGImport(path.Join("director")),
-	}
+    fpath := filepath.Join(rootDir, "internal", "texts", "manager", "interface.go")
+    imports := []*codegen.ImportSpec{
+        codegen.SCGImport(path.Join("director")),
+    }
 
-	sections = []*codegen.SectionTemplate{
-		codegen.Header(codegen.ToTitle(scriptInfo.Name)+" Interface for script text manager", "manager", imports, false),
-	}
+    sections = []*codegen.SectionTemplate{
+        codegen.Header(codegen.ToTitle(scriptInfo.Name)+" Interface for script text manager", "manager", imports, false),
+    }
 
-	sections = append(sections, &codegen.SectionTemplate{
-		Name:   "script-text-manger",
-		Source: scriptTextManagerT,
-		Data:   scriptInfo,
-		FuncMap: map[string]interface{}{
-			"ToTitle": codegen.ToTitle,
-			"IsLast":  storeLen,
-		},
-	})
+    sections = append(sections, &codegen.SectionTemplate{
+        Name:   "script-text-manger",
+        Source: scriptTextManagerT,
+        Data:   scriptInfo,
+        FuncMap: map[string]interface{}{
+            "ToTitle": codegen.ToTitle,
+            "IsLast":  storeLen,
+        },
+    })
 
-	return &codegen.File{Path: fpath, SectionTemplates: sections}
+    return &codegen.File{Path: fpath, SectionTemplates: sections}
 }
 
 var ln = 0
 
 func storeLen(l int) bool {
-	ln++
-	if l == ln {
-		ln = 0
-		return true
-	}
+    ln++
+    if l == ln {
+        ln = 0
+        return true
+    }
 
-	return false
+    return false
 }
 
 const scriptTextManagerT = `type TextManager interface {
