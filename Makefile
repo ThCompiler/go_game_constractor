@@ -1,4 +1,4 @@
-BIN_DIR=./bin
+BIN_DIR=bin
 BIN=scg
 BIN_WINDOWS=scg.exe
 WINDOWS_OS=windows
