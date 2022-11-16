@@ -116,32 +116,32 @@ func (l *Logger) Sync() error {
 
 // Debug -.
 func (l *Logger) Debug(message interface{}, args ...interface{}) {
-    l.log(l.logger.Debugf, message, args)
+    l.log(l.logger.Debugf, message, args...)
 }
 
 // Info -.
 func (l *Logger) Info(message interface{}, args ...interface{}) {
-    l.log(l.logger.Infof, message, args)
+    l.log(l.logger.Infof, message, args...)
 }
 
 // Warn -.
 func (l *Logger) Warn(message interface{}, args ...interface{}) {
-    l.log(l.logger.Warnf, message, args)
+    l.log(l.logger.Warnf, message, args...)
 }
 
 // Panic -.
 func (l *Logger) Panic(message interface{}, args ...interface{}) {
-    l.log(l.logger.Panicf, message, args)
+    l.log(l.logger.Panicf, message, args...)
 }
 
 // Error -.
 func (l *Logger) Error(message interface{}, args ...interface{}) {
-    l.log(l.logger.Errorf, message, args)
+    l.log(l.logger.Errorf, message, args...)
 }
 
 // Fatal -.
 func (l *Logger) Fatal(message interface{}, args ...interface{}) {
-    l.log(l.logger.Fatalf, message, args)
+    l.log(l.logger.Fatalf, message, args...)
 }
 
 func (l *Logger) log(lg func(message string, args ...interface{}), message interface{}, args ...interface{}) {
