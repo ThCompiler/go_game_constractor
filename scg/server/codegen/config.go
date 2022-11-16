@@ -112,7 +112,7 @@ http:
 
 logger:
   level: 'debug'
-  log_dir: './app-log'
+  log_dir: './app-log/'
   use_std_and_file: true
   add_low_priority_level_to_cmd: true
 `

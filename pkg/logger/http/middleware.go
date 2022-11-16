@@ -22,7 +22,8 @@ func GinRequestLogger(l logger.Interface) gin.HandlerFunc {
             path = path + "?" + raw
         }
 
-        l.With(URL, path).With(RequestId, requestId).With(Method, method)
+        lg := l.With(URL, path).With(RequestId, requestId).With(Method, method)
+        c.Set(ContextLoggerField, lg)
 
         // Process request
         c.Next()
@@ -40,7 +41,7 @@ func GinRequestLogger(l logger.Interface) gin.HandlerFunc {
             latency = latency.Truncate(time.Second)
         }
 
-        l.Info("[GIN] %v | %3d | %13v | %15s | %-7s  %#v | %s | ",
+        l.Info("[GIN] %v | %d | %v | %s | %s  %v | %s |",
             timeStamp.Format("2006/01/02 - 15:04:05"),
             statusCode,
             latency,
