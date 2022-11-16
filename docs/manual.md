@@ -19,10 +19,8 @@ title: "Быстрый старт"
 
 ## Первый шаг: Установка
 ```cmd
-mkdir tmp
-
 # Скачиваем последний релиз
-wget https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.3-alpha/scg.linux-amd64.tar.gz -P ./tmp
+wget https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha-dffd59b/scg.linux-amd64.tar.gz -P ./tmp
 
 # Распаковываем архив
 tar -xvf scg.linux-amd64.tar.gz -C ./tmp

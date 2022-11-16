@@ -39,10 +39,8 @@ title: "Установка генератора и подключения биб
 ###### Linux
 
 ```cmd
-  mkdir tmp
-  
   # Скачиваем последний релиз
-  wget https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha/scg.linux-amd64.tar.gz -P ./tmp
+  wget https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha-dffd59b/scg.linux-amd64.tar.gz -P ./tmp
   
   # Распаковываем архив
   tar -xvf ./tmp/scg.linux-amd64.tar.gz -C ./tmp
@@ -59,7 +57,7 @@ title: "Установка генератора и подключения биб
   mkdir tmp
   
   # Скачиваем последний релиз
-  cd tmp && curl -LO ./tmp https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha/scg.darwin-amd64.tar.gz \
+  cd tmp && curl -LO ./tmp https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha-dffd59b/scg.darwin-amd64.tar.gz \
   && cd ..
 
   
@@ -78,7 +76,7 @@ title: "Установка генератора и подключения биб
   mkdir tmp
   
   # Скачиваем последний релиз
-  wget https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha/scg.windows-amd64.zip -P .\tmp
+  wget https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha-dffd59b/scg.windows-amd64.zip -P .\tmp
    
   # Скачиваем распаковшик zip-архива
   wget https://www.7-zip.org/a/7z2201-x64.exe -P .\tmp
