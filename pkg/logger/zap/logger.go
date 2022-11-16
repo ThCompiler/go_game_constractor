@@ -156,6 +156,6 @@ func (l *Logger) log(lg func(message string, args ...interface{}), message inter
 }
 
 func (l *Logger) With(key log.Field, value interface{}) log.Interface {
-    l.logger = l.logger.With(key, value)
+    l.logger = l.logger.With(string(key), value)
     return l
 }
