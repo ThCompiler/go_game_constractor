@@ -34,7 +34,7 @@ func New(param Params, out io.Writer) *Logger {
     sugLogger := logger.Sugar()
 
     return &Logger{
-        logger: sugLogger.With(log.AppName, param.AppName),
+        logger: sugLogger.With(string(log.AppName), param.AppName),
     }
 }
 

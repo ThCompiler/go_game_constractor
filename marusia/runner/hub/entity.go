@@ -43,7 +43,7 @@ func ToRunnerButton(button drt.Button) runner.Button {
     return runner.Button{
         Title:   button.Title,
         URL:     button.URL,
-        Payload: button.URL,
+        Payload: button.Payload,
     }
 }
 
