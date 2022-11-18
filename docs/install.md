@@ -46,7 +46,7 @@ title: "Установка генератора и подключения биб
   tar -xvf ./tmp/scg.linux-amd64.tar.gz -C ./tmp
   
   # Добавляем генератор в утилиты пользователя
-  sudo cp ./tmp/scg.linux-amd64/scg /usr/local/bin/
+  sudo cp ./tmp/scg.linux-amd64/bin/scg /usr/local/bin/
   
   # Очищяем не нужные файлы
   rm -r tmp
@@ -65,28 +65,31 @@ title: "Установка генератора и подключения биб
   tar -xvf ./tmp/scg.darwin-amd64.tar.gz -C ./tmp
   
   # Добавляем генератор в утилиты пользователя
-  sudo cp ./tmp/scg.darwin-amd64/scg /usr/local/bin/
+  sudo cp ./tmp/scg.darwin-amd64/bin/scg /usr/local/bin/
   
   # Очищяем не нужные файлы
   rm -r tmp
 ```
 
 ###### Windows
+
+Данные комманды прописаны для использования Power
+
 ```cmd
   mkdir tmp
   
   # Скачиваем последний релиз
-  wget https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha-dffd59b/scg.windows-amd64.zip -P .\tmp
-   
-  # Скачиваем распаковшик zip-архива
-  wget https://www.7-zip.org/a/7z2201-x64.exe -P .\tmp
+  wget -Uri https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha-dffd59b/scg.windows-amd64.zip -OutFile .\tmp\scg.windows-amd64.zip
   
   # Распаковываем архив
-  .\tmp\7z2201-x64.exe x scg.windows-amd64.zip -o .\tmp
+  Expand-Archive -Path .\tmp\scg.windows-amd64.zip  -DestinationPath .\tmp\scg.windows-amd64 -Force
   
   # Добавляем генератор в утилиты пользователя
-  mkdir %USERPROFILE%/scg
-  copy .\tmp\scg.windows-amd64\scg %USERPROFILE%\scg
+  mkdir $env:USERPROFILE\scg
+  copy .\tmp\scg.windows-amd64\bin\scg.exe $env:USERPROFILE\scg
+  
+  # Добавим папку в переменные среды
+  $Env:Path += ";$env:USERPROFILE\scg"
   
   # Очищяем не нужные файлы
   rd -r tmp
@@ -107,7 +110,11 @@ title: "Установка генератора и подключения биб
 
 ###### Windows
 ```cmd
-  rd -r %USERPROFILE%\scg
+  # Удалим папку из переменных среды
+  $Env:Path = ( $Env:Path.Split(';') | Where-Object { $_ -ne "$env:USERPROFILE\scg" }) -join ';'
+  
+  # Удалить папку
+  rd -r $Env:USERPROFILE\scg
 ```
 
 > <h3>Важно</h3>
