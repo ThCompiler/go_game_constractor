@@ -90,7 +90,8 @@ Some modification and addition of new functionality.
 * New field `UserVKID` for struct `Request` in package `scene`
 * New logger based on zap logger
 * Http middleware for logger based on gin
-* Context for request from marusia (сurrently it is used only for transmitting the logger, but it is possible to transmit something else)
+* Context for request from marusia (сurrently it is used only for transmitting the logger, but it is possible to
+  transmit something else)
 * Generating server functional
 * Generating app functional
 * Generating config functional
@@ -105,11 +106,13 @@ Some modification and addition of new functionality.
 * Generalized marusia handler
 * New help text
 * Adjusted the default setting of the next scene in the React function
-* Moved `UserId` from the session field of the request to the independent `User` structure in the `Session` field of the request
+* Moved `UserId` from the session field of the request to the independent `User` structure in the `Session` field of the
+  request
 * Renamed package `hub` to `runner`
 * ScriptDirector moved to package `scriptdirector`
 * Renamed `UserInfo` to `SessionInfo`
-* <a id="moved_fields"></a>The fields `Command`, `FullUserText`, `WasButton`, `Payload` have been moved from `SceneRequest` to struct `UserInput`
+* <a id="moved_fields"></a>The fields `Command`, `FullUserText`, `WasButton`, `Payload` have been moved
+  from `SceneRequest` to struct `UserInput`
 * The structs `Text` and `Button` have been moved from package `scene` to package `director`
 * Used new Logger into webhook
 * Reformatted Directory structure(see in [documentation](https://thcompiler.github.io/go_game_constractor/manual/))
@@ -118,3 +121,21 @@ Some modification and addition of new functionality.
 ### Remove
 
 * A check that the skill was launched based on receiving the `debug` message from the user
+
+## 0.2.1-alpha
+
+### Added
+
+* Checking the name of a custom matcher for the presence of the same name in standard matchers
+* The ability to specify the next scene for each matcher and appropriate checks. Specified in the `toScene' field
+* The ability to specify the next scene for each button and appropriate checks. Specified in the `toScene' field
+* Dequeue and Queue structures to package `pkg/structures`
+* Graph functional to package `pkg/graph`
+* Storing to context value from user input
+* Loading data from context as a function
+* Getting values for the text of scenes from the context
+
+### Changes
+
+* Removed the remaining parts from the old way of describing the matchers
+* Updated some errors

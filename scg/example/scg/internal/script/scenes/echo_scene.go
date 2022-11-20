@@ -40,7 +40,7 @@ func (sc *Echo) React(ctx *scene.Context) scene.Command {
 
 	case ctx.Request.NameMatched == JoreEchoButtonText && ctx.Request.WasButton:
 
-		// Matcher select
+	// Matcher select
 	case ctx.Request.NameMatched == base_matchers.AnyMatchedString:
 
 	default:

@@ -65,9 +65,11 @@ script:
           joke: "Ds"
           sore:
             nore: "kak"
+        toScene: "echoRepeat"
     matchers:
       - 'any'
-      - 'Checked'
+      - name: 'Checked'
+        toScene: 'echo'
       - "Agreed"
     error:
       name: "dore"

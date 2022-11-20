@@ -13,7 +13,7 @@ import (
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/texts/store"
 )
 
-const checkKey = "EchoGame-0224140b-7b4b-4fb5-b984-6c907baa4704"
+const checkKey = "EchoGame-54219800-41c3-40bb-b102-c7c83c82538c"
 
 func checkScriptStore(st store.ScriptStore) bool {
 	text, err := st.GetText(checkKey)

@@ -91,7 +91,7 @@ const scriptTextManagerT = `type TextManager interface {
 	{{ range $name, $scene := .Script }}
 	// Get{{ ToTitle $name }}Text get text for {{$name}} scene with variables {{$lenValues := len $scene.Text.Values}}
 	Get{{ ToTitle $name }}Text({{ if $lenValues }}{{
-	range $nameVar, $typeVar := $scene.Text.Values}}{{$nameVar}} {{$typeVar}}{{
+	range $nameVar, $typeVar := $scene.Text.Values}}{{$nameVar}} {{$typeVar.Type}}{{
 	if not (IsLast $lenValues) }}, {{end}}{{end}}{{end}}) (director.Text, error)
 	{{ end }}
 }
@@ -100,7 +100,7 @@ const scriptTextManagerT = `type TextManager interface {
 const usecaseFuncStructT = ` {{ range $name, $scene := .Script }}
 	// Get{{ ToTitle $name }}Text get text for {{$name}} scene with variables {{$lenValues := len $scene.Text.Values}}
 	func (tu *TextUsecase) Get{{ ToTitle $name }}Text({{ if $lenValues }}{{
-	range $nameVar, $typeVar := $scene.Text.Values}}{{$nameVar}} {{$typeVar}}{{
+	range $nameVar, $typeVar := $scene.Text.Values}}{{$nameVar}} {{$typeVar.Type}}{{
 	if not (IsLast $lenValues) }}, {{end}}{{end}}{{end}}) (director.Text, error) {
 		text, err := tu.store.GetText(consts.{{ ToTitle $name }}Text)
 		if err != nil {

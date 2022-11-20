@@ -148,13 +148,13 @@ func (sc *{{ ToTitle .Name }}) React({{ if HaveMatchedString . }}ctx{{else}}_{{e
 	// TODO Write the actions after {{ ToTitle .Name }} scene has been played {{ if HaveMatchedString . }}
 	switch { 
 		{{ if .Buttons }}// Buttons select 
-		{{end}}{{ range $name, $button := .Buttons }} case ctx.Request.NameMatched == {{ ToTitle $name }}{{ ToTitle $sceneName }}ButtonText && ctx.Request.WasButton:
-
+		{{end}}{{ range $name, $button := .Buttons }}case ctx.Request.NameMatched == {{ ToTitle $name }}{{ ToTitle $sceneName }}ButtonText && ctx.Request.WasButton:
+            {{ if .ToScene }}sc.NextScene = {{ ToTitle .ToScene }}Scene{{end}}
 		{{end}}{{ if .Matchers }}
 		// Matcher select 
-		{{end}}{{ range .Matchers }} case ctx.Request.NameMatched == {{ if (IsBaseMather .) }}base_matchers.{{ToTitle .}}MatchedString{{
-		else}}matchers.{{ToTitle .}}MatchedString{{end}}:
-
+		{{end}}{{ range .Matchers }}case ctx.Request.NameMatched == {{ if (IsBaseMather .Name) }}base_matchers.{{ToTitle .Name}}MatchedString{{
+		else}}matchers.{{ToTitle .Name}}MatchedString{{end}}:
+            {{ if .ToScene }}sc.NextScene = {{ ToTitle .ToScene }}Scene{{end}}
 	{{end}}default:
 		sc.NextScene = {{ ToTitle .Name }}Scene
 	}
@@ -188,14 +188,14 @@ func (sc *{{ ToTitle .Name }}) Next() scene.Scene { {{ if not .IsInfoScene }}
 // GetSceneInfo function returning info about scene
 func (sc *{{ ToTitle .Name }}) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 	{{ if .Text.Values }}var (
-		{{range $nameVar, $typeVar := .Text.Values}}{{$nameVar}} {{$typeVar}}
+		{{ range $nameVar, $typeVar := .Text.Values }}{{ $nameVar }} {{ $typeVar.Type }}
 		{{end}}
 	)
 	{{end}}
 	// TODO Write some actions for get data for texts
 
 	text, _ := sc.TextManager.Get{{ ToTitle .Name }}Text(
-		{{range $nameVar, $typeVar := .Text.Values}}{{$nameVar}},
+		{{ range $nameVar, $typeVar := .Text.Values }}{{$nameVar}},
 		{{end}})
 	return scene.Info{
 		Text: text,
@@ -207,8 +207,8 @@ func (sc *{{ ToTitle .Name }}) GetSceneInfo(_ *scene.Context) (scene.Info, bool)
 `
 
 const sceneMatchersStructT = `{{ range .Matchers }}
-	{{ if IsBaseMather . }} base_matchers.{{ConvertNameToMatcher .}},{{
-	else}} matchers.{{ToTitle .}}Matcher,{{end}}{{end}} {{if .Matchers}}
+	{{ if IsBaseMather .Name }} base_matchers.{{ ConvertNameToMatcher .Name }},{{
+	else}} matchers.{{ ToTitle .Name }}Matcher,{{end}}{{end}} {{ if .Matchers }}
 {{end}}`
 
 const sceneButtonsStructT = `{{ $sceneName := .Name }}{{ range $name, $button := .Buttons }}

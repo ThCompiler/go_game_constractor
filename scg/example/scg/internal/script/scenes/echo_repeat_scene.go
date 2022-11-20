@@ -37,12 +37,13 @@ func (sc *EchoRepeat) React(ctx *scene.Context) scene.Command {
 	switch {
 	// Buttons select
 	case ctx.Request.NameMatched == DoreEchoRepeatButtonText && ctx.Request.WasButton:
+		sc.NextScene = EchoRepeatScene
 
-		// Matcher select
+	// Matcher select
 	case ctx.Request.NameMatched == base_matchers.AnyMatchedString:
 
 	case ctx.Request.NameMatched == matchers.CheckedMatchedString:
-
+		sc.NextScene = EchoScene
 	case ctx.Request.NameMatched == matchers.AgreedMatchedString:
 
 	default:

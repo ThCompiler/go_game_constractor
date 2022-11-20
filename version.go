@@ -1,4 +1,4 @@
 package go_game_constractor
 
 // Version - version of app
-const Version = "v0.1.4-alpha"
+const Version = "v0.2.1-alpha"
