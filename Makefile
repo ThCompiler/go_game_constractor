@@ -12,12 +12,12 @@ I386=386
 
 .PHONY: local-build
 local-build: bin-dir
-	go build -o $(BIN_DIR)/$(BIN) github.com/ThCompiler/go_game_constractor/scg/cmd
+	go build -o $(BIN_DIR)/$(BIN) github.com/ThCompiler/go_game_constractor/scg
 
 .PHONY: build
 build: bin-dir
 	if [ -z "$(shell git status --porcelain)" ]; then \
-		go build -o $(BIN_DIR)/$(BIN) github.com/ThCompiler/go_game_constractor/scg/cmd ; \
+		go build -o $(BIN_DIR)/$(BIN) github.com/ThCompiler/go_game_constractor/scg ; \
 	else \
 		echo Working directory not clean, commit changes; \
 	fi
@@ -27,7 +27,7 @@ build-linux: bin-dir
 	if [ -z "$(shell git status --porcelain)" ]; then \
   		for TYPE in $(ARCH) $(ARM) $(ARM64) $(I386) ; do \
 			sed -i "s|${VERSION}|${VERSION} $(LINUX_OS)/$$TYPE|" ./version.go; \
-			GOOS=$(LINUX_OS) GOARCH=$$TYPE go build -o $(BIN_DIR)/$(BIN) github.com/ThCompiler/go_game_constractor/scg/cmd; \
+			GOOS=$(LINUX_OS) GOARCH=$$TYPE go build -o $(BIN_DIR)/$(BIN) github.com/ThCompiler/go_game_constractor/scg; \
 			tar -czvf $(BIN_DIR)/$(BIN).$(LINUX_OS)-$$TYPE.tar.gz $(BIN_DIR)/$(BIN); \
 			git checkout -- ./version.go; \
 			rm $(BIN_DIR)/$(BIN); \
@@ -41,7 +41,7 @@ build-darwin: bin-dir
 	if [ -z "$(shell git status --porcelain)" ]; then \
   		for TYPE in $(ARCH) $(ARM64) ; do \
 			sed -i "s|${VERSION}|${VERSION} $(MAC_OS)/$$TYPE|" ./version.go; \
-			GOOS=$(MAC_OS) GOARCH=$$TYPE go build -o $(BIN_DIR)/$(BIN) github.com/ThCompiler/go_game_constractor/scg/cmd; \
+			GOOS=$(MAC_OS) GOARCH=$$TYPE go build -o $(BIN_DIR)/$(BIN) github.com/ThCompiler/go_game_constractor/scg; \
 			tar -czvf $(BIN_DIR)/$(BIN).$(MAC_OS)-$$TYPE.tar.gz $(BIN_DIR)/$(BIN); \
 			git checkout -- ./version.go; \
 			rm $(BIN_DIR)/$(BIN); \
@@ -55,7 +55,7 @@ build-windows: bin-dir
 	if [ -z "$(shell git status --porcelain)" ]; then \
 		for TYPE in $(ARCH) $(ARM) $(ARM64) $(I386) ; do \
 			sed -i "s|${VERSION}|${VERSION} $(WINDOWS_OS)/$$TYPE|" ./version.go; \
-			GOOS=$(WINDOWS_OS) GOARCH=$$TYPE go build -o $(BIN_DIR)/$(BIN_WINDOWS) github.com/ThCompiler/go_game_constractor/scg/cmd; \
+			GOOS=$(WINDOWS_OS) GOARCH=$$TYPE go build -o $(BIN_DIR)/$(BIN_WINDOWS) github.com/ThCompiler/go_game_constractor/scg; \
 			zip -9 -y $(BIN_DIR)/$(BIN).$(WINDOWS_OS)-$$TYPE.zip $(BIN_DIR)/$(BIN_WINDOWS); \
 			git checkout -- ./version.go; \
 			rm $(BIN_DIR)/$(BIN_WINDOWS); \

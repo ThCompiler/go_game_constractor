@@ -6,6 +6,9 @@ import (
     "github.com/ThCompiler/go_game_constractor"
     "github.com/ThCompiler/go_game_constractor/scg/expr"
     "github.com/ThCompiler/go_game_constractor/scg/generator"
+    fs "github.com/ThCompiler/go_game_constractor/scg/generator/filesystem"
+    "github.com/c2fo/vfs/v6/backend"
+    vfsos "github.com/c2fo/vfs/v6/backend/os"
     "os"
     "strings"
 )
@@ -54,7 +57,26 @@ func main() {
         fail(err.Error())
     }
 
-    outputs, err := generator.Generate(out, *si, update, server)
+    filesystem := fs.NewFilesystem(backend.Backend(vfsos.Scheme), "")
+
+    path, err := os.Getwd()
+
+    if err != nil {
+        fail(err.Error())
+    }
+
+    loc, err := filesystem.NewLocation(path)
+
+    if err != nil {
+        fail(err.Error())
+    }
+
+    outputs, err := generator.Generate(generator.Param{
+        Dir:       out,
+        Update:    update,
+        AddServer: server,
+    }, *si, loc)
+
     if err != nil {
         fail(err.Error())
     }

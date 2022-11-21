@@ -5,47 +5,71 @@ package generator
 import (
     "github.com/ThCompiler/go_game_constractor/scg/expr"
     "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+    "github.com/c2fo/vfs/v6"
+    "go/ast"
+    "go/parser"
+    "go/token"
     "golang.org/x/tools/go/packages"
     "os"
     "path/filepath"
     "sort"
     "strings"
+
+    fs "github.com/ThCompiler/go_game_constractor/scg/generator/filesystem"
 )
 
+type Param struct {
+    Dir       string
+    Update    bool
+    AddServer bool
+}
+
 // Generate runs the code generation algorithms.
-func Generate(dir string, scriptInfo expr.ScriptInfo, update bool, addServer bool) (outputs []string, err1 error) {
+func Generate(param Param, scriptInfo expr.ScriptInfo, loc vfs.Location) (outputs []string, err1 error) {
     pkgName := strings.ToLower(codegen.CamelCase(scriptInfo.Name, false, false))
     // 1. Compute start package import path.
     var rootPkg string
     {
-        base, err := filepath.Abs(dir)
-        if err != nil {
-            return nil, err
-        }
+        base := param.Dir
         path := filepath.Join(base, codegen.Gendir)
-        if err = os.MkdirAll(path, 0777); err != nil {
+        _, err := loc.NewLocation(path)
+        if err != nil {
             return nil, err
         }
 
         // We create a temporary Go file to make sure the directory is a valid Go package
-        dummy, err := os.CreateTemp(path, "temp.*.go")
+        dummy, err := fs.NewTempFile(loc, path, "temp.*.go")
         if err != nil {
             return nil, err
         }
+
         defer func() {
-            if err = os.Remove(dummy.Name()); err != nil {
+            if err = dummy.Delete(); err != nil {
                 outputs = nil
                 err1 = err
             }
         }()
-        if _, err = dummy.Write([]byte("package" + pkgName)); err != nil {
+        if _, err = dummy.Write([]byte("package " + pkgName)); err != nil {
             return nil, err
         }
+
         if err = dummy.Close(); err != nil {
             return nil, err
         }
 
-        pkgs, err := packages.Load(&packages.Config{Mode: packages.NeedName}, path)
+        pkgs, err := packages.Load(&packages.Config{
+            Mode: packages.NeedName,
+            ParseFile: func(fset *token.FileSet, filename string, src []byte) (*ast.File, error) {
+                if src != nil {
+                    buf, err := fs.ReadFile(loc, filename)
+                    if err != nil {
+                        return nil, err
+                    }
+                    src = buf.Bytes()
+                }
+                return parser.ParseFile(fset, "", src, parser.AllErrors|parser.ParseComments)
+            },
+            Dir: loc.Path()}, path)
         if err != nil {
             return nil, err
         }
@@ -53,22 +77,22 @@ func Generate(dir string, scriptInfo expr.ScriptInfo, update bool, addServer boo
     }
 
     // 2. Retrieve scg generators
-    genfuncs := Generators(addServer)
+    genFuncs := Generators(param.AddServer)
 
     // 3. Generate initial set of files produced by goa code generators.
-    var genfiles []*codegen.File
-    for _, gen := range genfuncs {
+    var genFiles []*codegen.File
+    for _, gen := range genFuncs {
         fs, err := gen(rootPkg, filepath.Join(codegen.Gendir), scriptInfo)
         if err != nil {
             return nil, err
         }
-        genfiles = append(genfiles, fs...)
+        genFiles = append(genFiles, fs...)
     }
 
     // 4. Write the files.
     written := make(map[string]struct{})
-    for _, f := range genfiles {
-        filename, err := f.Render(dir, update)
+    for _, f := range genFiles {
+        filename, err := f.Render(loc, param.Dir, param.Update)
         if err != nil {
             return nil, err
         }
