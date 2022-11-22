@@ -9,10 +9,11 @@
 package usecase
 
 import (
+	consts "example/scg/internal/texts/consts/textsname"
+	store "example/scg/internal/texts/store"
+	"example/scg/pkg/str"
+
 	"github.com/ThCompiler/go_game_constractor/director"
-	consts "github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/texts/consts/textsname"
-	store "github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/texts/store"
-	"github.com/ThCompiler/go_game_constractor/scg/example/scg/pkg/str"
 )
 
 type TextUsecase struct {

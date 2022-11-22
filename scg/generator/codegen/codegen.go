@@ -78,12 +78,7 @@ func (f *File) Section(name string) []*SectionTemplate {
 // happens the smallest integer value greater than 1 to make it unique. Renders
 // returns the computed path.
 func (f *File) Render(root vfs.Location, dir string, update bool) (string, error) {
-    base, err := filepath.Abs(dir)
-    if err != nil {
-        return "", err
-    }
-
-    path := filepath.Join(base, f.Path)
+    path := filepath.Join(dir, f.Path)
 
     file, err := root.NewFile(path)
     if err != nil {

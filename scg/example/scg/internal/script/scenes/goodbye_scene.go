@@ -9,10 +9,11 @@
 package scenes
 
 import (
+	"example/scg/internal/texts/manager"
+
 	"github.com/ThCompiler/go_game_constractor/director"
 	"github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
 	loghttp "github.com/ThCompiler/go_game_constractor/pkg/logger/http"
-	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/texts/manager"
 )
 
 // Goodbye scene

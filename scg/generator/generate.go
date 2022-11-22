@@ -6,11 +6,7 @@ import (
     "github.com/ThCompiler/go_game_constractor/scg/expr"
     "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
     "github.com/c2fo/vfs/v6"
-    "go/ast"
-    "go/parser"
-    "go/token"
     "golang.org/x/tools/go/packages"
-    "os"
     "path/filepath"
     "sort"
     "strings"
@@ -49,6 +45,7 @@ func Generate(param Param, scriptInfo expr.ScriptInfo, loc vfs.Location) (output
                 err1 = err
             }
         }()
+
         if _, err = dummy.Write([]byte("package " + pkgName)); err != nil {
             return nil, err
         }
@@ -57,19 +54,7 @@ func Generate(param Param, scriptInfo expr.ScriptInfo, loc vfs.Location) (output
             return nil, err
         }
 
-        pkgs, err := packages.Load(&packages.Config{
-            Mode: packages.NeedName,
-            ParseFile: func(fset *token.FileSet, filename string, src []byte) (*ast.File, error) {
-                if src != nil {
-                    buf, err := fs.ReadFile(loc, filename)
-                    if err != nil {
-                        return nil, err
-                    }
-                    src = buf.Bytes()
-                }
-                return parser.ParseFile(fset, "", src, parser.AllErrors|parser.ParseComments)
-            },
-            Dir: loc.Path()}, path)
+        pkgs, err := packages.Load(&packages.Config{Mode: packages.NeedName}, path)
         if err != nil {
             return nil, err
         }
@@ -97,17 +82,14 @@ func Generate(param Param, scriptInfo expr.ScriptInfo, loc vfs.Location) (output
             return nil, err
         }
         if filename != "" {
-            written[filename] = struct{}{}
+            written[filepath.Join(loc.Path(), filename)] = struct{}{}
         }
     }
 
     // 5. Compute all output filenames.
     {
         outputs = make([]string, len(written))
-        cwd, err := os.Getwd()
-        if err != nil {
-            cwd = "."
-        }
+        cwd := loc.Path()
         i := 0
         for o := range written {
             rel, err := filepath.Rel(cwd, o)

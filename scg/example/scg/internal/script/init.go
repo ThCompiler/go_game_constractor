@@ -9,9 +9,10 @@
 package script
 
 import (
+	"example/scg/internal/script/scenes"
+	"example/scg/internal/texts/manager"
+
 	game "github.com/ThCompiler/go_game_constractor/director/scriptdirector"
-	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/script/scenes"
-	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/texts/manager"
 )
 
 const GoodByeCommand = "GoodeBye"
