@@ -45,6 +45,9 @@ script:
         payload:
           kore: "Ds"
           sore: "Dsd"
+    context:
+      loadValue:
+        - 'sayed'
     matchers:
       - 'any'
     error:
@@ -54,10 +57,18 @@ script:
       string: "You say {userText}"
       tts: "You say {userText}"
       values:
-        userText: 'string'
+        userText:
+          type: 'string'
+          fromContext: 'sayed'
     nextScenes:
       - 'echoRepeat'
       - 'echo'
+    context:
+      saveValue:
+        name: 'sayed'
+        type: 'string'
+      loadValue:
+        - 'sayed'
     buttons:
       dore:
         text: "Привет"

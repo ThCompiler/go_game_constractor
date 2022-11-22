@@ -17,6 +17,7 @@ import (
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/script/matchers"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/script/payloads"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/texts/manager"
+	"github.com/ThCompiler/go_game_constractor/scg/go/types"
 )
 
 const (
@@ -33,6 +34,8 @@ type EchoRepeat struct {
 
 // React function of actions after scene has been played
 func (sc *EchoRepeat) React(ctx *scene.Context) scene.Command {
+	ctx.Set("sayed", types.MustConvert[string](ctx.Request.SearchedMessage))
+
 	// TODO Write the actions after EchoRepeat scene has been played
 	switch {
 	// Buttons select
@@ -72,9 +75,9 @@ func (sc *EchoRepeat) Next() scene.Scene {
 }
 
 // GetSceneInfo function returning info about scene
-func (sc *EchoRepeat) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
+func (sc *EchoRepeat) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
 	var (
-		userText string
+		userText string = sc.GetSayedContextValue(ctx)
 	)
 
 	// TODO Write some actions for get data for texts
@@ -97,4 +100,9 @@ func (sc *EchoRepeat) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 		},
 		Err: errors.DoreError,
 	}, true
+}
+
+// GetSayedContextValue function returning value from context about scene
+func (sc *EchoRepeat) GetSayedContextValue(ctx *scene.Context) string {
+	return scene.GetContextAny[string](ctx, "sayed")
 }

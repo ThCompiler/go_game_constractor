@@ -31,6 +31,14 @@ type ScriptMatcher struct {
     typeMatch     typeMatcher
 }
 
+func (m *ScriptMatcher) SetName(name string) {
+    if m.IsRegexMatcher() {
+        m.regexMatcher.Name = name
+    } else {
+        m.selectMatcher.Name = name
+    }
+}
+
 func (m *ScriptMatcher) GetRegexMatcher() (*RegexMatcher, error) {
     if m.IsRegexMatcher() {
         return m.regexMatcher, nil

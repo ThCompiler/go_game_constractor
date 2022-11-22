@@ -3,474 +3,105 @@ package types
 import (
     "fmt"
     "github.com/pkg/errors"
-    "reflect"
     "strconv"
     "strings"
 )
 
-var (
-    ErrorNotParsing = errors.New("can not parse type to other type")
-)
-
-func ConAnyToString(value any) (string, error) {
-    switch tp := value.(type) {
-    case bool:
-        return strconv.FormatBool(tp), nil
-    case int:
-        return strconv.Itoa(tp), nil
-    case int8:
-        return strconv.FormatInt(int64(tp), 8), nil
-    case int16:
-        return strconv.FormatInt(int64(tp), 16), nil
-    case int32:
-        return strconv.FormatInt(int64(tp), 32), nil
-    case int64:
-        return strconv.FormatInt(tp, 64), nil
-    case uint:
-        return strconv.FormatUint(uint64(tp), 32), nil
-    case uint8:
-        return strconv.FormatUint(uint64(tp), 8), nil
-    case uint16:
-        return strconv.FormatUint(uint64(tp), 16), nil
-    case uint32:
-        return strconv.FormatUint(uint64(tp), 32), nil
-    case uint64:
-        return strconv.FormatUint(tp, 64), nil
-    case float32:
-        return strconv.FormatFloat(float64(tp), 'f', -1, 32), nil
-    case float64:
-        return strconv.FormatFloat(tp, 'f', -1, 64), nil
-    case []byte:
-        return string(tp), nil
-    case complex64:
-        return strconv.FormatComplex(complex128(tp), 'f', -1, 64), nil
-    case complex128:
-        return strconv.FormatComplex(tp, 'f', -1, 128), nil
-    case []string:
-        return strings.Join(tp, " "), nil
-    }
-
-    switch tp := value.(type) {
-    case byte:
-        return string([]byte{tp}), nil
-    case rune:
-        return string(tp), nil
-    default:
-        return fmt.Sprintf("%v", tp), nil
-    }
-}
-
 func ConvertStringToBool(value string) (bool, error) {
-    return strconv.ParseBool(value)
+    res, err := strconv.ParseBool(value)
+    return res, errors.Wrap(err, fmt.Sprintf("with try convert from %s to bool", value))
 }
 
 func ConvertStringToInt(value string) (int, error) {
-    return strconv.Atoi(value)
+    res, err := strconv.Atoi(value)
+    return res, errors.Wrap(err, fmt.Sprintf("with try convert from %s to int", value))
 }
 
 func ConvertStringToInt8(value string) (int8, error) {
     res, err := strconv.ParseInt(value, 8, 10)
-    return int8(res), err
+    return int8(res), errors.Wrap(err, fmt.Sprintf("with try convert from %s to int8", value))
 }
 
-func ConvertStringToInt8(value string) (int16, error) {
-    switch tp := value.(type) {
-    case bool:
-        if tp {
-            return 1, nil
-        } else {
-            return 0, nil
-        }
-    case int, int8, int16, int32, int64, uint, uint8, uint16, uint64, uint32, float32, float64, complex64, complex128:
-        return conNumberTypeToNumberType[int16](tp), nil
-    case string:
-        res, err := strconv.ParseInt(tp, 16, 10)
-        return int16(res), err
-    case []byte:
-        res, err := strconv.ParseInt(string(tp), 16, 10)
-        return int16(res), err
-    case []string:
-        res, err := strconv.ParseInt(strings.Join(tp, ""), 16, 10)
-        return int16(res), err
-    }
-
-    switch tp := value.(type) {
-    case byte:
-        return int16(tp), nil
-    case rune:
-        return int16(tp), nil
-    default:
-        return 0, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type int16 to %s", tp))
-    }
+func ConvertStringToInt16(value string) (int16, error) {
+    res, err := strconv.ParseInt(value, 16, 10)
+    return int16(res), errors.Wrap(err, fmt.Sprintf("with try convert from %s to int16", value))
 }
 
-func ConvertStringToInt8(value string) (int32, error) {
-    switch tp := value.(type) {
-    case bool:
-        if tp {
-            return 1, nil
-        } else {
-            return 0, nil
-        }
-    case int, int8, int16, int32, int64, uint, uint8, uint16, uint64, uint32, float32, float64, complex64, complex128:
-        return conNumberTypeToNumberType[int32](tp), nil
-    case string:
-        res, err := strconv.ParseInt(tp, 32, 10)
-        return int32(res), err
-    case []byte:
-        res, err := strconv.ParseInt(string(tp), 32, 10)
-        return int32(res), err
-    case []string:
-        res, err := strconv.ParseInt(strings.Join(tp, ""), 32, 10)
-        return int32(res), err
-    }
-
-    switch tp := value.(type) {
-    case byte:
-        return int32(tp), nil
-    case rune:
-        return int32(tp), nil
-    default:
-        return 0, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type int32 to %s", tp))
-    }
+func ConvertStringToInt32(value string) (int32, error) {
+    res, err := strconv.ParseInt(value, 32, 10)
+    return int32(res), errors.Wrap(err, fmt.Sprintf("with try convert from %s to int32", value))
 }
 
-func ConvertStringToInt8(value string) (int64, error) {
-    switch tp := value.(type) {
-    case bool:
-        if tp {
-            return 1, nil
-        } else {
-            return 0, nil
-        }
-    case int, int8, int16, int32, int64, uint, uint8, uint16, uint64, uint32, float32, float64, complex64, complex128:
-        return conNumberTypeToNumberType[int64](tp), nil
-    case string:
-        return strconv.ParseInt(tp, 64, 10)
-    case []byte:
-        return strconv.ParseInt(string(tp), 64, 10)
-    case []string:
-        return strconv.ParseInt(strings.Join(tp, ""), 64, 10)
-    }
-
-    switch tp := value.(type) {
-    case byte:
-        return int64(tp), nil
-    case rune:
-        return int64(tp), nil
-    default:
-        return 0, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type int64 to %s", tp))
-    }
+func ConvertStringToInt64(value string) (int64, error) {
+    res, err := strconv.ParseInt(value, 64, 10)
+    return res, errors.Wrap(err, fmt.Sprintf("with try convert from %s to int64", value))
 }
 
-func ConvertStringToInt8(value string) (uint, error) {
-    switch tp := value.(type) {
-    case bool:
-        if tp {
-            return 1, nil
-        } else {
-            return 0, nil
-        }
-    case int, int8, int16, int32, int64, uint, uint8, uint16, uint64, uint32, float32, float64, complex64, complex128:
-        return conNumberTypeToNumberType[uint](tp), nil
-    case string:
-        res, err := strconv.ParseUint(tp, 64, 10)
-        return uint(res), err
-    case []byte:
-        res, err := strconv.ParseUint(string(tp), 64, 10)
-        return uint(res), err
-    case []string:
-        res, err := strconv.ParseUint(strings.Join(tp, ""), 64, 10)
-        return uint(res), err
-    }
-
-    switch tp := value.(type) {
-    case byte:
-        return uint(tp), nil
-    case rune:
-        return uint(tp), nil
-    default:
-        return 0, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type uint to %s", tp))
-    }
+func ConvertStringToUint(value string) (uint, error) {
+    res, err := strconv.ParseUint(value, 32, 10)
+    return uint(res), errors.Wrap(err, fmt.Sprintf("with try convert from %s to uint", value))
 }
 
-func ConvertStringToInt8(value string) (uint8, error) {
-    switch tp := value.(type) {
-    case bool:
-        if tp {
-            return 1, nil
-        } else {
-            return 0, nil
-        }
-    case int, int8, int16, int32, int64, uint, uint8, uint16, uint64, uint32, float32, float64, complex64, complex128:
-        return conNumberTypeToNumberType[uint8](tp), nil
-    case string:
-        res, err := strconv.ParseUint(tp, 8, 10)
-        return uint8(res), err
-    case []byte:
-        res, err := strconv.ParseUint(string(tp), 8, 10)
-        return uint8(res), err
-    case []string:
-        res, err := strconv.ParseUint(strings.Join(tp, ""), 8, 10)
-        return uint8(res), err
-    }
-
-    switch tp := value.(type) {
-    case byte:
-        return uint8(tp), nil
-    case rune:
-        return uint8(tp), nil
-    default:
-        return 0, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type uint8 to %s", tp))
-    }
+func ConvertStringToUint8(value string) (uint8, error) {
+    res, err := strconv.ParseUint(value, 8, 10)
+    return uint8(res), errors.Wrap(err, fmt.Sprintf("with try convert from %s to uint8", value))
 }
 
-func ConvertStringToInt8(value string) (uint16, error) {
-    switch tp := value.(type) {
-    case bool:
-        if tp {
-            return 1, nil
-        } else {
-            return 0, nil
-        }
-    case int, int8, int16, int32, int64, uint, uint8, uint16, uint64, uint32, float32, float64, complex64, complex128:
-        return conNumberTypeToNumberType[uint16](tp), nil
-    case string:
-        res, err := strconv.ParseUint(tp, 16, 10)
-        return uint16(res), err
-    case []byte:
-        res, err := strconv.ParseUint(string(tp), 16, 10)
-        return uint16(res), err
-    case []string:
-        res, err := strconv.ParseUint(strings.Join(tp, ""), 16, 10)
-        return uint16(res), err
-    }
-
-    switch tp := value.(type) {
-    case byte:
-        return uint16(tp), nil
-    case rune:
-        return uint16(tp), nil
-    default:
-        return 0, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type uint16 to %s", tp))
-    }
+func ConvertStringToUint16(value string) (uint16, error) {
+    res, err := strconv.ParseUint(value, 16, 10)
+    return uint16(res), errors.Wrap(err, fmt.Sprintf("with try convert from %s to uint16", value))
 }
 
-func ConvertStringToInt8(value string) (uint32, error) {
-    switch tp := value.(type) {
-    case bool:
-        if tp {
-            return 1, nil
-        } else {
-            return 0, nil
-        }
-    case int, int8, int16, int32, int64, uint, uint8, uint16, uint64, uint32, float32, float64, complex64, complex128:
-        return conNumberTypeToNumberType[uint32](tp), nil
-    case string:
-        res, err := strconv.ParseUint(tp, 32, 10)
-        return uint32(res), err
-    case []byte:
-        res, err := strconv.ParseUint(string(tp), 32, 10)
-        return uint32(res), err
-    case []string:
-        res, err := strconv.ParseUint(strings.Join(tp, ""), 32, 10)
-        return uint32(res), err
-    }
-
-    switch tp := value.(type) {
-    case byte:
-        return uint32(tp), nil
-    case rune:
-        return uint32(tp), nil
-    default:
-        return 0, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type uint32 to %s", tp))
-    }
+func ConvertStringToUint32(value string) (uint32, error) {
+    res, err := strconv.ParseUint(value, 32, 10)
+    return uint32(res), errors.Wrap(err, fmt.Sprintf("with try convert from %s to uint32", value))
 }
 
-func ConvertStringToInt8(value string) (uint64, error) {
-    switch tp := value.(type) {
-    case bool:
-        if tp {
-            return 1, nil
-        } else {
-            return 0, nil
-        }
-    case int, int8, int16, int32, int64, uint, uint8, uint16, uint64, uint32, float32, float64, complex64, complex128:
-        return conNumberTypeToNumberType[uint64](tp), nil
-    case string:
-        return strconv.ParseUint(tp, 64, 10)
-    case []byte:
-        return strconv.ParseUint(string(tp), 64, 10)
-    case []string:
-        return strconv.ParseUint(strings.Join(tp, ""), 64, 10)
-    }
-
-    switch tp := value.(type) {
-    case byte:
-        return uint64(tp), nil
-    case rune:
-        return uint64(tp), nil
-    default:
-        return 0, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type uint64 to %s", tp))
-    }
+func ConvertStringToUint64(value string) (uint64, error) {
+    res, err := strconv.ParseUint(value, 64, 10)
+    return res, errors.Wrap(err, fmt.Sprintf("with try convert from %s to uint64", value))
 }
 
-func ConvertStringToInt8(value string) (float32, error) {
-    switch tp := value.(type) {
-    case bool:
-        if tp {
-            return 1, nil
-        } else {
-            return 0, nil
-        }
-    case int, int8, int16, int32, int64, uint, uint8, uint16, uint64, uint32, float32, float64, complex64, complex128:
-        return conNumberTypeToNumberType[float32](tp), nil
-    case string:
-        res, err := strconv.ParseFloat(tp, 32)
-        return float32(res), err
-    case []byte:
-        res, err := strconv.ParseFloat(string(tp), 32)
-        return float32(res), err
-    case []string:
-        res, err := strconv.ParseFloat(strings.Join(tp, ""), 32)
-        return float32(res), err
-    }
-
-    switch tp := value.(type) {
-    case byte:
-        return float32(tp), nil
-    case rune:
-        return float32(tp), nil
-    default:
-        return 0, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type float32 to %s", tp))
-    }
+func ConvertStringToFloat32(value string) (float32, error) {
+    res, err := strconv.ParseFloat(value, 32)
+    return float32(res), errors.Wrap(err, fmt.Sprintf("with try convert from %s to float32", value))
 }
 
-func ConvertStringToInt8(value string) (float64, error) {
-    switch tp := value.(type) {
-    case bool:
-        if tp {
-            return 1, nil
-        } else {
-            return 0, nil
-        }
-    case int, int8, int16, int32, int64, uint, uint8, uint16, uint64, uint32, float32, float64, complex64, complex128:
-        return conNumberTypeToNumberType[float64](tp), nil
-    case string:
-        return strconv.ParseFloat(tp, 64)
-    case []byte:
-        return strconv.ParseFloat(string(tp), 64)
-    case []string:
-        return strconv.ParseFloat(strings.Join(tp, ""), 64)
-    }
-
-    switch tp := value.(type) {
-    case byte:
-        return float64(tp), nil
-    case rune:
-        return float64(tp), nil
-    default:
-        return 0, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type float64 to %s", tp))
-    }
+func ConvertStringToFloat64(value string) (float64, error) {
+    res, err := strconv.ParseFloat(value, 64)
+    return res, errors.Wrap(err, fmt.Sprintf("with try convert from %s to float64", value))
 }
 
-func ConAnyToComplex64(value any) (complex64, error) {
-    switch tp := value.(type) {
-    case bool:
-        if tp {
-            return 1, nil
-        } else {
-            return 0, nil
-        }
-    case int, int8, int16, int32, int64, uint, uint8, uint16, uint64, uint32, float32, float64, complex64, complex128:
-        return conNumberTypeToNumberType[complex64](tp), nil
-    case string:
-        res, err := strconv.ParseComplex(tp, 64)
-        return complex64(res), err
-    case []byte:
-        res, err := strconv.ParseComplex(string(tp), 64)
-        return complex64(res), err
-    case []string:
-        res, err := strconv.ParseComplex(strings.Join(tp, ""), 64)
-        return complex64(res), err
-    }
-
-    switch tp := value.(type) {
-    case byte:
-        res, err := strconv.ParseComplex(string(tp), 64)
-        return complex64(res), err
-    case rune:
-        res, err := strconv.ParseComplex(string(tp), 64)
-        return complex64(res), err
-    default:
-        return 0, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type complex64 to %s", tp))
-    }
+func ConvertStringToComplex64(value string) (complex64, error) {
+    res, err := strconv.ParseComplex(value, 64)
+    return complex64(res), errors.Wrap(err, fmt.Sprintf("with try convert from %s to complex64", value))
 }
 
-func ConAnyToComplex128(value any) (complex128, error) {
-    switch tp := value.(type) {
-    case bool:
-        if tp {
-            return 1, nil
-        } else {
-            return 0, nil
-        }
-    case int, int8, int16, int32, int64, uint, uint8, uint16, uint64, uint32, float32, float64, complex64, complex128:
-        return conNumberTypeToNumberType[complex128](tp), nil
-    case string:
-        return strconv.ParseComplex(tp, 128)
-    case []byte:
-        return strconv.ParseComplex(string(tp), 128)
-    case []string:
-        return strconv.ParseComplex(strings.Join(tp, ""), 128)
-    }
-
-    switch tp := value.(type) {
-    case byte:
-        return strconv.ParseComplex(string(tp), 128)
-    case rune:
-        return strconv.ParseComplex(string(tp), 128)
-    default:
-        return 0, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type complex128 to %s", tp))
-    }
+func ConvertStringToComplex128(value string) (complex128, error) {
+    res, err := strconv.ParseComplex(value, 128)
+    return res, errors.Wrap(err, fmt.Sprintf("with try convert from %s to complex128", value))
 }
 
-func ConAnyToByte(value any) (byte, error) {
-    res, err := ConAnyToInt32(value)
+func ConvertStringToByte(value string) (byte, error) {
+    res, err := ConvertStringToInt8(value)
     if err != nil {
-        err = errors.Wrap(ErrorNotParsing, fmt.Sprintf("with rune byte to %s", reflect.TypeOf(value).String()))
+        err = errors.Wrap(errors.Unwrap(err), fmt.Sprintf("with try convert from %s to byte", value))
     }
     return byte(res), err
 }
 
-func ConAnyToRune(value any) (rune, error) {
-    res, err := ConAnyToInt64(value)
-    if err != nil {
-        err = errors.Wrap(ErrorNotParsing, fmt.Sprintf("with rune rune to %s", reflect.TypeOf(value).String()))
+func ConvertStringToRune(value string) (rune, error) {
+    rs := []rune(value)
+    if len(rs) == 0 {
+        return 0, errors.Wrap(errors.New("empty string"), fmt.Sprintf("with try convert from %s to rune", value))
     }
-    return rune(res), err
+    return rs[0], nil
 }
 
-func ConAnyToBytes(value any) ([]byte, error) {
-    res, err := ConAnyToString(value)
-    if err != nil {
-        err = errors.Wrap(ErrorNotParsing, fmt.Sprintf("with rune []byte to %s", reflect.TypeOf(value).String()))
-    }
-    return []byte(res), err
+func ConvertStringToBytes(value string) ([]byte, error) {
+    return []byte(value), nil
 }
 
-func ConAnyToMapStrings(value any) (map[string]string, error) {
-    return nil, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type map[string]string to %s", reflect.TypeOf(value).String()))
-}
-
-func ConAnyToMapString(value any) (map[string]any, error) {
-    return nil, errors.Wrap(ErrorNotParsing, fmt.Sprintf("with type map[string]any to %s", reflect.TypeOf(value).String()))
-}
-
-func ConAnyToStrings(value any) ([]string, error) {
-    res, err := ConAnyToString(value)
-    if err != nil {
-        err = errors.Wrap(ErrorNotParsing, fmt.Sprintf("with rune []string to %s", reflect.TypeOf(value).String()))
-    }
-    return []string{res}, err
+func ConvertStringToStrings(value string) ([]string, error) {
+    return strings.Split(value, " "), nil
 }

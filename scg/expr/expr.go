@@ -41,7 +41,11 @@ func (si *ScriptInfo) IsValid() (is bool, err error) {
         return false, ErrorStartSceneNotFound
     }
 
-    return false, nil
+    if is, err = si.checkContext(); !is {
+        return is, err
+    }
+
+    return true, nil
 }
 
 func (si *ScriptInfo) checkValidScenes() (is bool, err error) {
@@ -54,18 +58,15 @@ func (si *ScriptInfo) checkValidScenes() (is bool, err error) {
 }
 
 func (si *ScriptInfo) checkValidMatcherName() (is bool, err error) {
-    for _, matcher := range si.UserMatchers {
-        name := ""
-        if matcher.IsRegexMatcher() {
-            name = matcher.MustRegexMatcher().Name
-        } else {
-            name = matcher.MustSelectsMatcher().Name
-        }
+    is = true
+    for name, matcher := range si.UserMatchers {
+        matcher.SetName(name)
 
-        if is = matchers.IsCorrectNameOfMather(name); !is {
+        if is = matchers.IsCorrectNameOfMather(name); is {
             err = errors.Wrap(ErrorNameAlreadyOccupied, fmt.Sprintf("error with matcher %s", name))
             break
         }
+        is = true
     }
 
     return is, err
@@ -96,7 +97,7 @@ up:
         return is, errorNameSceneNotFound(unknownScene)
     }
 
-    return false, nil
+    return true, nil
 }
 
 type sceneContext struct {
@@ -125,13 +126,13 @@ func (si *ScriptInfo) checkLoadContext(sceneGraph *graph.Graph[*sceneContext, st
     err := error(nil)
 up:
     for name, sc := range si.Script {
-        for _, load := range sc.Context.LoadValue {
+        for i, load := range sc.Context.LoadValue {
             visited := make([]string, 0)
             found := false
 
             visitor := graph.Visitor[*sceneContext](func(sctx *graph.ValueNode[*sceneContext]) bool {
                 visited = append(visited, sctx.Value.sceneName)
-                if sctx.Value.ctx.SaveValue.Name == load.Name {
+                if sctx.Value.ctx.SaveValue != nil && sctx.Value.ctx.SaveValue.Name == load.Name {
                     found = true
                     load.Type = sctx.Value.ctx.SaveValue.Type
                     return true
@@ -145,6 +146,7 @@ up:
                 err = errorNotFoundLoadingContext(load.Name, name, visited)
                 break up
             }
+            sc.Context.LoadValue[i] = load
         }
     }
 
@@ -156,13 +158,17 @@ func (si *ScriptInfo) checkValueContext(sceneGraph *graph.Graph[*sceneContext, s
 up:
     for name, sc := range si.Script {
         for _, value := range sc.Text.Values {
+            if value.FromContext == "" {
+                continue
+            }
+
             visited := make([]string, 0)
             found := false
             ctxType := ""
 
             visitor := graph.Visitor[*sceneContext](func(sctx *graph.ValueNode[*sceneContext]) bool {
                 visited = append(visited, sctx.Value.sceneName)
-                if sctx.Value.ctx.SaveValue.Name == value.FromContext {
+                if sctx.Value.ctx.SaveValue != nil && sctx.Value.ctx.SaveValue.Name == value.FromContext {
                     found = true
                     ctxType = sctx.Value.ctx.SaveValue.Type
                     return true
@@ -178,7 +184,7 @@ up:
             }
 
             if ctxType != value.Type {
-                err = nil
+                err = errors.Wrapf(ErrorNotEqualValueAndContextType, "with context type %s and value type %s", ctxType, value.Type)
                 break up
             }
         }
@@ -193,6 +199,9 @@ func (si *ScriptInfo) initSceneGraph() (*graph.Graph[*sceneContext, string], err
 
     for name, sc := range si.Script {
         sceneGraph.AddVertex(name, &sceneContext{sc.Context, name})
+        if name == si.GoodByeScene {
+            continue
+        }
 
         for _, nextScene := range sc.NextScenes {
             edges = append(edges, graph.EdgeInfo[string]{VertexFrom: nextScene, VertexTo: name})
@@ -201,9 +210,11 @@ func (si *ScriptInfo) initSceneGraph() (*graph.Graph[*sceneContext, string], err
         if sc.NextScene != "" {
             edges = append(edges, graph.EdgeInfo[string]{VertexFrom: sc.NextScene, VertexTo: name})
         }
+
+        edges = append(edges, graph.EdgeInfo[string]{VertexFrom: si.GoodByeScene, VertexTo: name})
     }
 
-    err := sceneGraph.AddUndirectedEdges(edges...)
+    err := sceneGraph.AddOrientedEdges(edges...)
     if err != nil {
         return nil, errors.Wrap(ErrorUnknown, err.Error())
     }

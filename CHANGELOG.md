@@ -126,20 +126,40 @@ Some modification and addition of new functionality.
 
 ### Added
 
-* Checking the name of a custom matcher for the presence of the same name in standard matchers
-* The ability to specify the next scene for each matcher and appropriate checks. Specified in the `toScene' field
-* The ability to specify the next scene for each button and appropriate checks. Specified in the `toScene' field
+#### Library
+
 * Dequeue and Queue structures to package `pkg/structures`
 * Graph functional to package `pkg/graph`
-* Storing to context value from user input
-* Loading data from context as a function
-* Getting values for the text of scenes from the context
+
+#### Generator
+
+* Checking the name of a custom matcher for the presence of the same name in standard matchers
+* The ability to specify the next scene for each matcher and appropriate checks. Specified in the `toScene` field
+* The ability to specify the next scene for each button and appropriate checks. Specified in the `toScene` field
+* Support for saving to context and converting to generator-supported user input types from the `SearchedMessage` query field
+* Support for loading previously saved values from the context
+* Support in the configuration file for the `context` field with the `saveValue` and `loadValue` subfields for the new functionality described earlier
+* The ability to initialize the text fields of scenes with values stored in the context
+* A check for the current scene about whether the values loaded in it from the context were saved in previous scenes
+
+#### Documentation
+
 * Installation instructions via `go install`
-* Cosmetic changes to the documentation
+
+#### Other
+
 * Issues template for `Bugs` and `Questions`
-* 
+* New file `CODE_OF_CONDUCT.md`
 
 ### Changes
 
+#### Generator
+
 * Removed the remaining parts from the old way of describing the matchers
 * Updated some errors
+* Changed the setup format of supported types. Each type now has its own converter to the string. And in the **future** it will be possible to add custom types using the `AddType` function
+* Fixed checking the configuration file for correctness
+
+#### Documentation
+
+* Cosmetic changes to the documentation

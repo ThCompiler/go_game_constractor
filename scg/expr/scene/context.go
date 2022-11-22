@@ -8,14 +8,16 @@ import (
 )
 
 type Context struct {
-    SaveValue SaveValue   `yaml:"saveValue" json:"save_value" xml:"saveValue"`
+    SaveValue *SaveValue  `yaml:"saveValue" json:"save_value" xml:"saveValue"`
     LoadValue []LoadValue `yaml:"loadValue" json:"load_value" xml:"loadValue"`
 }
 
 func (ct *Context) checkValuesType() (err error) {
     err = nil
-    if !types.IsValidType(ct.SaveValue.Type) {
-        err = errorUnknownTypeOfValue(ct.SaveValue.Type)
+    if ct.SaveValue != nil {
+        if !types.IsValidType(ct.SaveValue.Type) {
+            err = errorUnknownTypeOfValue(ct.SaveValue.Type)
+        }
     }
     return
 }

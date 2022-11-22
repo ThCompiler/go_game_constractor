@@ -88,3 +88,8 @@ func (sc *Echo) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 		Err: base_matchers.NumberError,
 	}, true
 }
+
+// GetSayedContextValue function returning value from context about scene
+func (sc *Echo) GetSayedContextValue(ctx *scene.Context) string {
+	return scene.GetContextAny[string](ctx, "sayed")
+}
