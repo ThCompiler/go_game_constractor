@@ -4,6 +4,7 @@ import (
     "github.com/ThCompiler/go_game_constractor/scg/expr"
     "github.com/ThCompiler/go_game_constractor/scg/expr/scene"
     "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+    "github.com/ThCompiler/go_game_constractor/scg/go/types"
     errors2 "github.com/ThCompiler/go_game_constractor/scg/script/errors"
     "github.com/ThCompiler/go_game_constractor/scg/script/matchers"
     "path"
@@ -109,6 +110,7 @@ func scriptScenes(rootPkg string, rootDir string, scriptName string, sceneInfo s
             "ConvertNameToError":   errors2.ConvertNameToError,
             "IsBaseMather":         matchers.IsCorrectNameOfMather,
             "HaveMatchedString":    haveMatchedString,
+            "ToGoType":             types.ToGoType,
         },
     })
 
@@ -188,7 +190,7 @@ func (sc *{{ ToTitle .Name }}) Next() scene.Scene { {{ if not .IsInfoScene }}
 // GetSceneInfo function returning info about scene
 func (sc *{{ ToTitle .Name }}) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 	{{ if .Text.Values }}var (
-		{{ range $nameVar, $typeVar := .Text.Values }}{{ $nameVar }} {{ $typeVar.Type }}
+		{{ range $nameVar, $typeVar := .Text.Values }}{{ $nameVar }} {{ ToGoType $typeVar.Type }}
 		{{end}}
 	)
 	{{end}}
@@ -236,6 +238,13 @@ func New{{ ToTitle .Name }}Script(manager  manager.TextManager) game.SceneDirect
 					},
 		EndCommand:   GoodByeCommand,
 	}
+}
+`
+
+const loadContextStructT = `
+//  Get{{ .Name }}ContextValue function returning value from context about scene
+func (sc *{{ ToTitle .Name }}) Get{{ .Name }}ContextValue(ctx *scene.Context) ({{ ToGoType .Type }}) {
+    
 }
 `
 

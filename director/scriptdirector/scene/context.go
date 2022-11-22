@@ -68,6 +68,54 @@ func (c *Context) MustGet(key ContextKey) any {
     panic("Key \"" + key + "\" does not exist")
 }
 
+// GetComplex64 returns the value associated with the key as a complex64.
+func (c *Context) GetComplex64(key ContextKey) (c64 complex64) {
+    if val, ok := c.Get(key); ok && val != nil {
+        c64, _ = val.(complex64)
+    }
+    return
+}
+
+// GetComplex128 returns the value associated with the key as a complex128.
+func (c *Context) GetComplex128(key ContextKey) (c128 complex128) {
+    if val, ok := c.Get(key); ok && val != nil {
+        c128, _ = val.(complex128)
+    }
+    return
+}
+
+// GetByte returns the value associated with the key as a byte.
+func (c *Context) GetByte(key ContextKey) (b byte) {
+    if val, ok := c.Get(key); ok && val != nil {
+        b, _ = val.(byte)
+    }
+    return
+}
+
+// GetRune returns the value associated with the key as a rune.
+func (c *Context) GetRune(key ContextKey) (r rune) {
+    if val, ok := c.Get(key); ok && val != nil {
+        r, _ = val.(rune)
+    }
+    return
+}
+
+// GetBytes returns the value associated with the key as a []byte.
+func (c *Context) GetBytes(key ContextKey) (bs []byte) {
+    if val, ok := c.Get(key); ok && val != nil {
+        bs, _ = val.([]byte)
+    }
+    return
+}
+
+// GetStrings returns the value associated with the key as a []string.
+func (c *Context) GetStrings(key ContextKey) (ss []string) {
+    if val, ok := c.Get(key); ok && val != nil {
+        ss, _ = val.([]string)
+    }
+    return
+}
+
 // GetString returns the value associated with the key as a string.
 func (c *Context) GetString(key ContextKey) (s string) {
     if val, ok := c.Get(key); ok && val != nil {
@@ -84,7 +132,7 @@ func (c *Context) GetBool(key ContextKey) (b bool) {
     return
 }
 
-// GetInt returns the value associated with the key as an integer.
+// GetInt returns the value associated with the key as an int.
 func (c *Context) GetInt(key ContextKey) (i int) {
     if val, ok := c.Get(key); ok && val != nil {
         i, _ = val.(int)
@@ -92,7 +140,31 @@ func (c *Context) GetInt(key ContextKey) (i int) {
     return
 }
 
-// GetInt64 returns the value associated with the key as an integer.
+// GetInt8 returns the value associated with the key as an int8.
+func (c *Context) GetInt8(key ContextKey) (i8 int8) {
+    if val, ok := c.Get(key); ok && val != nil {
+        i8, _ = val.(int8)
+    }
+    return
+}
+
+// GetInt16 returns the value associated with the key as an int16.
+func (c *Context) GetInt16(key ContextKey) (i16 int16) {
+    if val, ok := c.Get(key); ok && val != nil {
+        i16, _ = val.(int16)
+    }
+    return
+}
+
+// GetInt32 returns the value associated with the key as an int32.
+func (c *Context) GetInt32(key ContextKey) (i32 int32) {
+    if val, ok := c.Get(key); ok && val != nil {
+        i32, _ = val.(int32)
+    }
+    return
+}
+
+// GetInt64 returns the value associated with the key as an int64.
 func (c *Context) GetInt64(key ContextKey) (i64 int64) {
     if val, ok := c.Get(key); ok && val != nil {
         i64, _ = val.(int64)
@@ -100,7 +172,7 @@ func (c *Context) GetInt64(key ContextKey) (i64 int64) {
     return
 }
 
-// GetUint returns the value associated with the key as an unsigned integer.
+// GetUint returns the value associated with the key as an uint.
 func (c *Context) GetUint(key ContextKey) (ui uint) {
     if val, ok := c.Get(key); ok && val != nil {
         ui, _ = val.(uint)
@@ -108,10 +180,42 @@ func (c *Context) GetUint(key ContextKey) (ui uint) {
     return
 }
 
-// GetUint64 returns the value associated with the key as an unsigned integer.
+// GetUint8 returns the value associated with the key as an uint8.
+func (c *Context) GetUint8(key ContextKey) (ui8 uint8) {
+    if val, ok := c.Get(key); ok && val != nil {
+        ui8, _ = val.(uint8)
+    }
+    return
+}
+
+// GetUint16 returns the value associated with the key as an uint16.
+func (c *Context) GetUint16(key ContextKey) (ui16 uint16) {
+    if val, ok := c.Get(key); ok && val != nil {
+        ui16, _ = val.(uint16)
+    }
+    return
+}
+
+// GetUint32 returns the value associated with the key as an uint32.
+func (c *Context) GetUint32(key ContextKey) (ui32 uint32) {
+    if val, ok := c.Get(key); ok && val != nil {
+        ui32, _ = val.(uint32)
+    }
+    return
+}
+
+// GetUint64 returns the value associated with the key as an uint64.
 func (c *Context) GetUint64(key ContextKey) (ui64 uint64) {
     if val, ok := c.Get(key); ok && val != nil {
         ui64, _ = val.(uint64)
+    }
+    return
+}
+
+// GetFloat32 returns the value associated with the key as a float32.
+func (c *Context) GetFloat32(key ContextKey) (f32 float32) {
+    if val, ok := c.Get(key); ok && val != nil {
+        f32, _ = val.(float32)
     }
     return
 }
@@ -168,6 +272,13 @@ func (c *Context) GetStringMapString(key ContextKey) (sms map[string]string) {
 func (c *Context) GetStringMapStringSlice(key ContextKey) (smss map[string][]string) {
     if val, ok := c.Get(key); ok && val != nil {
         smss, _ = val.(map[string][]string)
+    }
+    return
+}
+
+func GetContextAny[T any](ctx *Context, key ContextKey) (r T) {
+    if val, ok := ctx.Get(key); ok && val != nil {
+        r, _ = val.(T)
     }
     return
 }

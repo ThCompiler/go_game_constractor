@@ -53,7 +53,15 @@ theme:
   favicon: icon/logo.png
   logo: icon/logo.png
 
-
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
 extra:
   social:
     - icon: fontawesome/brands/github

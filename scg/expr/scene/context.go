@@ -3,12 +3,21 @@ package scene
 import (
     "encoding/xml"
     "github.com/ThCompiler/go_game_constractor/scg/expr/parser"
+    "github.com/ThCompiler/go_game_constractor/scg/go/types"
     "gopkg.in/yaml.v3"
 )
 
 type Context struct {
     SaveValue SaveValue   `yaml:"saveValue" json:"save_value" xml:"saveValue"`
     LoadValue []LoadValue `yaml:"loadValue" json:"load_value" xml:"loadValue"`
+}
+
+func (ct *Context) checkValuesType() (err error) {
+    err = nil
+    if !types.IsValidType(ct.SaveValue.Type) {
+        err = errorUnknownTypeOfValue(ct.SaveValue.Type)
+    }
+    return
 }
 
 type SaveValue struct {
@@ -18,6 +27,7 @@ type SaveValue struct {
 
 type LoadValue struct {
     Name string
+    Type string
 }
 
 type _loadValue struct {

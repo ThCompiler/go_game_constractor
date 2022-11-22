@@ -38,6 +38,10 @@ func (s *Scene) IsValid(userMatchers map[string]ScriptMatcher) (bool, error) {
         return is, err
     }
 
+    if err := s.Context.checkValuesType(); err != nil {
+        return false, err
+    }
+
     return s.Text.IsValid()
 }
 

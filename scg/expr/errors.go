@@ -12,7 +12,8 @@ var (
     ErrorNameSceneNotFound    = errors.New("the name of scene not found")
     ErrorUnknown              = errors.New("got unknown error. Please send the error information " +
         "and your configuration file to the mail: vetan22@mail.ru")
-    ErrorNotFoundSLoadedContext = errors.New("not found value that you try load from context in higher-level scenes")
+    ErrorNotFoundSLoadedContext      = errors.New("not found value that you try load from context in higher-level scenes")
+    ErrorNotEqualValueAndContextType = errors.New("")
 )
 
 func errorNameSceneNotFound(sceneName string) error {

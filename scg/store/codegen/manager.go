@@ -3,6 +3,7 @@ package codegen
 import (
     "github.com/ThCompiler/go_game_constractor/scg/expr"
     "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+    "github.com/ThCompiler/go_game_constractor/scg/go/types"
     "github.com/google/uuid"
     "path"
     "path/filepath"
@@ -42,8 +43,9 @@ func usecase(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codege
         Source: usecaseFuncStructT,
         Data:   scriptInfo,
         FuncMap: map[string]interface{}{
-            "ToTitle": codegen.ToTitle,
-            "IsLast":  storeLen,
+            "ToTitle":  codegen.ToTitle,
+            "IsLast":   storeLen,
+            "ToGoType": types.ToGoType,
         },
     })
 
@@ -67,8 +69,9 @@ func managerInterface(_ string, rootDir string, scriptInfo expr.ScriptInfo) *cod
         Source: scriptTextManagerT,
         Data:   scriptInfo,
         FuncMap: map[string]interface{}{
-            "ToTitle": codegen.ToTitle,
-            "IsLast":  storeLen,
+            "ToTitle":  codegen.ToTitle,
+            "IsLast":   storeLen,
+            "ToGoType": types.ToGoType,
         },
     })
 
@@ -91,7 +94,7 @@ const scriptTextManagerT = `type TextManager interface {
 	{{ range $name, $scene := .Script }}
 	// Get{{ ToTitle $name }}Text get text for {{$name}} scene with variables {{$lenValues := len $scene.Text.Values}}
 	Get{{ ToTitle $name }}Text({{ if $lenValues }}{{
-	range $nameVar, $typeVar := $scene.Text.Values}}{{$nameVar}} {{$typeVar.Type}}{{
+	range $nameVar, $typeVar := $scene.Text.Values}}{{$nameVar}} {{ToGoType $typeVar.Type}}{{
 	if not (IsLast $lenValues) }}, {{end}}{{end}}{{end}}) (director.Text, error)
 	{{ end }}
 }
@@ -100,7 +103,7 @@ const scriptTextManagerT = `type TextManager interface {
 const usecaseFuncStructT = ` {{ range $name, $scene := .Script }}
 	// Get{{ ToTitle $name }}Text get text for {{$name}} scene with variables {{$lenValues := len $scene.Text.Values}}
 	func (tu *TextUsecase) Get{{ ToTitle $name }}Text({{ if $lenValues }}{{
-	range $nameVar, $typeVar := $scene.Text.Values}}{{$nameVar}} {{$typeVar.Type}}{{
+	range $nameVar, $typeVar := $scene.Text.Values}}{{$nameVar}} {{ToGoType $typeVar.Type}}{{
 	if not (IsLast $lenValues) }}, {{end}}{{end}}{{end}}) (director.Text, error) {
 		text, err := tu.store.GetText(consts.{{ ToTitle $name }}Text)
 		if err != nil {

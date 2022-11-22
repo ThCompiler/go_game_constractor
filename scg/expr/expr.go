@@ -110,34 +110,18 @@ func (si *ScriptInfo) checkContext() (bool, error) {
         return false, err
     }
 
-up:
-    for name, sc := range si.Script {
-        for _, load := range sc.Context.LoadValue {
-            visited := make([]string, 0)
-            found := false
+    if is, err := si.checkLoadContext(sceneGraph); !is {
+        return is, err
+    }
 
-            visitor := graph.Visitor[*sceneContext](func(sctx *graph.ValueNode[*sceneContext]) bool {
-                visited = append(visited, sctx.Value.sceneName)
-                if sctx.Value.ctx.SaveValue.Name == load.Name {
-                    found = true
-                    return true
-                }
-                return false
-            })
-
-            sceneGraph.BFS(name, visitor)
-
-            if !found {
-                err = errorNotFoundLoadingContext(load.Name, name, visited)
-                break up
-            }
-        }
+    if is, err := si.checkValueContext(sceneGraph); !is {
+        return is, err
     }
 
     return err == nil, err
 }
 
-func (si *ScriptInfo) checkLoadContext(sceneGraph graph.Graph[*sceneContext, string]) (bool, error) {
+func (si *ScriptInfo) checkLoadContext(sceneGraph *graph.Graph[*sceneContext, string]) (bool, error) {
     err := error(nil)
 up:
     for name, sc := range si.Script {
@@ -149,6 +133,7 @@ up:
                 visited = append(visited, sctx.Value.sceneName)
                 if sctx.Value.ctx.SaveValue.Name == load.Name {
                     found = true
+                    load.Type = sctx.Value.ctx.SaveValue.Type
                     return true
                 }
                 return false
@@ -166,7 +151,7 @@ up:
     return err == nil, err
 }
 
-func (si *ScriptInfo) checkValueContext(sceneGraph graph.Graph[*sceneContext, string]) (bool, error) {
+func (si *ScriptInfo) checkValueContext(sceneGraph *graph.Graph[*sceneContext, string]) (bool, error) {
     err := error(nil)
 up:
     for name, sc := range si.Script {
@@ -188,7 +173,7 @@ up:
             sceneGraph.BFS(name, visitor)
 
             if !found {
-                err = errorNotFoundLoadingContext(value.FromContext, name, visited)
+                err = errorNotFoundLoadingContextInValues(value.FromContext, name, visited)
                 break up
             }
 

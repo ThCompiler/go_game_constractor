@@ -134,6 +134,10 @@ Some modification and addition of new functionality.
 * Storing to context value from user input
 * Loading data from context as a function
 * Getting values for the text of scenes from the context
+* Installation instructions via `go install`
+* Cosmetic changes to the documentation
+* Issues template for `Bugs` and `Questions`
+* 
 
 ### Changes
 
