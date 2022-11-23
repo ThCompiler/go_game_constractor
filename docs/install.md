@@ -117,7 +117,7 @@ go install github.com/ThCompiler/go_game_constractor/scg@latest
     
     === "Windows"
         ```cmd
-          # Удалим папку из переменных среды
+          # Удалить папку из переменных среды
           $Env:Path = ( $Env:Path.Split(';') | Where-Object { $_ -ne "$env:USERPROFILE\scg" }) -join ';'
           
           # Удалить папку
@@ -125,7 +125,7 @@ go install github.com/ThCompiler/go_game_constractor/scg@latest
         ```
 
     !!! warning "Важно"
-        Перед началом работы с генератором обязательно инициализируйте Go приложение в директории, где Вы хотите создать игру:
+        Перед началом работы с генератором обязательно инициализируйте Go-приложение в директории, где Вы хотите создать игру:
         `go init pkg_name`
 
 
