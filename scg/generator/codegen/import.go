@@ -33,15 +33,18 @@ func SCGImport(rel string) *ImportSpec {
 		name = "scg"
 		rel = "pkg"
 	}
+
 	return SCGNamedImport(rel, name)
 }
 
 // SCGNamedImport creates an import for a Goa package with the given name.
 func SCGNamedImport(rel, name string) *ImportSpec {
 	root := "github.com/ThCompiler/go_game_constractor"
+
 	if rel != "" {
 		rel = "/" + rel
 	}
+
 	return &ImportSpec{Name: name, Path: root + rel}
 }
 
@@ -50,5 +53,6 @@ func (s *ImportSpec) Code() string {
 	if len(s.Name) > 0 {
 		return fmt.Sprintf(`%s "%s"`, s.Name, s.Path)
 	}
+
 	return fmt.Sprintf(`"%s"`, s.Path)
 }

@@ -88,8 +88,8 @@ type SceneRequest interface {
 
 ```go
 type UserInfo struct {
-    UserId    string
-    SessionId string
+    UserID   string
+    SessionID string
 }
 ```
 
@@ -97,7 +97,7 @@ type UserInfo struct {
 
 Идентификатор текущего пользователя.
 
-##### SessionId
+##### SessionID
 
 Сессия пользователя в голосовом помощнике.
 
@@ -431,7 +431,7 @@ type Request struct {
 
 ```go
 type ScriptRunner interface {
-    AttachDirector(sessionId string, op Director)
+    AttachDirector(sessionIDstring, op Director)
     RunScene(req marusia.Request) (res chan PlayedSceneResult)
 }
 ```

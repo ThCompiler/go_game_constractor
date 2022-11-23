@@ -8,70 +8,72 @@ import (
     "net/http"
 )
 
-type HttpContext interface {
+type HTTPContext interface {
     GetHeader(headerName string) string
     SendErrorResponse(code int, errorText string)
     SetHeader(headerName string, value string)
-    SendResponse(code int, response any)
+    SendResponse(code int, response any) error
     ParseRequest(req interface{}) error
     GetContext() context.Context
 }
 
-type GinHttpContext struct {
+type GinHTTPContext struct {
     *gin.Context
 }
 
-func (gc *GinHttpContext) GetHeader(headerName string) string {
+func (gc *GinHTTPContext) GetHeader(headerName string) string {
     return gc.Request.Header.Get(headerName)
 }
 
-func (gc *GinHttpContext) SendErrorResponse(code int, errorText string) {
+func (gc *GinHTTPContext) SendErrorResponse(code int, errorText string) {
     ginutilits.ErrorResponse(gc.Context, code, errorText)
 }
 
-func (gc *GinHttpContext) ParseRequest(req interface{}) error {
+func (gc *GinHTTPContext) ParseRequest(req interface{}) error {
     return gc.ShouldBindJSON(req)
 }
 
-func (gc *GinHttpContext) SetHeader(headerName string, value string) {
+func (gc *GinHTTPContext) SetHeader(headerName string, value string) {
     gc.Header(headerName, value)
 }
 
-func (gc *GinHttpContext) SendResponse(code int, response any) {
+func (gc *GinHTTPContext) SendResponse(code int, response any) error {
     gc.JSON(code, response)
+
+    return nil
 }
 
-func (gc *GinHttpContext) GetContext() context.Context {
+func (gc *GinHTTPContext) GetContext() context.Context {
     return gc
 }
 
-type BaseHttpContext struct {
+type BaseHTTPContext struct {
     Req  *http.Request
     Resp http.ResponseWriter
 }
 
-func (bhc *BaseHttpContext) GetHeader(headerName string) string {
+func (bhc *BaseHTTPContext) GetHeader(headerName string) string {
     return bhc.Req.Header.Get(headerName)
 }
 
-func (bhc *BaseHttpContext) SendErrorResponse(code int, errorText string) {
+func (bhc *BaseHTTPContext) SendErrorResponse(code int, errorText string) {
     http.Error(bhc.Resp, errorText, code)
 }
 
-func (bhc *BaseHttpContext) ParseRequest(req interface{}) error {
+func (bhc *BaseHTTPContext) ParseRequest(req interface{}) error {
     return json.NewDecoder(bhc.Req.Body).Decode(&req)
 }
 
-func (bhc *BaseHttpContext) SetHeader(headerName string, value string) {
+func (bhc *BaseHTTPContext) SetHeader(headerName string, value string) {
     bhc.Resp.Header().Set(headerName, value)
 }
 
-func (bhc *BaseHttpContext) SendResponse(code int, response any) {
+func (bhc *BaseHTTPContext) SendResponse(code int, response any) error {
     bhc.Resp.WriteHeader(code)
 
-    _ = json.NewEncoder(bhc.Resp).Encode(response)
+    return json.NewEncoder(bhc.Resp).Encode(response)
 }
 
-func (bhc *BaseHttpContext) GetContext() context.Context {
+func (bhc *BaseHTTPContext) GetContext() context.Context {
     return bhc.Req.Context()
 }

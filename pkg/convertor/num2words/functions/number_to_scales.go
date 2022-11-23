@@ -6,18 +6,20 @@ import (
 	"strings"
 )
 
+const countPart = 3
+
 func NumberToScales(number string) []objects.RuneDigitTriplet {
 	// Сделать количество цифр числа кратным 3
 	numberLength := len(number)
-	numberScales := int(math.Ceil(float64(numberLength) / 3.0))
-	numberLengthGoal := numberScales * 3
+	numberScales := int(math.Ceil(float64(numberLength) / countPart))
+	numberLengthGoal := numberScales * countPart
 	lackOfDigits := numberLengthGoal - numberLength
 	extendedNumber := strings.Repeat("0", lackOfDigits) + number
 
 	r := []rune(extendedNumber)
 	// Разделить число на классы по 3 цифры в каждом
 	var cutNumber []objects.RuneDigitTriplet
-	for i := 0; i < len(r); i += 3 {
+	for i := 0; i < len(r); i += countPart {
 		cutNumber = append(cutNumber, objects.RuneDigitTriplet{
 			Hundreds: r[i],
 			Dozens:   r[i+1],

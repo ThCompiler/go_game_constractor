@@ -15,12 +15,14 @@ import (
 func ScriptFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
     directorConfigFile := directorConfig(rootPkg, rootDir, scriptInfo)
     scriptFiles := make([]*codegen.File, 0)
+
     for key, value := range scriptInfo.Script {
         scriptFiles = append(scriptFiles, scriptScenes(rootPkg, rootDir, scriptInfo.Name, sceneWithName{
             Scene: value,
             Name:  key,
         }))
     }
+
     sceneNamesFile := sceneNames(rootPkg, rootDir, scriptInfo)
 
     return append([]*codegen.File{directorConfigFile, sceneNamesFile}, scriptFiles...)
@@ -57,10 +59,9 @@ func sceneNames(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.F
     var sections []*codegen.SectionTemplate
 
     fpath := filepath.Join(rootDir, "internal", "script", "scenes", "names.go")
-    var imports []*codegen.ImportSpec
 
     sections = []*codegen.SectionTemplate{
-        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Scenes Name", "scenes", imports, false),
+        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Scenes Name", "scenes", nil, false),
     }
 
     sections = append(sections, &codegen.SectionTemplate{
@@ -155,12 +156,15 @@ func haveMatchedString(scene sceneWithName) bool {
 
 func haveLoadFromContextValue(values map[string]scene.Value) bool {
     found := false
+
     for _, val := range values {
         if val.FromContext != "" {
             found = true
+
             break
         }
     }
+
     return found
 }
 
@@ -170,6 +174,7 @@ func storeLen(l int) bool {
     ln++
     if l == ln {
         ln = 0
+
         return true
     }
 
@@ -216,12 +221,16 @@ func (sc *{{ ToTitle .Name }}) React(_ *scene.Context) scene.Command {
 
 // Next function returning next scene
 func (sc *{{ ToTitle .Name }}) Next() scene.Scene { {{ if not .IsInfoScene }}
-	{{ if .NextScenes }}switch sc.NextScene { 
+	{{ if .NextScenes }}{{if eq (len .NextScenes) 1 }}{{ range .NextScenes }} if sc.NextScene == {{ ToTitle . }}Scene {
+		return &{{ ToTitle . }}{
+				TextManager: sc.TextManager,
+			}
+		}{{end}}{{else}}switch sc.NextScene { 
 		{{ range .NextScenes }} case {{ ToTitle . }}Scene:
 			return &{{ ToTitle . }}{
 				TextManager: sc.TextManager,
 			}
-		{{end}}}{{end}}
+		{{end}}}{{end}}{{end}}
 
 	return &{{ ToTitle .Name }}{
 			TextManager: sc.TextManager,

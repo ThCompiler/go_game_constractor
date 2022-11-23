@@ -33,10 +33,12 @@ func init() {
 func initTypes() {
     arrayTypes := make([]string, len(mapTypes))
     index := 0
+
     for key := range mapTypes {
         arrayTypes[index] = key
         index++
     }
+
     types = strings.Join(arrayTypes, ", ")
 }
 
@@ -66,6 +68,7 @@ func AddTypes(name string, goType GoType) {
 
 func IsValidType(s string) bool {
     _, is := mapTypes[s]
+
     return is
 }
 
@@ -79,14 +82,17 @@ func GetSupportTypes() string {
 
 func MustConvert[T any](str string) T {
     var res T
+
     if tp, is := unmapTypes[reflect.TypeOf(res).String()]; is {
         val, err := mapTypes[tp].ConvertFunction(str)
         if err != nil {
             panic(err)
         }
-        res = val.(T)
+
+        res = val.(T) //nolint:errcheck // it is assumed that the functions already return the desired type, and the interface is used for convenience of storage
     } else {
         panic(ErrorNotSupportedType)
     }
+
     return res
 }

@@ -39,8 +39,9 @@ var (
 type NumberMatchers struct{}
 
 func (nm NumberMatchers) Match(message string) (bool, string) {
-	res, _ := words2num.Convert(message)
-	return res != 0, strconv.FormatInt(res, 10)
+	res, err := words2num.Convert(message)
+
+	return res != 0 && err == nil, strconv.FormatInt(res, 10)
 }
 
 func (nm NumberMatchers) GetMatchedName() string {

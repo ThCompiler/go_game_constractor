@@ -9,6 +9,8 @@ import (
     "unicode"
 )
 
+const GeneratorCommandName = "scg"
+
 // TemplateFuncs lists common template helper functions.
 func TemplateFuncs() map[string]interface{} {
     return map[string]interface{}{
@@ -19,13 +21,16 @@ func TemplateFuncs() map[string]interface{} {
 
 // CommandLine return the command used to run this process.
 func CommandLine() string {
-    cmdl := "scg"
+    cmdl := GeneratorCommandName
+
     for _, arg := range os.Args {
         if strings.HasPrefix(arg, "--cmd=") {
             cmdl = arg[6:]
+
             break
         }
     }
+
     return cmdl
 }
 
@@ -33,13 +38,17 @@ func CommandLine() string {
 // producing 80 characters long lines starting with "//".
 func Comment(elems ...string) string {
     var lines []string
+
     for _, e := range elems {
         lines = append(lines, strings.Split(e, "\n")...)
     }
+
     var trimmed = make([]string, len(lines))
+
     for i, l := range lines {
         trimmed[i] = strings.TrimLeft(l, " \t")
     }
+
     t := strings.Join(trimmed, "\n")
 
     return Indent(WrapText(t, 77), "// ")
@@ -58,26 +67,31 @@ func Indent(s, prefix string) string {
         p   = []byte(prefix)
         bol = true
     )
+
     for _, c := range b {
         if bol && c != '\n' {
             res = append(res, p...)
         }
+
         res = append(res, c)
+
         bol = c == '\n'
     }
+
     return string(res)
 }
 
-// CopyStringMap create copy of map with strings kay and any values
+// CopyStringMap create copy of map with strings kay and any values.
 func CopyStringMap[Value any](mp map[string]Value) map[string]Value {
     newMap := make(map[string]Value)
     for key, value := range mp {
         newMap[key] = value
     }
+
     return newMap
 }
 
-// Casing exceptions
+// Casing exceptions.
 var toLower = map[string]string{"OAuth": "oauth"}
 
 func LowerCamelCase(name string) string {
@@ -114,25 +128,31 @@ func CamelCase(name string, firstUpper bool, acronym bool) string {
         // remove leading invalid identifiers
         runes = removeInvalidAtIndex(i, runes)
 
-        if i+1 == len(runes) {
+        switch {
+        case i+1 == len(runes):
             eow = true
-        } else if !validIdentifier(runes[i]) {
-            // get rid of it
+
+        case !validIdentifier(runes[i]):
             runes = append(runes[:i], runes[i+1:]...)
-        } else if runes[i+1] == '_' {
+
+        case runes[i+1] == '_':
             // underscore; shift the remainder forward over any run of underscores
             eow = true
             n := 1
+
             for i+n+1 < len(runes) && runes[i+n+1] == '_' {
                 n++
             }
+
             copy(runes[i+1:], runes[i+n+1:])
             runes = runes[:len(runes)-n]
-        } else if isLower(runes[i]) && !isLower(runes[i+1]) {
-            // lower->non-lower
+
+        case isLower(runes[i]) && !isLower(runes[i+1]):
             eow = true
         }
+
         i++
+
         if !eow {
             continue
         }
@@ -141,27 +161,33 @@ func CamelCase(name string, firstUpper bool, acronym bool) string {
         word := string(runes[w:i])
         // is it one of our initialisms?
 
-        if u := strings.ToUpper(word); commonInitialisms[u] {
-            switch {
-            case firstUpper && acronym:
-                // u is already in upper case. Nothing to do here.
-            case firstUpper && !acronym:
-                u = strings.ToLower(u)
-            case w > 0 && !acronym:
-                u = strings.ToLower(u)
-            case w == 0:
-                u = strings.ToLower(u)
-            }
+        u := strings.ToUpper(word)
 
-            // All the common initialisms are ASCII,
-            // so we can replace the bytes exactly.
-            copy(runes[w:], []rune(u))
-        } else if w > 0 && strings.ToLower(word) == word {
+        switch {
+        case commonInitialisms[u]:
+            {
+                switch {
+                case firstUpper && acronym:
+                    // u is already in upper case. Nothing to do here.
+                case firstUpper && !acronym:
+                    u = strings.ToLower(u)
+                case w > 0 && !acronym:
+                    u = strings.ToLower(u)
+                case w == 0:
+                    u = strings.ToLower(u)
+                }
+
+                // All the common initialisms are ASCII,
+                // so we can replace the bytes exactly.
+                copy(runes[w:], []rune(u))
+            }
+        case w > 0 && strings.ToLower(word) == word:
             // already all lowercase, and not the first word, so uppercase the first character.
             runes[w] = unicode.ToUpper(runes[w])
-        } else if w == 0 && strings.ToLower(word) == word && firstUpper {
+        case w == 0 && strings.ToLower(word) == word && firstUpper:
             runes[w] = unicode.ToUpper(runes[w])
         }
+
         if w == 0 && !firstUpper {
             runes[w] = unicode.ToLower(runes[w])
         }
@@ -190,13 +216,19 @@ func SnakeCase(name string) string {
     name = strings.ReplaceAll(name, "-", "_")
 
     var b bytes.Buffer
+
     ln := len(name)
     if ln == 0 {
         return ""
     }
+
     n := rune(name[0])
     b.WriteRune(unicode.ToLower(n))
-    lastLower, isLower, lastUnder, isUnder := false, true, false, false
+
+    var isLower, isUnder bool
+
+    lastLower, lastUnder := false, false
+
     for i := 1; i < ln; i++ {
         r := rune(name[i])
         isLower = unicode.IsLower(r) && unicode.IsLetter(r) || unicode.IsDigit(r)
@@ -211,10 +243,13 @@ func SnakeCase(name string) string {
                 }
             }
         }
+
         b.WriteRune(unicode.ToLower(r))
+
         lastLower = isLower
         lastUnder = isUnder
     }
+
     return b.String()
 }
 
@@ -222,9 +257,11 @@ func SnakeCase(name string) string {
 func KebabCase(name string) string {
     name = SnakeCase(name)
     ln := len(name)
+
     if name[ln-1] == '_' {
         name = name[:ln-1]
     }
+
     return strings.ReplaceAll(name, "_", "-")
 }
 
@@ -233,11 +270,14 @@ func KebabCase(name string) string {
 func WrapText(text string, maxChars int) string {
     res := ""
     lines := strings.Split(text, "\n")
+
     for _, v := range lines {
         runes := []rune(strings.TrimSpace(v))
+
         for l := len(runes); l >= 0; l = len(runes) {
             if maxChars >= l {
                 res = res + string(runes) + "\n"
+
                 break
             }
 
@@ -247,12 +287,15 @@ func WrapText(text string, maxChars int) string {
             }
 
             res = res + string(runes[:i]) + "\n"
+
             if l == i {
                 break
             }
+
             runes = runes[i+1:]
         }
     }
+
     return res[:len(res)-1]
 }
 
@@ -262,6 +305,7 @@ func runeSpacePosRev(r []rune) int {
             return i
         }
     }
+
     return 0
 }
 
@@ -271,6 +315,7 @@ func runeSpacePos(r []rune) int {
             return i
         }
     }
+
     return len(r)
 }
 

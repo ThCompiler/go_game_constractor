@@ -21,6 +21,7 @@ type Visitor[T any] func(value *ValueNode[T]) (stop bool)
 func NewGraph[T any, Label comparable](vertexes []VertexInfo[T, Label]) *Graph[T, Label] {
     graph := &Graph[T, Label]{}
     graph.SetVertexes(vertexes)
+
     return graph
 }
 
@@ -31,9 +32,9 @@ func (graph *Graph[T, Label]) SetVertexes(vertexes []VertexInfo[T, Label]) {
     }
 }
 
-func (graph *Graph[T, Label]) AddVertex(label Label, Value T) {
+func (graph *Graph[T, Label]) AddVertex(label Label, value T) {
     graph.graph[label] = &Node[T, Label]{
-        ValueNode: ValueNode[T]{Value},
+        ValueNode: ValueNode[T]{value},
         next:      make(map[Label]*Node[T, Label]),
     }
 }
@@ -74,6 +75,7 @@ func (graph *Graph[T, Label]) AddOrientedEdge(vertexFrom Label, vertexTo Label) 
     }
 
     graph.graph[vertexFrom].next[vertexTo] = graph.graph[vertexTo]
+
     return nil
 }
 
@@ -95,6 +97,7 @@ func (graph *Graph[T, Label]) DeleteOrientedEdge(vertexFrom Label, vertexTo Labe
     }
 
     delete(graph.graph[vertexFrom].next, vertexTo)
+
     return nil
 }
 
@@ -113,7 +116,7 @@ func (graph *Graph[T, Label]) DFS(startVertex Label, visitor Visitor[T]) {
     dfsStack.Push(graph.graph[startVertex])
 
     for !dfsStack.Empty() {
-        currentVertex, _ := dfsStack.Pop()
+        currentVertex := dfsStack.MustPop()
 
         if visitor(&currentVertex.ValueNode) {
             break
@@ -122,6 +125,7 @@ func (graph *Graph[T, Label]) DFS(startVertex Label, visitor Visitor[T]) {
         for label, vertex := range currentVertex.next {
             if !visited[label] {
                 visited[label] = true
+
                 dfsStack.Push(vertex)
             }
         }
@@ -135,7 +139,7 @@ func (graph *Graph[T, Label]) BFS(startVertex Label, visitor Visitor[T]) {
     bfsQueue.Push(graph.graph[startVertex])
 
     for !bfsQueue.Empty() {
-        currentVertex, _ := bfsQueue.Pop()
+        currentVertex := bfsQueue.MustPop()
 
         if visitor(&currentVertex.ValueNode) {
             break
@@ -144,6 +148,7 @@ func (graph *Graph[T, Label]) BFS(startVertex Label, visitor Visitor[T]) {
         for label, vertex := range currentVertex.next {
             if !visited[label] {
                 visited[label] = true
+
                 bfsQueue.Push(vertex)
             }
         }
@@ -152,8 +157,10 @@ func (graph *Graph[T, Label]) BFS(startVertex Label, visitor Visitor[T]) {
 
 func (graph *Graph[T, Label]) createVisited() map[Label]bool {
     visited := make(map[Label]bool)
+
     for vertex := range graph.graph {
         visited[vertex] = false
     }
+
     return visited
 }

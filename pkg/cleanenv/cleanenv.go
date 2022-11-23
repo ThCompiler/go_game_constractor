@@ -40,30 +40,30 @@ const (
     DefaultSeparator = ","
 )
 
-// Supported tags
+// Supported tags.
 const (
-    // Name of the environment variable or a list of names
+    // TagEnv - name of the environment variable or a list of names.
     TagEnv = "env"
 
-    // Value parsing layout (for types like time.Time)
+    // TagEnvLayout -value parsing layout (for types like time.Time).
     TagEnvLayout = "env-layout"
 
-    // Default value
+    // TagEnvDefault - default value.
     TagEnvDefault = "env-default"
 
-    // Custom list and map separator
+    // TagEnvSeparator - custom list and map separator.
     TagEnvSeparator = "env-separator"
 
-    // Environment variable description
+    // TagEnvDescription - environment variable description.
     TagEnvDescription = "env-description"
 
-    // Flag to mark a field as updatable
+    // TagEnvUpd - flag to mark a field as updatable.
     TagEnvUpd = "env-upd"
 
-    // Flag to mark a field as required
+    // TagEnvRequired - flag to mark a field as required.
     TagEnvRequired = "env-required"
 
-    // Flag to specify prefix for structure fields
+    // TagEnvPrefix - flag to specify prefix for structure fields.
     TagEnvPrefix = "env-prefix"
 )
 
@@ -84,7 +84,7 @@ type Setter interface {
     SetValue(string) error
 }
 
-// Updater gives an ability to implement custom update function for a field or a whole structure
+// Updater gives an ability to implement custom update function for a field or a whole structure.
 type Updater interface {
     Update() error
 }
@@ -148,7 +148,7 @@ func UpdateEnv(cfg interface{}) error {
 //
 // - env
 //
-// - edn
+// - edn.
 func parseFile(path string, cfg interface{}) error {
     // open the configuration file
     f, err := os.OpenFile(path, os.O_RDONLY|os.O_SYNC, 0)
@@ -174,9 +174,11 @@ func parseFile(path string, cfg interface{}) error {
     default:
         return fmt.Errorf("file format '%s' doesn't supported by the parser", ext)
     }
+
     if err != nil {
-        return fmt.Errorf("config file parsing error: %s", err.Error())
+        return fmt.Errorf("config file parsing error: %w", err)
     }
+
     return nil
 }
 
@@ -192,7 +194,7 @@ func parseFile(path string, cfg interface{}) error {
 //
 // - env
 //
-// - edn
+// - edn.
 func parseReader(reader io.Reader, ext ConfigType, cfg interface{}) (err error) {
     // parse the file depending on the file type
     switch ext {
@@ -213,38 +215,41 @@ func parseReader(reader io.Reader, ext ConfigType, cfg interface{}) (err error) 
     }
 
     if err != nil {
-        return fmt.Errorf("config reader parsing error: %s", err.Error())
+        return fmt.Errorf("config reader parsing error: %w", err)
     }
 
     return nil
 }
 
-// parseYAML parses YAML from reader to data structure
+// parseYAML parses YAML from reader to data structure.
 func parseYAML(r io.Reader, str interface{}) error {
     dec := yaml.NewDecoder(r)
     dec.KnownFields(true)
+
     return dec.Decode(str)
 }
 
-// parseJSON parses JSON from reader to data structure
+// parseJSON parses JSON from reader to data structure.
 func parseJSON(r io.Reader, str interface{}) error {
     d := json.NewDecoder(r)
     d.DisallowUnknownFields()
+
     return d.Decode(str)
 }
 
-// parseTOML parses TOML from reader to data structure
+// parseTOML parses TOML from reader to data structure.
 func parseTOML(r io.Reader, str interface{}) error {
     _, err := toml.NewDecoder(r).Decode(str)
+
     return err
 }
 
-// parseEDN parses EDN from reader to data structure
+// parseEDN parses EDN from reader to data structure.
 func parseEDN(r io.Reader, str interface{}) error {
     return edn.NewDecoder(r).Decode(str)
 }
 
-// parseXML parses XML from reader to data structure
+// parseXML parses XML from reader to data structure.
 func parseXML(r io.Reader, str interface{}) error {
     return xml.NewDecoder(r).Decode(str)
 }
@@ -267,7 +272,7 @@ func parseENV(r io.Reader, _ interface{}) error {
     return nil
 }
 
-// parseSlice parses value into a slice of given type
+// parseSlice parses value into a slice of given type.
 func parseSlice(valueType reflect.Type, value string, sep string, layout *string) (*reflect.Value, error) {
     sliceValue := reflect.MakeSlice(valueType, 0, 0)
     if valueType.Elem().Kind() == reflect.Uint8 {
@@ -282,36 +287,47 @@ func parseSlice(valueType reflect.Type, value string, sep string, layout *string
             }
         }
     }
+
     return &sliceValue, nil
 }
 
-// parseMap parses value into a map of given type
+const partNumber = 2
+
+// parseMap parses value into a map of given type.
 func parseMap(valueType reflect.Type, value string, sep string, layout *string) (*reflect.Value, error) {
     mapValue := reflect.MakeMap(valueType)
+
     if len(strings.TrimSpace(value)) != 0 {
         pairs := strings.Split(value, sep)
+
         for _, pair := range pairs {
-            kvPair := strings.SplitN(pair, ":", 2)
-            if len(kvPair) != 2 {
+            kvPair := strings.SplitN(pair, ":", partNumber)
+            if len(kvPair) != partNumber {
                 return nil, fmt.Errorf("invalid map item: %q", pair)
             }
+
             k := reflect.New(valueType.Key()).Elem()
+
             err := parseValue(k, kvPair[0], sep, layout)
             if err != nil {
                 return nil, err
             }
+
             v := reflect.New(valueType.Elem()).Elem()
+
             err = parseValue(v, kvPair[1], sep, layout)
             if err != nil {
                 return nil, err
             }
+
             mapValue.SetMapIndex(k, v)
         }
     }
+
     return &mapValue, nil
 }
 
-// structMeta is a structure metadata entity
+// structMeta is a structure metadata entity.
 type structMeta struct {
     envList     []string
     fieldName   string
@@ -324,7 +340,7 @@ type structMeta struct {
     required    bool
 }
 
-// isFieldValueZero determines if fieldValue empty or not
+// isFieldValueZero determines if fieldValue empty or not.
 func (sm *structMeta) isFieldValueZero() bool {
     return sm.fieldValue.IsZero()
 }
@@ -334,7 +350,6 @@ type parseFunc func(*reflect.Value, string, *string) error
 
 // Any specific supported struct can be added here
 var validStructs = map[reflect.Type]parseFunc{
-
     reflect.TypeOf(time.Time{}): func(field *reflect.Value, value string, layout *string) error {
         var l string
         if layout != nil {
@@ -342,11 +357,13 @@ var validStructs = map[reflect.Type]parseFunc{
         } else {
             l = time.RFC3339
         }
+
         val, err := time.Parse(l, value)
         if err != nil {
             return err
         }
         field.Set(reflect.ValueOf(val))
+
         return nil
     },
 
@@ -356,6 +373,7 @@ var validStructs = map[reflect.Type]parseFunc{
             return err
         }
         field.Set(reflect.ValueOf(*val))
+
         return nil
     },
 
@@ -366,6 +384,7 @@ var validStructs = map[reflect.Type]parseFunc{
         }
 
         field.Set(reflect.ValueOf(loc))
+
         return nil
     },
 }
@@ -381,7 +400,6 @@ func readStructMetadata(cfgRoot interface{}) ([]structMeta, error) {
     metas := make([]structMeta, 0)
 
     for i := 0; i < len(cfgStack); i++ {
-
         s := reflect.ValueOf(cfgStack[i].Val)
         sPrefix := cfgStack[i].Prefix
 
@@ -394,6 +412,7 @@ func readStructMetadata(cfgRoot interface{}) ([]structMeta, error) {
         if s.Kind() != reflect.Struct {
             return nil, fmt.Errorf("wrong type %v", s.Kind())
         }
+
         typeInfo := s.Type()
 
         // read tags
@@ -408,11 +427,11 @@ func readStructMetadata(cfgRoot interface{}) ([]structMeta, error) {
 
             // process nested structure (except of supported ones)
             if fld := s.Field(idx); fld.Kind() == reflect.Struct {
-
                 // add structure to parsing structures
                 if _, found := validStructs[fld.Type()]; !found {
                     prefix, _ := fType.Tag.Lookup(TagEnvPrefix)
                     cfgStack = append(cfgStack, cfgNode{fld.Addr().Interface(), sPrefix + prefix})
+
                     continue
                 }
 
@@ -464,7 +483,6 @@ func readStructMetadata(cfgRoot interface{}) ([]structMeta, error) {
                 required:    required,
             })
         }
-
     }
 
     return metas, nil
@@ -494,6 +512,7 @@ func readEnvVars(cfg interface{}, update bool) error {
         for _, env := range meta.envList {
             if value, ok := os.LookupEnv(env); ok {
                 rawValue = &value
+
                 break
             }
         }
@@ -524,8 +543,6 @@ func readEnvVars(cfg interface{}, update bool) error {
 // parseValue parses value into the corresponding field.
 // In case of maps and slices it uses provided separator to split raw value string
 func parseValue(field reflect.Value, value, sep string, layout *string) error {
-    // TODO: simplify recursion
-
     if field.CanInterface() {
         if cs, ok := field.Interface().(Setter); ok {
             return cs.SetValue(value)
@@ -535,8 +552,8 @@ func parseValue(field reflect.Value, value, sep string, layout *string) error {
     }
 
     valueType := field.Type()
-    switch valueType.Kind() {
 
+    switch valueType.Kind() { //nolint:exhaustive // it is not necessary to consider all options
     // parse string value
     case reflect.String:
         field.SetString(value)
@@ -547,6 +564,7 @@ func parseValue(field reflect.Value, value, sep string, layout *string) error {
         if err != nil {
             return err
         }
+
         field.SetBool(b)
 
     // parse integer
@@ -555,6 +573,7 @@ func parseValue(field reflect.Value, value, sep string, layout *string) error {
         if err != nil {
             return err
         }
+
         field.SetInt(number)
 
     case reflect.Int64:
@@ -564,6 +583,7 @@ func parseValue(field reflect.Value, value, sep string, layout *string) error {
             if err != nil {
                 return err
             }
+
             field.SetInt(int64(d))
         } else {
             // parse regular integer
@@ -571,6 +591,7 @@ func parseValue(field reflect.Value, value, sep string, layout *string) error {
             if err != nil {
                 return err
             }
+
             field.SetInt(number)
         }
 
@@ -580,6 +601,7 @@ func parseValue(field reflect.Value, value, sep string, layout *string) error {
         if err != nil {
             return err
         }
+
         field.SetUint(number)
 
     // parse floating point value
@@ -588,6 +610,7 @@ func parseValue(field reflect.Value, value, sep string, layout *string) error {
         if err != nil {
             return err
         }
+
         field.SetFloat(number)
 
     // parse sliced value
@@ -642,15 +665,16 @@ func GetDescription(cfg interface{}, headerText *string) (string, error) {
         }
 
         for idx, env := range m.envList {
-
             elemDescription := fmt.Sprintf("\n  %s %s", env, m.fieldValue.Kind())
             if idx > 0 {
                 elemDescription += fmt.Sprintf(" (alternative to %s)", m.envList[0])
             }
+
             elemDescription += fmt.Sprintf("\n    \t%s", m.description)
             if m.defValue != nil {
                 elemDescription += fmt.Sprintf(" (default %q)", *m.defValue)
             }
+
             description += elemDescription
         }
     }
@@ -658,6 +682,7 @@ func GetDescription(cfg interface{}, headerText *string) (string, error) {
     if description != "" {
         return header + description, nil
     }
+
     return "", nil
 }
 
@@ -682,9 +707,11 @@ func FUsage(w io.Writer, cfg interface{}, headerText *string, usageFuncs ...func
         if err != nil {
             return
         }
+
         if len(usageFuncs) > 0 {
-            fmt.Fprintln(w)
+            _, _ = fmt.Fprintln(w)
         }
-        fmt.Fprintln(w, text)
+
+        _, _ = fmt.Fprintln(w, text)
     }
 }

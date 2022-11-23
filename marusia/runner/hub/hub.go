@@ -6,7 +6,7 @@ import (
 )
 
 type sceneMessage struct {
-	sessionId string
+	sessionID string
 	answer    chan runner.PlayedSceneResult
 	req       runner.Request
 }
@@ -14,13 +14,13 @@ type sceneMessage struct {
 type director struct {
 	hub       *ScriptHub
 	op        drt.Director
-	sessionId string
+	sessionID string
 }
 
-func newDirector(hub *ScriptHub, sessionId string, op drt.Director) *director {
+func newDirector(hub *ScriptHub, sessionID string, op drt.Director) *director {
 	return &director{
 		hub:       hub,
-		sessionId: sessionId,
+		sessionID: sessionID,
 		op:        op,
 	}
 }
@@ -53,8 +53,8 @@ func NewHub() *ScriptHub {
 	}
 }
 
-func (h *ScriptHub) AttachDirector(sessionId string, op drt.Director) {
-	h.attacher <- newDirector(h, sessionId, op)
+func (h *ScriptHub) AttachDirector(sessionID string, op drt.Director) {
+	h.attacher <- newDirector(h, sessionID, op)
 }
 
 func (h *ScriptHub) detachDirector(drt *director) {
@@ -64,10 +64,11 @@ func (h *ScriptHub) detachDirector(drt *director) {
 func (h *ScriptHub) RunScene(req runner.Request) chan runner.PlayedSceneResult {
 	answer := make(chan runner.PlayedSceneResult)
 	h.broadcast <- &(sceneMessage{
-		sessionId: req.Session.SessionID,
+		sessionID: req.Session.SessionID,
 		req:       req,
 		answer:    answer,
 	})
+
 	return answer
 }
 
@@ -82,7 +83,7 @@ func (h *ScriptHub) detachAll() {
 }
 
 func (h *ScriptHub) runScene(msg *sceneMessage) {
-	if drt, ok := h.directors[msg.sessionId]; ok {
+	if drt, ok := h.directors[msg.sessionID]; ok {
 		go func(ans chan runner.PlayedSceneResult, drt *director) {
 			ans <- runner.PlayedSceneResult{
 				Result:         ToRunnerResult(drt.PlayScene(*msg)),
@@ -93,7 +94,7 @@ func (h *ScriptHub) runScene(msg *sceneMessage) {
 }
 
 func (h *ScriptHub) applyDirectorDetaching(drt *director) {
-	delete(h.directors, drt.sessionId)
+	delete(h.directors, drt.sessionID)
 }
 
 func (h *ScriptHub) Run() {
@@ -101,7 +102,7 @@ func (h *ScriptHub) Run() {
 		select {
 		case drt, ok := <-h.attacher:
 			if ok {
-				h.directors[drt.sessionId] = drt
+				h.directors[drt.sessionID] = drt
 			}
 		case drt, ok := <-h.dettacher:
 			if ok {
@@ -113,6 +114,7 @@ func (h *ScriptHub) Run() {
 			}
 		case <-h.stopHub:
 			h.detachAll()
+
 			return
 		}
 	}

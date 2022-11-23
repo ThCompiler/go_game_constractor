@@ -1,6 +1,5 @@
 package words2num
 
-// TODO
 import (
 	words2 "github.com/ThCompiler/go_game_constractor/pkg/convertor/words"
 	"math"
@@ -16,21 +15,29 @@ func Convert(str string) (int64, error) {
 	return convert(str)
 }
 
+const (
+	ten      = 10
+	hundred  = 100
+	thousand = 1000
+)
+
 func convert(str string) (int64, error) {
 	words := strings.Fields(str)
 	res := int64(0)
+
 	for _, word := range words {
-		if value, is := words2.WordConstants.W2n.WordsDigit.Units[word]; is {
+		if value, is := words2.WordConstants.W2n.Digit.Units[word]; is {
 			res += int64(value)
-		} else if value, is = words2.WordConstants.W2n.WordsDigit.Tens[word]; is {
-			res += 10 + int64(value)
-		} else if value, is = words2.WordConstants.W2n.WordsDigit.Dozens[word]; is {
-			res += int64(value) * 10
-		} else if value, is = words2.WordConstants.W2n.WordsDigit.Hundreds[word]; is {
-			res += int64(value) * 100
+		} else if value, is = words2.WordConstants.W2n.Digit.Tens[word]; is {
+			res += ten + int64(value)
+		} else if value, is = words2.WordConstants.W2n.Digit.Dozens[word]; is {
+			res += int64(value) * ten
+		} else if value, is = words2.WordConstants.W2n.Digit.Hundreds[word]; is {
+			res += int64(value) * hundred
 		} else if scale, is := words2.WordConstants.W2n.UnitScalesNamesToNumber.Words[word]; is {
-			res *= int64(math.Pow(1000, float64(scale)))
+			res *= int64(math.Pow(thousand, float64(scale)))
 		}
 	}
+
 	return res, nil
 }

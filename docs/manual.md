@@ -61,6 +61,10 @@ script:
       tts: "I will Repeat you word"
     nextScenes:
       - 'echoRepeat'
+    context:
+      saveValue:
+        name: 'sayed'
+        type: 'string'
     matchers:
       - 'any'
     error:
@@ -70,9 +74,15 @@ script:
       string: "You say {userText}"
       tts: "You say {userText}"
       values:
-        userText: 'string'
+        userText: 
+          type: 'string'
+          fromContext: 'sayed'
     nextScenes:
       - 'echoRepeat'
+    context:
+      saveValue:
+        name: 'sayed'
+        type: 'string'
     matchers:
       - 'any'
     error:

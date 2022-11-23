@@ -13,9 +13,11 @@ import (
 	"unicode"
 )
 
+const twoSignAfterRound = 2
+
 func combineResultData(number objects.Number, appliedOptions Options) string {
 	/* Пример convertedNumberArr:
-	['минус', 'двадцать два', 'рубля', 'сорок одна', 'копейка'] */
+	   ['минус', 'двадцать два', 'рубля', 'сорок одна', 'копейка'] */
 	convertedNumber := objects.ResultNumberT{}
 	modifiedNumber := number
 
@@ -37,7 +39,7 @@ func combineResultData(number objects.Number, appliedOptions Options) string {
 	// Если указана валюта
 	if appliedOptions.currency != "" && appliedOptions.currency != currency.NUMBER {
 		// Округлить число до 2 знаков после запятой
-		modifiedNumber = functions2.RoundNumber(modifiedNumber, 2)
+		modifiedNumber = functions2.RoundNumber(modifiedNumber, twoSignAfterRound)
 	}
 
 	integerScalesArray := modifiedNumber.FirstPart
@@ -190,5 +192,6 @@ func combineResultData(number objects.Number, appliedOptions Options) string {
 
 	// Сделать первую букву заглавной
 	r := []rune(convertedNumberResult)
+
 	return string(append([]rune{unicode.ToUpper(r[0])}, r[1:]...))
 }

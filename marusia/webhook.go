@@ -365,28 +365,39 @@ func (wh *Webhook) OnEvent(f eventFunc) {
 }
 
 // HandleFunc обработчик http запросов.
-func (wh *Webhook) HandleFunc(c HttpContext) {
-    mediatype, _, _ := mime.ParseMediaType(c.GetHeader("Content-Type"))
+func (wh *Webhook) HandleFunc(c HTTPContext) {
+    mediatype, _, err := mime.ParseMediaType(c.GetHeader("Content-Type"))
+    if err != nil {
+        wh.Log(c.GetContext()).Error("%s + "+http.StatusText(http.StatusBadRequest), errors.Wrap(err, "http - marusia server, bad content-type"))
+        c.SendErrorResponse(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+
+        return
+    }
+
     if mediatype != "application/json" {
         wh.Log(c.GetContext()).Error("%s + "+http.StatusText(http.StatusBadRequest), "http - marusia server, bad body type")
         c.SendErrorResponse(http.StatusBadRequest, http.StatusText(http.StatusBadRequest))
+
         return
     }
 
     var req Request
 
-    if err := c.ParseRequest(&req); err != nil {
-        wh.Log(c.GetContext()).Error(errors.Wrap(err, "http - marusia server"))
+    if errParse := c.ParseRequest(&req); errParse != nil {
+        wh.Log(c.GetContext()).Error(errors.Wrap(errParse, "http - marusia server"))
         c.SendErrorResponse(http.StatusBadRequest, "invalid request body")
+
         return
     }
 
     req.Context = c.GetContext()
 
-    resp, err := wh.event(req)
+    resp, errWebhook := wh.event(req)
 
-    if err != nil {
-        c.SendErrorResponse(http.StatusInternalServerError, err.Error())
+    if errWebhook != nil {
+        wh.Log(c.GetContext()).Error(errors.Wrap(errWebhook, "webhook - error server"))
+        c.SendErrorResponse(http.StatusInternalServerError, errWebhook.Error())
+
         return
     }
 
@@ -402,15 +413,19 @@ func (wh *Webhook) HandleFunc(c HttpContext) {
 
     // Возвращаем данные
     c.SetHeader("Content-Type", "application/json; encoding=utf-8")
-    c.SendResponse(http.StatusOK, fullResponse)
+    err = c.SendResponse(http.StatusOK, fullResponse)
+
+    if err != nil {
+        wh.Log(c.GetContext()).Error(errors.Wrap(errWebhook, "http - error send response"))
+    }
 }
 
 // GinHandleFunc обработчик http запросов для gin.Context.
 func (wh *Webhook) GinHandleFunc(c *gin.Context) {
-    wh.HandleFunc(&GinHttpContext{Context: c})
+    wh.HandleFunc(&GinHTTPContext{Context: c})
 }
 
-// BaseHttpHandleFunc обработчик http запросов для gin.Context.
-func (wh *Webhook) BaseHttpHandleFunc(w http.ResponseWriter, r *http.Request) {
-    wh.HandleFunc(&BaseHttpContext{Req: r, Resp: w})
+// BaseHTTPHandleFunc обработчик http запросов для gin.Context.
+func (wh *Webhook) BaseHTTPHandleFunc(w http.ResponseWriter, r *http.Request) {
+    wh.HandleFunc(&BaseHTTPContext{Req: r, Resp: w})
 }

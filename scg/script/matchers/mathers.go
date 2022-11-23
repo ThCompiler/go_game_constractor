@@ -20,10 +20,11 @@ func GetSupportedNames() []string {
 
 func IsCorrectNameOfMather(name string) bool {
 	_, is := linkNameWithMatherName[name]
+
 	return is
 }
 
-// ConvertNameToMatcher
+// ConvertNameToMatcher - .
 func ConvertNameToMatcher(name string) string {
 	return linkNameWithMatherName[name]
 }

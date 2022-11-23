@@ -54,18 +54,22 @@ func (si *ScriptInfo) checkValidScenes() (is bool, err error) {
             break
         }
     }
+
     return is, err
 }
 
 func (si *ScriptInfo) checkValidMatcherName() (is bool, err error) {
     is = true
+
     for name, matcher := range si.UserMatchers {
         matcher.SetName(name)
 
         if is = matchers.IsCorrectNameOfMather(name); is {
             err = errors.Wrap(ErrorNameAlreadyOccupied, fmt.Sprintf("error with matcher %s", name))
+
             break
         }
+
         is = true
     }
 
@@ -76,15 +80,16 @@ func (si *ScriptInfo) checkNextScenes() (is bool, err error) {
     unknownScene := ""
 up:
     for _, sc := range si.Script {
-
         if _, is = si.Script[sc.NextScene]; sc.IsInfoScene && !is {
             unknownScene = sc.NextScene
+
             break
         }
 
         for _, name := range sc.NextScenes {
             if _, is = si.Script[name]; !is {
                 unknownScene = name
+
                 break up
             }
         }
@@ -94,6 +99,7 @@ up:
         if unknownScene == "" {
             return is, err
         }
+
         return is, errorNameSceneNotFound(unknownScene)
     }
 
@@ -111,12 +117,12 @@ func (si *ScriptInfo) checkContext() (bool, error) {
         return false, err
     }
 
-    if is, err := si.checkLoadContext(sceneGraph); !is {
-        return is, err
+    if is, errLoadContext := si.checkLoadContext(sceneGraph); !is {
+        return is, errLoadContext
     }
 
-    if is, err := si.checkValueContext(sceneGraph); !is {
-        return is, err
+    if is, errValueContext := si.checkValueContext(sceneGraph); !is {
+        return is, errValueContext
     }
 
     return err == nil, err
@@ -135,8 +141,10 @@ up:
                 if sctx.Value.ctx.SaveValue != nil && sctx.Value.ctx.SaveValue.Name == load.Name {
                     found = true
                     load.Type = sctx.Value.ctx.SaveValue.Type
+
                     return true
                 }
+
                 return false
             })
 
@@ -144,6 +152,7 @@ up:
 
             if !found {
                 err = errorNotFoundLoadingContext(load.Name, name, visited)
+
                 break up
             }
             sc.Context.LoadValue[i] = load
@@ -171,8 +180,10 @@ up:
                 if sctx.Value.ctx.SaveValue != nil && sctx.Value.ctx.SaveValue.Name == value.FromContext {
                     found = true
                     ctxType = sctx.Value.ctx.SaveValue.Type
+
                     return true
                 }
+
                 return false
             })
 
@@ -180,11 +191,13 @@ up:
 
             if !found {
                 err = errorNotFoundLoadingContextInValues(value.FromContext, name, visited)
+
                 break up
             }
 
             if ctxType != value.Type {
                 err = errors.Wrapf(ErrorNotEqualValueAndContextType, "with context type %s and value type %s", ctxType, value.Type)
+
                 break up
             }
         }
@@ -199,6 +212,7 @@ func (si *ScriptInfo) initSceneGraph() (*graph.Graph[*sceneContext, string], err
 
     for name, sc := range si.Script {
         sceneGraph.AddVertex(name, &sceneContext{sc.Context, name})
+
         if name == si.GoodByeScene {
             continue
         }
@@ -218,11 +232,13 @@ func (si *ScriptInfo) initSceneGraph() (*graph.Graph[*sceneContext, string], err
     if err != nil {
         return nil, errors.Wrap(ErrorUnknown, err.Error())
     }
+
     return sceneGraph, nil
 }
 
 func LoadScriptInfo(path string) (*ScriptInfo, error) {
     si := ScriptInfo{}
+
     err := cleanenv.ReadConfig(path, &si)
     if err != nil {
         return nil, fmt.Errorf("error load script info: %w", err)
@@ -232,5 +248,6 @@ func LoadScriptInfo(path string) (*ScriptInfo, error) {
     if err != nil {
         return nil, fmt.Errorf("this script config is not correct: %w", err)
     }
+
     return &si, nil
 }

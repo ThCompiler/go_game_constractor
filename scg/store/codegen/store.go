@@ -1,58 +1,57 @@
 package codegen
 
 import (
-    "github.com/ThCompiler/go_game_constractor/scg/expr"
-    "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-    "path/filepath"
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+	"path/filepath"
 )
 
 // ScriptStoreFiles returns redis store for scripts implementation
 func ScriptStoreFiles(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
-    repositoryFile := repository(rootPkg, rootDir, scriptInfo)
-    interfaceStoreFile := scriptStore(rootPkg, rootDir, scriptInfo)
+	repositoryFile := repository(rootPkg, rootDir, scriptInfo)
+	interfaceStoreFile := scriptStore(rootPkg, rootDir, scriptInfo)
 
-    return []*codegen.File{repositoryFile, interfaceStoreFile}
+	return []*codegen.File{repositoryFile, interfaceStoreFile}
 }
 
 // client returns the files defining the gRPC client.
 func repository(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-    var sections []*codegen.SectionTemplate
+	var sections []*codegen.SectionTemplate
 
-    fpath := filepath.Join(rootDir, "internal", "texts", "store", "redis", "repository.go")
-    imports := []*codegen.ImportSpec{
-        {Path: "github.com/go-redis/redis/v8", Name: "redis"},
-        {Path: "context"},
-        {Path: "github.com/pkg/errors"},
-    }
+	fpath := filepath.Join(rootDir, "internal", "texts", "store", "redis", "repository.go")
+	imports := []*codegen.ImportSpec{
+		{Path: "github.com/go-redis/redis/v8", Name: "redis"},
+		{Path: "context"},
+		{Path: "github.com/pkg/errors"},
+	}
 
-    sections = []*codegen.SectionTemplate{
-        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Redis store", "redis", imports, false),
-    }
+	sections = []*codegen.SectionTemplate{
+		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Redis store", "redis", imports, false),
+	}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "script-redis-repository",
-        Source: scriptRedisRepositoryT,
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "script-redis-repository",
+		Source: scriptRedisRepositoryT,
+	})
 
-    return &codegen.File{Path: fpath, SectionTemplates: sections}
+	return &codegen.File{Path: fpath, SectionTemplates: sections}
 }
 
 func scriptStore(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-    var sections []*codegen.SectionTemplate
+	var sections []*codegen.SectionTemplate
 
-    fpath := filepath.Join(rootDir, "internal", "texts", "store", "interface.go")
-    var imports []*codegen.ImportSpec
+	fpath := filepath.Join(rootDir, "internal", "texts", "store", "interface.go")
 
-    sections = []*codegen.SectionTemplate{
-        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Interface for script store", "store", imports, false),
-    }
+	sections = []*codegen.SectionTemplate{
+		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Interface for script store", "store", nil, false),
+	}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "script-store",
-        Source: scriptStoreT,
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "script-store",
+		Source: scriptStoreT,
+	})
 
-    return &codegen.File{Path: fpath, SectionTemplates: sections}
+	return &codegen.File{Path: fpath, SectionTemplates: sections}
 }
 
 const scriptStoreT = `type ScriptStore interface {

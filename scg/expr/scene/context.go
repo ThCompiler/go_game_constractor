@@ -7,6 +7,8 @@ import (
     "gopkg.in/yaml.v3"
 )
 
+const nLoadValueFields = 1
+
 type Context struct {
     SaveValue *SaveValue  `yaml:"saveValue" json:"save_value" xml:"saveValue"`
     LoadValue []LoadValue `yaml:"loadValue" json:"load_value" xml:"loadValue"`
@@ -14,11 +16,13 @@ type Context struct {
 
 func (ct *Context) checkValuesType() (err error) {
     err = nil
+
     if ct.SaveValue != nil {
         if !types.IsValidType(ct.SaveValue.Type) {
             err = errorUnknownTypeOfValue(ct.SaveValue.Type)
         }
     }
+
     return
 }
 
@@ -54,16 +58,18 @@ func (lv *LoadValue) unmarshal(unm parser.Unmarshaler) (err error) {
         if err = unm.Unmarshal(&lv.Name); err == nil {
             return nil
         }
+
         return err
     }
 
     tmpMatcher := _loadValue{}
     if err = unm.Unmarshal(&tmpMatcher); err == nil {
         lv.Name = tmpMatcher.Name
+
         return nil
     }
 
-    if len(tmp) > 1 {
+    if len(tmp) > nLoadValueFields {
         return ErrorTooManyFields
     }
 

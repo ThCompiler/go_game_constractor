@@ -10,14 +10,14 @@ import (
     "strings"
 )
 
-// SceneDirectorConfig - config for director
+// SceneDirectorConfig - config for director.
 type SceneDirectorConfig struct {
     StartScene   scene.Scene
     GoodbyeScene scene.Scene
     EndCommand   string
 }
 
-// ScriptDirector - implementation game director for script games
+// ScriptDirector - implementation game director for script games.
 type ScriptDirector struct {
     stashedScene  structures.Stack[scene.Scene]
     currentScene  scene.Scene
@@ -26,7 +26,7 @@ type ScriptDirector struct {
     cf            SceneDirectorConfig
 }
 
-// NewScriptDirector - create new ScriptDirector
+// NewScriptDirector - create new ScriptDirector.
 func NewScriptDirector(cf SceneDirectorConfig) *ScriptDirector {
     return &ScriptDirector{
         stashedScene:  structures.NewStack[scene.Scene](),
@@ -39,7 +39,7 @@ func NewScriptDirector(cf SceneDirectorConfig) *ScriptDirector {
 
 // PlayScene - .
 func (so *ScriptDirector) PlayScene(req director.SceneRequest) director.Result {
-    ctx := toSceneContext(req, so.ctx)
+    ctx := toSceneContext(so.ctx, req)
 
     sceneInfo := scene.Info{}
     if so.currentScene != nil {
@@ -65,6 +65,7 @@ func (so *ScriptDirector) PlayScene(req director.SceneRequest) director.Result {
         } else {
             cmd, name = so.matchCommands(req.Request.Command, sceneInfo.ExpectedMessages)
         }
+
         if cmd != "" {
             ctx.Request.SearchedMessage = cmd
             ctx.Request.NameMatched = name
@@ -81,6 +82,7 @@ func (so *ScriptDirector) PlayScene(req director.SceneRequest) director.Result {
         if Err.IsErrorScene() {
             errCmd := Err.GetErrorScene().React(ctx)
             tmpScene, ErrInfo := so.baseSceneInfo(Err.GetErrorScene().Next(), ctx)
+
             if errCmd != scene.ApplyStashedScene {
                 so.stashedScene.Push(so.currentScene)
                 so.currentScene = tmpScene
@@ -101,6 +103,7 @@ func (so *ScriptDirector) PlayScene(req director.SceneRequest) director.Result {
     }
 
     so.ctx = ctx.Context
+
     return director.Result{
         Text:          info.Text,
         Buttons:       info.Buttons,
@@ -132,12 +135,17 @@ func (so *ScriptDirector) reactSceneCommand(command scene.Command, nextScene sce
     case scene.StashScene:
         so.stashedScene.Push(so.currentScene)
         so.currentScene = nextScene
+
     case scene.ApplyStashedScene:
         if !so.stashedScene.Empty() {
-            so.currentScene, _ = so.stashedScene.Pop()
+            so.currentScene = so.stashedScene.MustPop()
         }
+
     case scene.FinishScene:
         so.isEndOfScript = true
+        so.currentScene = nextScene
+
+    case scene.NoCommand:
         so.currentScene = nextScene
     default:
         so.currentScene = nextScene
@@ -150,6 +158,7 @@ func (so *ScriptDirector) matchCommands(command string, commands []scene.Message
             return msg, cmd.GetMatchedName()
         }
     }
+
     return "", ""
 }
 
@@ -159,5 +168,6 @@ func (so *ScriptDirector) matchButton(command string, buttons []director.Button)
             return command, button.Title
         }
     }
+
     return "", ""
 }

@@ -6,6 +6,8 @@ import (
     "gopkg.in/yaml.v3"
 )
 
+const nSceneMatcherFields = 2
+
 type Matcher struct {
     Name    string
     ToScene string
@@ -34,6 +36,7 @@ func (m *Matcher) unmarshal(unm parser.Unmarshaler) (err error) {
         if err = unm.Unmarshal(&m.Name); err == nil {
             return nil
         }
+
         return err
     }
 
@@ -41,10 +44,11 @@ func (m *Matcher) unmarshal(unm parser.Unmarshaler) (err error) {
     if err = unm.Unmarshal(&tmpMatcher); err == nil {
         m.Name = tmpMatcher.Name
         m.ToScene = tmpMatcher.ToScene
+
         return nil
     }
 
-    if len(tmp) > 2 {
+    if len(tmp) > nSceneMatcherFields {
         return ErrorTooManyFields
     }
 

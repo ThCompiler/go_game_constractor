@@ -1,47 +1,47 @@
 package codegen
 
 import (
-    "github.com/ThCompiler/go_game_constractor/scg/expr"
-    "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-    "path"
-    "path/filepath"
-    "strings"
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+	"path"
+	"path/filepath"
+	"strings"
 )
 
 // MainFile returns main file
 func MainFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
-    mainFile := generateMain(rootPkg, rootDir, scriptInfo)
+	mainFile := generateMain(rootPkg, rootDir, scriptInfo)
 
-    return []*codegen.File{mainFile}
+	return []*codegen.File{mainFile}
 }
 
 func generateMain(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-    var sections []*codegen.SectionTemplate
+	var sections []*codegen.SectionTemplate
 
-    fpath := filepath.Join(rootDir, "cmd", "main.go")
-    imports := []*codegen.ImportSpec{
-        {Path: path.Join("log")},
-        codegen.SCGImport(path.Join("pkg", "convertor", "words")),
-        codegen.SCGImport(path.Join("pkg", "convertor", "words", "languages")),
-        {Path: path.Join(rootPkg, "config")},
-        {Path: path.Join(rootPkg, "internal", strings.ToLower(codegen.ToTitle(scriptInfo.Name)))},
-    }
+	fpath := filepath.Join(rootDir, "cmd", "main.go")
+	imports := []*codegen.ImportSpec{
+		{Path: path.Join("log")},
+		codegen.SCGImport(path.Join("pkg", "convertor", "words")),
+		codegen.SCGImport(path.Join("pkg", "convertor", "words", "languages")),
+		{Path: path.Join(rootPkg, "config")},
+		{Path: path.Join(rootPkg, "internal", strings.ToLower(codegen.ToTitle(scriptInfo.Name)))},
+	}
 
-    sections = []*codegen.SectionTemplate{
-        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Main file", "main", imports, true),
-    }
+	sections = []*codegen.SectionTemplate{
+		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Main file", "main", imports, true),
+	}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "main-file",
-        Source: mainFileStructT,
-        Data:   scriptInfo,
-        FuncMap: map[string]interface{}{
-            "ToTitle": codegen.ToTitle,
-            "ToLower": strings.ToLower,
-        },
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "main-file",
+		Source: mainFileStructT,
+		Data:   scriptInfo,
+		FuncMap: map[string]interface{}{
+			"ToTitle": codegen.ToTitle,
+			"ToLower": strings.ToLower,
+		},
+	})
 
-    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
 const mainFileStructT = ` // This is your application's startup file. 

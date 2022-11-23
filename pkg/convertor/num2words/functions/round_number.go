@@ -8,6 +8,11 @@ import (
 	"unicode"
 )
 
+const (
+	nine = 9
+	four = 4
+)
+
 func RoundNumber(number objects.Number, precision int64) objects.Number {
 	if number.Divider == constants.FractionalNumber ||
 		int64(len(number.SecondPart)) <= precision || precision < 0 {
@@ -27,23 +32,20 @@ func RoundNumber(number objects.Number, precision int64) objects.Number {
 			// Если нужно было увеличивать цифру
 			if increaseDigit {
 				// Если текущая цифра 9, то увеличить следующую
-				if currentDigit == 9 {
+				if currentDigit == nine {
 					numberPartToRound[i] = '0'
-					increaseDigit = true
 					// Если это уже самая первая цифра слева, то добавить "1" в начало
 					if i == 0 {
 						numberPartToRound = append([]rune{'1'}, numberPartToRound...)
 					}
-					// Если любая другая цифра
-				} else {
+				} else { // Если любая другая цифра
 					numberPartToRound[i]++
-					increaseDigit = false
+
 					break
 				}
-				// Если не нужно было увеличивать цифру
-			} else {
+			} else { // Если не нужно было увеличивать цифру
 				// Если текущая цифра <= 4, то завершить цикл
-				if currentDigit <= 4 {
+				if currentDigit <= four {
 					break
 				} else {
 					/* Если текущая цифра >= 5,

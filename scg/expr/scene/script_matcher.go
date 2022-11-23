@@ -9,8 +9,10 @@ import (
 type typeMatcher int64
 
 const (
-    selects = 1
-    regex   = 2
+    selects typeMatcher = 1
+    regex   typeMatcher = 2
+
+    nScriptMatcherFields = 3
 )
 
 type RegexMatcher struct {
@@ -43,6 +45,7 @@ func (m *ScriptMatcher) GetRegexMatcher() (*RegexMatcher, error) {
     if m.IsRegexMatcher() {
         return m.regexMatcher, nil
     }
+
     return nil, ErrorIsNotRegexMatcher
 }
 
@@ -50,6 +53,7 @@ func (m *ScriptMatcher) GetSelectsMatcher() (*SelectMatcher, error) {
     if m.IsSelectMatcher() {
         return m.selectMatcher, nil
     }
+
     return nil, ErrorIsNotSelectsMatcher
 }
 
@@ -57,6 +61,7 @@ func (m *ScriptMatcher) MustSelectsMatcher() SelectMatcher {
     if m.IsSelectMatcher() {
         return *m.selectMatcher
     }
+
     panic(ErrorIsNotSelectsMatcher)
 }
 
@@ -64,6 +69,7 @@ func (m *ScriptMatcher) MustRegexMatcher() RegexMatcher {
     if m.IsRegexMatcher() {
         return *m.regexMatcher
     }
+
     panic(ErrorIsNotRegexMatcher)
 }
 
@@ -96,18 +102,22 @@ func (m *ScriptMatcher) unmarshal(unm parser.Unmarshaler) (err error) {
     if _, is := tmp["regex"]; is {
         if err = unm.Unmarshal(&m.regexMatcher); err == nil {
             m.typeMatch = regex
+
             return nil
         }
+
         m.regexMatcher = nil
     } else {
         if err = unm.Unmarshal(&m.selectMatcher); err == nil {
             m.typeMatch = selects
+
             return nil
         }
+
         m.selectMatcher = nil
     }
 
-    if len(tmp) > 3 {
+    if len(tmp) > nScriptMatcherFields {
         return ErrorTooManyFields
     }
 

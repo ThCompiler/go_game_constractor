@@ -13,15 +13,8 @@ import (
 	base_matchers "github.com/ThCompiler/go_game_constractor/director/scriptdirector/matchers"
 	"github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
 	loghttp "github.com/ThCompiler/go_game_constractor/pkg/logger/http"
-	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/script/payloads"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/texts/manager"
-)
-
-const (
-	// DoreEchoButtonText - text for button Dore
-	DoreEchoButtonText = "Привет"
-	// JoreEchoButtonText - text for button Jore
-	JoreEchoButtonText = "Привет"
+	"github.com/ThCompiler/go_game_constractor/scg/go/types"
 )
 
 // Echo scene
@@ -33,12 +26,10 @@ type Echo struct {
 
 // React function of actions after scene has been played
 func (sc *Echo) React(ctx *scene.Context) scene.Command {
+	ctx.Set("sayed", types.MustConvert[string](ctx.Request.SearchedMessage))
+
 	// TODO Write the actions after Echo scene has been played
 	switch {
-	// Buttons select
-	case ctx.Request.NameMatched == DoreEchoButtonText && ctx.Request.WasButton:
-
-	case ctx.Request.NameMatched == JoreEchoButtonText && ctx.Request.WasButton:
 
 	// Matcher select
 	case ctx.Request.NameMatched == base_matchers.AnyMatchedString:
@@ -52,8 +43,7 @@ func (sc *Echo) React(ctx *scene.Context) scene.Command {
 
 // Next function returning next scene
 func (sc *Echo) Next() scene.Scene {
-	switch sc.NextScene {
-	case EchoRepeatScene:
+	if sc.NextScene == EchoRepeatScene {
 		return &EchoRepeat{
 			TextManager: sc.TextManager,
 		}
@@ -75,21 +65,7 @@ func (sc *Echo) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 		ExpectedMessages: []scene.MessageMatcher{
 			base_matchers.AnyMatcher,
 		},
-		Buttons: []director.Button{
-			{
-				Title:   DoreEchoButtonText,
-				Payload: &payloads.EchoDorePayload{},
-			},
-			{
-				Title:   JoreEchoButtonText,
-				Payload: &payloads.EchoJorePayload{},
-			},
-		},
-		Err: base_matchers.NumberError,
+		Buttons: []director.Button{},
+		Err:     base_matchers.NumberError,
 	}, true
-}
-
-// GetSayedContextValue function returning value from context about scene
-func (sc *Echo) GetSayedContextValue(ctx *scene.Context) string {
-	return scene.GetContextAny[string](ctx, "sayed")
 }

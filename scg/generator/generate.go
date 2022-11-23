@@ -23,7 +23,7 @@ func Generate(dir string, scriptInfo expr.ScriptInfo, update bool, addServer boo
             return nil, err
         }
         path := filepath.Join(base, codegen.Gendir)
-        if err = os.MkdirAll(path, 0777); err != nil {
+        if err = os.MkdirAll(path, os.ModePerm); err != nil {
             return nil, err
         }
 
@@ -57,21 +57,25 @@ func Generate(dir string, scriptInfo expr.ScriptInfo, update bool, addServer boo
 
     // 3. Generate initial set of files produced by goa code generators.
     var genfiles []*codegen.File
+
     for _, gen := range genfuncs {
-        fs, err := gen(rootPkg, filepath.Join(codegen.Gendir), scriptInfo)
+        fs, err := gen(rootPkg, codegen.Gendir, scriptInfo)
         if err != nil {
             return nil, err
         }
+
         genfiles = append(genfiles, fs...)
     }
 
     // 4. Write the files.
     written := make(map[string]struct{})
+
     for _, f := range genfiles {
         filename, err := f.Render(dir, update)
         if err != nil {
             return nil, err
         }
+
         if filename != "" {
             written[filename] = struct{}{}
         }

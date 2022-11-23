@@ -13,16 +13,8 @@ import (
 	base_matchers "github.com/ThCompiler/go_game_constractor/director/scriptdirector/matchers"
 	"github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
 	loghttp "github.com/ThCompiler/go_game_constractor/pkg/logger/http"
-	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/script/errors"
-	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/script/matchers"
-	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/script/payloads"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/texts/manager"
 	"github.com/ThCompiler/go_game_constractor/scg/go/types"
-)
-
-const (
-	// DoreEchoRepeatButtonText - text for button Dore
-	DoreEchoRepeatButtonText = "Привет"
 )
 
 // EchoRepeat scene
@@ -38,16 +30,9 @@ func (sc *EchoRepeat) React(ctx *scene.Context) scene.Command {
 
 	// TODO Write the actions after EchoRepeat scene has been played
 	switch {
-	// Buttons select
-	case ctx.Request.NameMatched == DoreEchoRepeatButtonText && ctx.Request.WasButton:
-		sc.NextScene = EchoRepeatScene
 
 	// Matcher select
 	case ctx.Request.NameMatched == base_matchers.AnyMatchedString:
-
-	case ctx.Request.NameMatched == matchers.CheckedMatchedString:
-		sc.NextScene = EchoScene
-	case ctx.Request.NameMatched == matchers.AgreedMatchedString:
 
 	default:
 		sc.NextScene = EchoRepeatScene
@@ -58,13 +43,8 @@ func (sc *EchoRepeat) React(ctx *scene.Context) scene.Command {
 
 // Next function returning next scene
 func (sc *EchoRepeat) Next() scene.Scene {
-	switch sc.NextScene {
-	case EchoRepeatScene:
+	if sc.NextScene == EchoRepeatScene {
 		return &EchoRepeat{
-			TextManager: sc.TextManager,
-		}
-	case EchoScene:
-		return &Echo{
 			TextManager: sc.TextManager,
 		}
 	}
@@ -89,16 +69,9 @@ func (sc *EchoRepeat) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
 		Text: text,
 		ExpectedMessages: []scene.MessageMatcher{
 			base_matchers.AnyMatcher,
-			matchers.CheckedMatcher,
-			matchers.AgreedMatcher,
 		},
-		Buttons: []director.Button{
-			{
-				Title:   DoreEchoRepeatButtonText,
-				Payload: &payloads.EchoRepeatDorePayload{},
-			},
-		},
-		Err: errors.DoreError,
+		Buttons: []director.Button{},
+		Err:     base_matchers.NumberError,
 	}, true
 }
 

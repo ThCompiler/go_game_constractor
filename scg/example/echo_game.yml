@@ -2,15 +2,6 @@ name: 'echo_game'
 startScene: "hello"
 goodByeCommand: "GoodeBye"
 goodByeScene: "goodbye"
-matchers:
-  Checked:
-    regex: ".*"
-    nameMatched: "da"
-  Agreed:
-    selects:
-      - "da"
-      - "no"
-    replaceMessage: "Da"
 script:
   goodbye:
     text:
@@ -34,20 +25,10 @@ script:
       tts: "I will Repeat you word"
     nextScenes:
       - 'echoRepeat'
-    buttons:
-      Dore:
-        text: "Привет"
-        payload:
-          kore: "Ds"
-          sore: "Dsd"
-      jore:
-        text: "Привет"
-        payload:
-          kore: "Ds"
-          sore: "Dsd"
     context:
-      loadValue:
-        - 'sayed'
+      saveValue:
+        name: 'sayed'
+        type: 'string'
     matchers:
       - 'any'
     error:
@@ -62,26 +43,11 @@ script:
           fromContext: 'sayed'
     nextScenes:
       - 'echoRepeat'
-      - 'echo'
     context:
       saveValue:
         name: 'sayed'
         type: 'string'
-      loadValue:
-        - 'sayed'
-    buttons:
-      dore:
-        text: "Привет"
-        payload:
-          joke: "Ds"
-          sore:
-            nore: "kak"
-        toScene: "echoRepeat"
     matchers:
       - 'any'
-      - name: 'Checked'
-        toScene: 'echo'
-      - "Agreed"
     error:
-      name: "dore"
-      text: "dore"
+      base: "number"

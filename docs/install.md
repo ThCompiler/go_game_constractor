@@ -16,7 +16,7 @@ go install github.com/ThCompiler/go_game_constractor/scg@latest
 
 ??? example "Установка вручную"
 
-    Для установки необходимо использовать последний [релиз](https://github.com/ThCompiler/go_game_constractor/releases/tag/v0.1.3-alpha) проекта.
+    Для установки необходимо использовать последний [релиз](https://github.com/ThCompiler/go_game_constractor/releases/tag/v0.2.1-alpha) проекта.
     В релизе опубликованы генераторы для 3 различных ОС: *Linux*, *MacOS* и *Windows*.
 
     ![manual_images/release.png](static/release.png)
@@ -47,7 +47,7 @@ go install github.com/ThCompiler/go_game_constractor/scg@latest
 
         ```cmd
           # Скачать последний релиз
-          wget https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha-dffd59b/scg.linux-amd64.tar.gz -P ./tmp
+          wget https://github.com/ThCompiler/go_game_constractor/releases/download/v0.2.1-alpha/scg.linux-amd64.tar.gz -P ./tmp
           
           # Распаковать архив
           tar -xvf ./tmp/scg.linux-amd64.tar.gz -C ./tmp
@@ -64,7 +64,7 @@ go install github.com/ThCompiler/go_game_constractor/scg@latest
           mkdir tmp
           
           # Скачать последний релиз
-          cd tmp && curl -LO ./tmp https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha-dffd59b/scg.darwin-amd64.tar.gz \
+          cd tmp && curl -LO ./tmp https://github.com/ThCompiler/go_game_constractor/releases/download/v0.2.1-alpha/scg.darwin-amd64.tar.gz \
           && cd ..
         
           
@@ -86,7 +86,7 @@ go install github.com/ThCompiler/go_game_constractor/scg@latest
           mkdir tmp
           
           # Скачать последний релиз
-          wget -Uri https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha-dffd59b/scg.windows-amd64.zip -OutFile .\tmp\scg.windows-amd64.zip
+          wget -Uri https://github.com/ThCompiler/go_game_constractor/releases/download/v0.2.1-alpha/scg.windows-amd64.zip -OutFile .\tmp\scg.windows-amd64.zip
           
           # Распаковать архив
           Expand-Archive -Path .\tmp\scg.windows-amd64.zip  -DestinationPath .\tmp\scg.windows-amd64 -Force
