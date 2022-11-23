@@ -4,9 +4,9 @@ title: "Быстрый старт"
 ---
 Перед началом создания игры убедитесь, что у Вас установлены `Go` и `Docker`.
 ??? info "Дополнительно"
-    Инструкция по установке `Go` находится на сайте [go.dev](https://go.dev/learn/))
+    Инструкция по установке `Go` находится на сайте [go.dev](https://go.dev/learn/)
 
-    Инструкция по установке `Docker` находится на сайте [docs.docker](https://docs.docker.com/engine/install/))
+    Инструкция по установке `Docker` находится на сайте [docs.docker](https://docs.docker.com/engine/install/)
 
 ## Первый шаг: установка генератора
 ```cmd
