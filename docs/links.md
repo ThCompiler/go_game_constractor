@@ -3,8 +3,8 @@ comments: true
 title: "Ссылки"
 ---
 
-Ссылки которые использовались при создании или присутствуют в документации.
+Ресурсы, которые использовались при создании или были упомянуты в документации.
 
-- [Маруся](https://marusia.vk.com/)
+- [Голосовой помощник Маруся](https://marusia.vk.com/)
 - [Goa constructor](https://github.com/goadesign/goa)
-- [Репозиторий ВК с SDK для Маруси](https://github.com/SevereCloud/vksdk)
+- [Репозиторий VK с SDK для Маруси](https://github.com/SevereCloud/vksdk)
