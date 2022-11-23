@@ -16,6 +16,7 @@ func GetSupportedNames() []string {
 
 func IsCorrectNameOfError(name string) bool {
 	_, is := linkNameWithErrorName[name]
+
 	return is
 }
 

@@ -13,15 +13,8 @@ import (
 	base_matchers "github.com/ThCompiler/go_game_constractor/director/scriptdirector/matchers"
 	"github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
 	loghttp "github.com/ThCompiler/go_game_constractor/pkg/logger/http"
-	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/script/errors"
-	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/script/matchers"
-	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/script/payloads"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/texts/manager"
-)
-
-const (
-	// DoreEchoRepeatButtonText - text for button Dore
-	DoreEchoRepeatButtonText = "Привет"
+	"github.com/ThCompiler/go_game_constractor/scg/go/types"
 )
 
 // EchoRepeat scene
@@ -33,17 +26,13 @@ type EchoRepeat struct {
 
 // React function of actions after scene has been played
 func (sc *EchoRepeat) React(ctx *scene.Context) scene.Command {
+	ctx.Set("sayed", types.MustConvert[string](ctx.Request.SearchedMessage))
+
 	// TODO Write the actions after EchoRepeat scene has been played
 	switch {
-	// Buttons select
-	case ctx.Request.NameMatched == DoreEchoRepeatButtonText && ctx.Request.WasButton:
 
-		// Matcher select
+	// Matcher select
 	case ctx.Request.NameMatched == base_matchers.AnyMatchedString:
-
-	case ctx.Request.NameMatched == matchers.CheckedMatchedString:
-
-	case ctx.Request.NameMatched == matchers.AgreedMatchedString:
 
 	default:
 		sc.NextScene = EchoRepeatScene
@@ -54,13 +43,8 @@ func (sc *EchoRepeat) React(ctx *scene.Context) scene.Command {
 
 // Next function returning next scene
 func (sc *EchoRepeat) Next() scene.Scene {
-	switch sc.NextScene {
-	case EchoRepeatScene:
+	if sc.NextScene == EchoRepeatScene {
 		return &EchoRepeat{
-			TextManager: sc.TextManager,
-		}
-	case EchoScene:
-		return &Echo{
 			TextManager: sc.TextManager,
 		}
 	}
@@ -71,9 +55,9 @@ func (sc *EchoRepeat) Next() scene.Scene {
 }
 
 // GetSceneInfo function returning info about scene
-func (sc *EchoRepeat) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
+func (sc *EchoRepeat) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
 	var (
-		userText string
+		userText string = sc.GetSayedContextValue(ctx)
 	)
 
 	// TODO Write some actions for get data for texts
@@ -85,15 +69,13 @@ func (sc *EchoRepeat) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
 		Text: text,
 		ExpectedMessages: []scene.MessageMatcher{
 			base_matchers.AnyMatcher,
-			matchers.CheckedMatcher,
-			matchers.AgreedMatcher,
 		},
-		Buttons: []director.Button{
-			{
-				Title:   DoreEchoRepeatButtonText,
-				Payload: &payloads.EchoRepeatDorePayload{},
-			},
-		},
-		Err: errors.DoreError,
+		Buttons: []director.Button{},
+		Err:     base_matchers.NumberError,
 	}, true
+}
+
+// GetSayedContextValue function returning value from context about scene
+func (sc *EchoRepeat) GetSayedContextValue(ctx *scene.Context) string {
+	return scene.GetContextAny[string](ctx, "sayed")
 }

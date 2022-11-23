@@ -1,4 +1,4 @@
-package stack
+package structures
 
 import (
 	"errors"
@@ -7,40 +7,44 @@ import (
 
 var ErrorEmptyStack = errors.New("empty Stack")
 
-type Stack[T any] []T
-
-func NewStack[T any]() Stack[T] {
-	return make([]T, 0)
+type Stack[T any] struct {
+	deq Dequeue[T]
 }
 
-func (st *Stack[T]) zeroT() T {
-	var zero T
-	return zero
+func NewStack[T any]() Stack[T] {
+	return Stack[T]{
+		deq: NewDequeue[T](),
+	}
 }
 
 func (st *Stack[T]) Push(value T) {
-	*st = append(*st, value)
+	st.deq.PushBack(value)
 }
 
 func (st *Stack[T]) Empty() bool {
-	return len(*st) == 0
+	return st.deq.Empty()
 }
 
 func (st *Stack[T]) Pop() (T, error) {
-	if st.Empty() {
-		return st.zeroT(), ErrorEmptyStack
+	res, err := st.deq.PopBack()
+	if err != nil {
+		return res, ErrorEmptyStack
 	}
-	size := len(*st)
-	top := (*st)[size-1]
-	*st = (*st)[:size-1]
-	return top, nil
+
+	return res, nil
+}
+
+func (st *Stack[T]) MustPop() T {
+	res, err := st.Pop()
+	if err != nil {
+		panic(err)
+	}
+
+	return res
 }
 
 func (st *Stack[T]) Top() (T, error) {
-	if st.Empty() {
-		return st.zeroT(), ErrorEmptyStack
-	}
-	return (*st)[0], nil
+	return st.deq.Back()
 }
 
 type AsyncStack[T any] struct {

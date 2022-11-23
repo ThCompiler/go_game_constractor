@@ -32,11 +32,13 @@ func (d *digitT) UnmarshalYAML(n *yaml.Node) error {
 	if err = n.Decode(&d.word); err == nil {
 		return nil
 	}
+
 	d.word = ""
 
 	if err = n.Decode(&d.wordWithGender); err == nil {
 		return nil
 	}
+
 	d.wordWithGender = nil
 
 	return err
@@ -53,7 +55,7 @@ type DigitWords struct {
 
 type Words map[string]objects.Digit
 
-type WordsDigit struct {
+type Digit struct {
 	Units    Words
 	Tens     Words
 	Dozens   Words
@@ -62,10 +64,12 @@ type WordsDigit struct {
 
 func (dn *DeclensionNumbers) convertToWords() Words {
 	words := make(Words)
+
 	for _, num2word := range *dn {
 		for digit, word := range num2word {
 			if word.WithGender() {
 				genderWord := word.GetGendersWord()
+
 				for _, wrd := range genderWord {
 					words[wrd] = objects.Digit(digit)
 				}
@@ -73,13 +77,13 @@ func (dn *DeclensionNumbers) convertToWords() Words {
 				words[word.GetWord()] = objects.Digit(digit)
 			}
 		}
-
 	}
+
 	return words
 }
 
-func NewWordsDigit(dw DigitWords) WordsDigit {
-	return WordsDigit{
+func NewWordsDigit(dw DigitWords) Digit {
+	return Digit{
 		Units:    dw.Units.convertToWords(),
 		Tens:     dw.Tens.convertToWords(),
 		Dozens:   dw.Dozens.convertToWords(),

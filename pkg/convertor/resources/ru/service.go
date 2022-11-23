@@ -1,7 +1,7 @@
 package ru
 
 import (
-    _ "embed"
+    _ "embed" //nolint:golint //these are the rules for working with embed
     "github.com/ThCompiler/go_game_constractor/pkg/cleanenv"
     "github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/entity"
 )

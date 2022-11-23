@@ -1,61 +1,61 @@
 package codegen
 
 import (
-    "github.com/ThCompiler/go_game_constractor/scg/expr"
-    "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-    "path"
-    "path/filepath"
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+	"path"
+	"path/filepath"
 )
 
 // ServerFile returns server pkg file
 func ServerFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
-    serverFile := generateServer(rootPkg, rootDir, scriptInfo)
-    serverOptionFile := generateServerOption(rootPkg, rootDir, scriptInfo)
+	serverFile := generateServer(rootPkg, rootDir, scriptInfo)
+	serverOptionFile := generateServerOption(rootPkg, rootDir, scriptInfo)
 
-    return []*codegen.File{serverOptionFile, serverFile}
+	return []*codegen.File{serverOptionFile, serverFile}
 }
 
 func generateServer(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-    var sections []*codegen.SectionTemplate
+	var sections []*codegen.SectionTemplate
 
-    fpath := filepath.Join(rootDir, "pkg", "httpserver", "server.go")
-    imports := []*codegen.ImportSpec{
-        {Path: path.Join("context")},
-        {Path: path.Join("net", "http")},
-        {Path: path.Join("time")},
-    }
+	fpath := filepath.Join(rootDir, "pkg", "httpserver", "server.go")
+	imports := []*codegen.ImportSpec{
+		{Path: path.Join("context")},
+		{Path: path.Join("net", "http")},
+		{Path: path.Join("time")},
+	}
 
-    sections = []*codegen.SectionTemplate{
-        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Http server file", "httpserver", imports, false),
-    }
+	sections = []*codegen.SectionTemplate{
+		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Http server file", "httpserver", imports, false),
+	}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "server-file",
-        Source: ServerStructT,
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "server-file",
+		Source: ServerStructT,
+	})
 
-    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: false}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: false}
 }
 
 func generateServerOption(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-    var sections []*codegen.SectionTemplate
+	var sections []*codegen.SectionTemplate
 
-    fpath := filepath.Join(rootDir, "pkg", "httpserver", "option.go")
-    imports := []*codegen.ImportSpec{
-        {Path: path.Join("net")},
-        {Path: path.Join("time")},
-    }
+	fpath := filepath.Join(rootDir, "pkg", "httpserver", "option.go")
+	imports := []*codegen.ImportSpec{
+		{Path: path.Join("net")},
+		{Path: path.Join("time")},
+	}
 
-    sections = []*codegen.SectionTemplate{
-        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Http server option file", "httpserver", imports, false),
-    }
+	sections = []*codegen.SectionTemplate{
+		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Http server option file", "httpserver", imports, false),
+	}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "server-option-file",
-        Source: ServerOptionStructT,
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "server-option-file",
+		Source: ServerOptionStructT,
+	})
 
-    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: false}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: false}
 }
 
 const ServerStructT = `const (

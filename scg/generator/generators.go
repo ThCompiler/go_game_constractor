@@ -1,8 +1,8 @@
 package generator
 
 import (
-    "github.com/ThCompiler/go_game_constractor/scg/expr"
-    "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 )
 
 // Genfunc is the type of the functions invoked to generate code.
@@ -14,10 +14,10 @@ type Genfunc func(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) ([
 // plugins) may override the default generators.
 var Generators = generators
 
-// generators returns the generator functions exposed by the generator
+// generators returns the generator functions exposed by the generator.
 func generators(addServer bool) []Genfunc {
-    if addServer {
-        return []Genfunc{Store, Script, Server}
-    }
-    return []Genfunc{Store, Script}
+	if addServer {
+		return []Genfunc{Store, Script, Server}
+	}
+	return []Genfunc{Store, Script}
 }

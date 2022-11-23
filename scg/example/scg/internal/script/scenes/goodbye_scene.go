@@ -32,8 +32,7 @@ func (sc *Goodbye) React(_ *scene.Context) scene.Command {
 
 // Next function returning next scene
 func (sc *Goodbye) Next() scene.Scene {
-	switch sc.NextScene {
-	case GoodbyeScene:
+	if sc.NextScene == GoodbyeScene {
 		return &Goodbye{
 			TextManager: sc.TextManager,
 		}

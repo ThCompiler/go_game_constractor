@@ -1,61 +1,61 @@
 package codegen
 
 import (
-    "github.com/ThCompiler/go_game_constractor/scg/expr"
-    "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-    "path"
-    "path/filepath"
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+	"path"
+	"path/filepath"
 )
 
 // LoggerPrepareFile returns logger prepare file
 func LoggerPrepareFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
-    loggerPrepareIOFile := generateLoggerPrepareIO(rootPkg, rootDir, scriptInfo)
-    loggerPrepareConfig := generateLoggerPrepareConfig(rootPkg, rootDir, scriptInfo)
+	loggerPrepareIOFile := generateLoggerPrepareIO(rootPkg, rootDir, scriptInfo)
+	loggerPrepareConfig := generateLoggerPrepareConfig(rootPkg, rootDir, scriptInfo)
 
-    return []*codegen.File{loggerPrepareIOFile, loggerPrepareConfig}
+	return []*codegen.File{loggerPrepareIOFile, loggerPrepareConfig}
 }
 
 func generateLoggerPrepareIO(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-    var sections []*codegen.SectionTemplate
+	var sections []*codegen.SectionTemplate
 
-    fpath := filepath.Join(rootDir, "pkg", "logger", "prepare", "io.go")
-    imports := []*codegen.ImportSpec{
-        {Path: path.Join("os")},
-        {Path: path.Join("time")},
-        {Path: path.Join("path", "filepath")},
-        {Path: path.Join("github.com", "pkg", "errors")},
-    }
+	fpath := filepath.Join(rootDir, "pkg", "logger", "prepare", "io.go")
+	imports := []*codegen.ImportSpec{
+		{Path: path.Join("os")},
+		{Path: path.Join("time")},
+		{Path: path.Join("path", "filepath")},
+		{Path: path.Join("github.com", "pkg", "errors")},
+	}
 
-    sections = []*codegen.SectionTemplate{
-        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Logger prepare file with open log file ", "prepare", imports, false),
-    }
+	sections = []*codegen.SectionTemplate{
+		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Logger prepare file with open log file ", "prepare", imports, false),
+	}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "logger-prepare-io",
-        Source: loggerPrepareIOStructT,
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "logger-prepare-io",
+		Source: loggerPrepareIOStructT,
+	})
 
-    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: false}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: false}
 }
 
 func generateLoggerPrepareConfig(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-    var sections []*codegen.SectionTemplate
+	var sections []*codegen.SectionTemplate
 
-    fpath := filepath.Join(rootDir, "pkg", "logger", "prepare", "config.go")
-    imports := []*codegen.ImportSpec{
-        codegen.SCGImport(path.Join("pkg", "logger")),
-    }
+	fpath := filepath.Join(rootDir, "pkg", "logger", "prepare", "config.go")
+	imports := []*codegen.ImportSpec{
+		codegen.SCGImport(path.Join("pkg", "logger")),
+	}
 
-    sections = []*codegen.SectionTemplate{
-        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Logger prepare file with config for logger ", "prepare", imports, false),
-    }
+	sections = []*codegen.SectionTemplate{
+		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Logger prepare file with config for logger ", "prepare", imports, false),
+	}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "logger-prepare-config",
-        Source: loggerPrepareConfigStructT,
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "logger-prepare-config",
+		Source: loggerPrepareConfigStructT,
+	})
 
-    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: false}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: false}
 }
 
 const loggerPrepareIOStructT = `const logName = "log"

@@ -1,60 +1,60 @@
 package codegen
 
 import (
-    "github.com/ThCompiler/go_game_constractor/scg/expr"
-    "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-    "path"
-    "path/filepath"
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+	"path"
+	"path/filepath"
 )
 
 // ConfigFile returns config file
 func ConfigFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
-    configGoFile := generateConfigGO(rootPkg, rootDir, scriptInfo)
-    configYmlFile := generateConfigYml(rootPkg, rootDir, scriptInfo)
+	configGoFile := generateConfigGO(rootPkg, rootDir, scriptInfo)
+	configYmlFile := generateConfigYml(rootPkg, rootDir, scriptInfo)
 
-    return []*codegen.File{configGoFile, configYmlFile}
+	return []*codegen.File{configGoFile, configYmlFile}
 }
 
 func generateConfigGO(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-    var sections []*codegen.SectionTemplate
+	var sections []*codegen.SectionTemplate
 
-    fpath := filepath.Join(rootDir, "config", "config.go")
-    imports := []*codegen.ImportSpec{
-        {Path: path.Join(rootPkg, "pkg", "logger", "prepare")},
-        {Path: path.Join("fmt")},
-        {Path: path.Join("github.com", "ilyakaznacheev", "cleanenv")},
-    }
+	fpath := filepath.Join(rootDir, "config", "config.go")
+	imports := []*codegen.ImportSpec{
+		{Path: path.Join(rootPkg, "pkg", "logger", "prepare")},
+		{Path: path.Join("fmt")},
+		{Path: path.Join("github.com", "ilyakaznacheev", "cleanenv")},
+	}
 
-    sections = []*codegen.SectionTemplate{
-        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Go config file ", "config", imports, true),
-    }
+	sections = []*codegen.SectionTemplate{
+		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Go config file ", "config", imports, true),
+	}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "config-go-file",
-        Source: configGoFileStructT,
-        Data:   rootDir,
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "config-go-file",
+		Source: configGoFileStructT,
+		Data:   rootDir,
+	})
 
-    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
 func generateConfigYml(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-    var sections []*codegen.SectionTemplate
+	var sections []*codegen.SectionTemplate
 
-    fpath := filepath.Join(rootDir, "config", "config.yml")
+	fpath := filepath.Join(rootDir, "config", "config.yml")
 
-    sections = []*codegen.SectionTemplate{}
+	sections = []*codegen.SectionTemplate{}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "config-yml-file",
-        Source: configYMLFileStructT,
-        Data:   scriptInfo,
-        FuncMap: map[string]interface{}{
-            "ToTitle": codegen.ToTitle,
-        },
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "config-yml-file",
+		Source: configYMLFileStructT,
+		Data:   scriptInfo,
+		FuncMap: map[string]interface{}{
+			"ToTitle": codegen.ToTitle,
+		},
+	})
 
-    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
 const configGoFileStructT = ` type (

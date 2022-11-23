@@ -88,9 +88,9 @@ func NewOptions(currency currency.Currency, declension declension.Declension,
 func (o *Options) getCurrencyObject() currency.CustomCurrency {
 	if o.currency == currency.CUSTOM {
 		return *o.currencyInfo
-	} else {
-		return words.WordConstants.N2w.CurrenciesStrings.Currencies[o.currency]
 	}
+
+	return words.WordConstants.N2w.CurrenciesStrings.Currencies[o.currency]
 }
 
 type NumberPart struct {

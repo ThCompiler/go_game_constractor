@@ -1,60 +1,60 @@
 package codegen
 
 import (
-    "github.com/ThCompiler/go_game_constractor/scg/expr"
-    "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-    "path"
-    "path/filepath"
-    "strings"
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+	"path"
+	"path/filepath"
+	"strings"
 )
 
 // AppFile returns app file
 func AppFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
-    appFile := generateApp(rootPkg, rootDir, scriptInfo)
+	appFile := generateApp(rootPkg, rootDir, scriptInfo)
 
-    return []*codegen.File{appFile}
+	return []*codegen.File{appFile}
 }
 
 func generateApp(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-    var sections []*codegen.SectionTemplate
+	var sections []*codegen.SectionTemplate
 
-    fpath := filepath.Join(rootDir, "internal", strings.ToLower(codegen.ToTitle(scriptInfo.Name)), "app.go")
-    imports := []*codegen.ImportSpec{
-        {Path: path.Join("fmt")},
-        {Path: path.Join("os")},
-        {Path: path.Join("os", "signal")},
-        {Path: path.Join("io")},
-        {Path: path.Join("log")},
-        {Path: path.Join("syscall")},
-        {Path: path.Join(rootPkg, "internal", "script")},
-        {Path: path.Join(rootPkg, "internal", "controller", "http", "v1")},
-        {Path: path.Join(rootPkg, "internal", "texts", "manager", "usecase")},
-        {Path: path.Join(rootPkg, "internal", "texts", "store", "redis"), Name: codegen.SnakeCase(scriptInfo.Name) + "_redis"},
-        {Path: path.Join(rootPkg, "internal", "texts", "store", "storesaver")},
-        {Path: path.Join(rootPkg, "pkg", "logger", "prepare")},
-        {Path: path.Join(rootPkg, "pkg", "httpserver")},
-        {Path: path.Join(rootPkg, "config")},
-        codegen.SCGImport(path.Join("marusia", "runner", "hub")),
-        codegen.SCGImport(path.Join("pkg", "logger", "zap")),
-        {Path: path.Join("github.com", "go-redis", "redis", "v8"), Name: "redis"},
-        {Path: path.Join("github.com", "gin-gonic", "gin")},
-    }
-    sections = []*codegen.SectionTemplate{
-        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-App file", strings.ToLower(codegen.ToTitle(scriptInfo.Name)), imports, true),
-    }
+	fpath := filepath.Join(rootDir, "internal", strings.ToLower(codegen.ToTitle(scriptInfo.Name)), "app.go")
+	imports := []*codegen.ImportSpec{
+		{Path: path.Join("fmt")},
+		{Path: path.Join("os")},
+		{Path: path.Join("os", "signal")},
+		{Path: path.Join("io")},
+		{Path: path.Join("log")},
+		{Path: path.Join("syscall")},
+		{Path: path.Join(rootPkg, "internal", "script")},
+		{Path: path.Join(rootPkg, "internal", "controller", "http", "v1")},
+		{Path: path.Join(rootPkg, "internal", "texts", "manager", "usecase")},
+		{Path: path.Join(rootPkg, "internal", "texts", "store", "redis"), Name: codegen.SnakeCase(scriptInfo.Name) + "_redis"},
+		{Path: path.Join(rootPkg, "internal", "texts", "store", "storesaver")},
+		{Path: path.Join(rootPkg, "pkg", "logger", "prepare")},
+		{Path: path.Join(rootPkg, "pkg", "httpserver")},
+		{Path: path.Join(rootPkg, "config")},
+		codegen.SCGImport(path.Join("marusia", "runner", "hub")),
+		codegen.SCGImport(path.Join("pkg", "logger", "zap")),
+		{Path: path.Join("github.com", "go-redis", "redis", "v8"), Name: "redis"},
+		{Path: path.Join("github.com", "gin-gonic", "gin")},
+	}
+	sections = []*codegen.SectionTemplate{
+		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-App file", strings.ToLower(codegen.ToTitle(scriptInfo.Name)), imports, true),
+	}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "app-file",
-        Source: AppStructT,
-        Data:   scriptInfo,
-        FuncMap: map[string]interface{}{
-            "ToTitle":   codegen.ToTitle,
-            "CamelCase": codegen.LowerCamelCase,
-            "SnakeCase": codegen.SnakeCase,
-        },
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "app-file",
+		Source: AppStructT,
+		Data:   scriptInfo,
+		FuncMap: map[string]interface{}{
+			"ToTitle":   codegen.ToTitle,
+			"CamelCase": codegen.LowerCamelCase,
+			"SnakeCase": codegen.SnakeCase,
+		},
+	})
 
-    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
 const AppStructT = `// Run creates objects via constructors.

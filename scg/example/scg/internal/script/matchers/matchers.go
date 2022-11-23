@@ -7,31 +7,3 @@
 // DO NOT EDIT .
 
 package matchers
-
-import "github.com/ThCompiler/go_game_constractor/director/scriptdirector/matchers"
-
-// name matched string for RegexMatchers
-const (
-	CheckedMatchedString = "da"
-)
-
-// RegexMatchers
-var (
-	CheckedMatcher = matchers.NewRegexMather(".*", CheckedMatchedString)
-)
-
-// replace string for SelectsMatchers
-const (
-	AgreedMatchedString = "Da"
-)
-
-// SelectsMatchers
-var (
-	AgreedMatcher = matchers.NewSelectorMatcher(
-		[]string{
-			"da",
-			"no",
-		},
-		AgreedMatchedString,
-	)
-)

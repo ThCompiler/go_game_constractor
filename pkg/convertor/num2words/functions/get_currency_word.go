@@ -21,6 +21,7 @@ func GetCurrencyWord(
 	if scaleNameForm == 0 {
 		scaleForm = 0
 	}
+
 	currentDeclension := decl
 
 	// Если падеж "именительный" или "винительный" и множественное число
@@ -42,8 +43,6 @@ func GetCurrencyWord(
 		scaleForm = 1
 		// Всегда родительный падеж и множественное число
 		currentDeclension = declension.GENITIVE
-
 	}
-
 	return declensionsObject[currentDeclension][scaleForm]
 }

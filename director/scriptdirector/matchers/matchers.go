@@ -19,6 +19,7 @@ func NewRegexMather(pattern string, nameMatched string) *RegexMatcher {
 
 func (rm *RegexMatcher) Match(message string) (bool, string) {
 	res := rm.pattern.FindString(message)
+	
 	return res != "", res
 }
 
@@ -40,6 +41,7 @@ func NewSelectorMatcher(variants []string, replaceMessage string) *SelectorMatch
 
 func (sm *SelectorMatcher) Match(message string) (bool, string) {
 	found := ""
+
 	for _, variant := range sm.variants {
 		if strings.EqualFold(variant, message) {
 			if sm.replaceMessage == "" {
@@ -47,9 +49,11 @@ func (sm *SelectorMatcher) Match(message string) (bool, string) {
 			} else {
 				found = sm.replaceMessage
 			}
+
 			break
 		}
 	}
+
 	return found != "", found
 }
 

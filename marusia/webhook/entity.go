@@ -52,7 +52,7 @@ func ToHubApplication(req marusia.Application) runner.Application {
 
 func ToHubUser(req marusia.User) runner.User {
 	return runner.User{
-		UserId:   req.UserID,
-		UserVKId: req.UserVKID,
+		UserID:   req.UserID,
+		UserVKID: req.UserVKID,
 	}
 }

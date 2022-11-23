@@ -89,8 +89,8 @@ var (
 )
 ```
 
-> <h5>hint</h5>
-> Также вы можете дописать свой набор правил в соответствии с интерфейсом [`MessageMatcher`](./lib_structs.md#message_matcher).
+!!! tip "hint"
+    Также вы можете дописать свой набор правил в соответствии с интерфейсом [`MessageMatcher`](./lib_structs.md#message_matcher).
 
 ## <a id="inf_scene"></a> Информационные сцены
 

@@ -17,6 +17,7 @@ func Convert(number interface{}, options Options) (string, error) {
 
 	// Собрать конечный словесный результат
 	convertedNumberString := combineResultData(numberArray, options)
+
 	return convertedNumberString, nil
 }
 

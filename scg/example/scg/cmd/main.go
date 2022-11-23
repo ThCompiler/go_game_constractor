@@ -9,26 +9,26 @@
 package main
 
 import (
-    "log"
+	"log"
 
-    "github.com/ThCompiler/go_game_constractor/pkg/convertor/words"
-    "github.com/ThCompiler/go_game_constractor/pkg/convertor/words/languages"
-    "github.com/ThCompiler/go_game_constractor/scg/example/scg/config"
-    "github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/echogame"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words/languages"
+	"github.com/ThCompiler/go_game_constractor/scg/example/scg/config"
+	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/echogame"
 )
 
 // This is your application's startup file.
 // All the basic settings take place already in the "internal/app" file.
 
 func main() {
-    // Configuration
-    cfg, err := config.NewConfig()
-    if err != nil {
-        log.Fatalf("Config error: %s", err)
-    }
+	// Configuration
+	cfg, err := config.NewConfig()
+	if err != nil {
+		log.Fatalf("Config error: %s", err)
+	}
 
-    _ = words.LoadWordsConstants(languages.Russia, "")
+	_ = words.LoadWordsConstants(languages.Russia, cfg.App.ResourcesDir)
 
-    // Run
-    echogame.Run(cfg)
+	// Run
+	echogame.Run(cfg)
 }

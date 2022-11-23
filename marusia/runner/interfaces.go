@@ -14,6 +14,6 @@ type PlayedSceneResult struct {
 }
 
 type ScriptRunner interface {
-	AttachDirector(sessionId string, op drt.Director)
+	AttachDirector(sessionID string, op drt.Director)
 	RunScene(req Request) chan PlayedSceneResult
 }
