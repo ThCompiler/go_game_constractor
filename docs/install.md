@@ -13,11 +13,10 @@ title: "Установка генератора и подключения биб
 ```cmd
 go install github.com/ThCompiler/go_game_constractor/scg@latest
 ```
-предлагаю полностью удалить отсюда установку ручками
 
-??? example "Установка ручками из релизов"
+??? example "Установка вручную"
 
-    Для установки лучше использовать последний [релиз](https://github.com/ThCompiler/go_game_constractor/releases/tag/v0.1.3-alpha) проекта.
+    Для установки необходимо использовать последний [релиз](https://github.com/ThCompiler/go_game_constractor/releases/tag/v0.1.3-alpha) проекта.
     В релизе опубликованы генераторы для 3 различных ОС: *Linux*, *MacOS* и *Windows*.
 
     ![manual_images/release.png](static/release.png)
@@ -35,28 +34,28 @@ go install github.com/ThCompiler/go_game_constractor/scg@latest
 
     ## Пример
 
-    В примерах используются утилиты для распаковки и скачивания, которые могут быть не установленны
-    на вашем устройстве. Подразумевается, что вы сами их найдёте и установите. 
+    Убедитесь, что утилиты для распаковки и скачивания, используемые в примерах, установленны
+    на Вашем устройстве.
     
     !!! tip "hint"
-        Если вам требуется другая архитектура, то в строке со скачиванием вместо `amd64` укажите вашу архитектуру.
+        Если Вам требуется другая архитектура, то вместо `amd64` укажите необходимую.
     
     !!! tip "hint"
-        Если вам требуется другая версия, то в строке со скачиванием вместо `v0.1.4-alpha` укажите нужную версию.
+        Если Вам требуется другая версия, то вместо `v0.1.4-alpha` укажите необходимую.
 
     === "Linux"
 
         ```cmd
-          # Скачиваем последний релиз
+          # Скачать последний релиз
           wget https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha-dffd59b/scg.linux-amd64.tar.gz -P ./tmp
           
-          # Распаковываем архив
+          # Распаковать архив
           tar -xvf ./tmp/scg.linux-amd64.tar.gz -C ./tmp
           
-          # Добавляем генератор в утилиты пользователя
+          # Добавить генератор в утилиты пользователя
           sudo cp ./tmp/scg.linux-amd64/bin/scg /usr/local/bin/
           
-          # Очищяем не нужные файлы
+          # Очистить ненужные файлы
           rm -r tmp
         ```
     
@@ -64,42 +63,42 @@ go install github.com/ThCompiler/go_game_constractor/scg@latest
         ```cmd
           mkdir tmp
           
-          # Скачиваем последний релиз
+          # Скачать последний релиз
           cd tmp && curl -LO ./tmp https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha-dffd59b/scg.darwin-amd64.tar.gz \
           && cd ..
         
           
-          # Распаковываем архив
+          # Распаковать архив
           tar -xvf ./tmp/scg.darwin-amd64.tar.gz -C ./tmp
           
-          # Добавляем генератор в утилиты пользователя
+          # Добавить генератор в утилиты пользователя
           sudo cp ./tmp/scg.darwin-amd64/bin/scg /usr/local/bin/
           
-          # Очищяем не нужные файлы
+          # Очистить ненужные файлы
           rm -r tmp
         ```
 
     === "Windows"
     
-        Данные комманды прописаны для использования Powershell
+        Данные комманды прописаны для Powershell
         
         ```cmd
           mkdir tmp
           
-          # Скачиваем последний релиз
+          # Скачать последний релиз
           wget -Uri https://github.com/ThCompiler/go_game_constractor/releases/download/v0.1.4-alpha-dffd59b/scg.windows-amd64.zip -OutFile .\tmp\scg.windows-amd64.zip
           
-          # Распаковываем архив
+          # Распаковать архив
           Expand-Archive -Path .\tmp\scg.windows-amd64.zip  -DestinationPath .\tmp\scg.windows-amd64 -Force
           
-          # Добавляем генератор в утилиты пользователя
+          # Добавить генератор в утилиты пользователя
           mkdir $env:USERPROFILE\scg
           copy .\tmp\scg.windows-amd64\bin\scg.exe $env:USERPROFILE\scg
           
-          # Добавим папку в переменные среды
+          # Добавить папку в переменные среды
           $Env:Path += ";$env:USERPROFILE\scg"
           
-          # Очищяем не нужные файлы
+          # Очистить ненужные файлы
           rd -r tmp
         ```
     
