@@ -8,13 +8,13 @@ title: "Быстрый старт"
 
     Инструкция по установке `Docker` находится на сайте [docs.docker](https://docs.docker.com/engine/install/))
 
-## Первый шаг: установка
+## Первый шаг: установка генератора
 ```cmd
 go install https://github.com/ThCompiler/go_game_constractor/scg@latest
 ```
 
 ## Второй шаг: создание конфигурационного файла
-Создать директорию проекта:
+Создать и зайти в директорию проекта:
 ```cmd
 mkdir dir_name
 cd dir_name
@@ -31,7 +31,7 @@ go mod init game_name
 touch skill.yml
 ```
 
-Пример: конфигурационный файл для echo-игры, повторяющей реплику пользователя.
+Пример: конфигурационный файл для echo-игры, повторяющей реплики пользователя.
 
 ```yaml
 name: 'echo_game'
@@ -161,4 +161,4 @@ REDIS_URL=redis://localhost:6380 ./bin/skill
 
 !!! tip "hint"
     Для запуска игры Вы можете воспользоваться [отладчиком](https://skill-debugger.marusia.mail.ru/) от Маруси, указав в нём
-    `url` для webhookа в формате `http://localhost:8080/v1/skill_name`.
+    `url` для Webhookа в формате `http://localhost:8080/v1/skill_name`.
