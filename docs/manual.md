@@ -170,5 +170,5 @@ REDIS_URL=redis://localhost:6380 ./bin/skill
 ------------------------------------------------------------------
 
 !!! tip "hint"
-    Для запуска игры Вы можете воспользоваться [отладчиком](https://skill-debugger.marusia.mail.ru/) от Маруси, указав в нём
+    Для запуска скилла Вы можете воспользоваться [отладчиком](https://skill-debugger.marusia.mail.ru/) от Маруси, указав в нём
     `url` для Webhookа в формате `http://localhost:8080/v1/skill_name`.
