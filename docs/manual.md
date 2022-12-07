@@ -10,7 +10,7 @@ title: "Быстрый старт"
 
 ## Первый шаг: установка генератора
 ```cmd
-go install https://github.com/ThCompiler/go_game_constractor/scg@latest
+go install github.com/ThCompiler/go_game_constractor/scg@latest
 ```
 
 ## Второй шаг: создание конфигурационного файла
