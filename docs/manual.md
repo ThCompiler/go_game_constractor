@@ -22,7 +22,7 @@ cd dir_name
 
 Инициализировать **Go**-приложение:
 ```cmd
-go mod init game_name
+go mod init skill_name
 ```
 
 Скилл описывается в `YAML` файле (поддерживается также `XML` и `JSON` формат).
@@ -47,10 +47,8 @@ script:
       - 'goodbye'
   hello:
     text:
-      string: "Hello boy. Is number {number}"
-      tts: "Hello boy. Is number {number}"
-      values:
-        number: 'int64'
+      string: "Hello."
+      tts: "Hello."
     nextScene: 'echo'
     isInfoScene: true
     error:
