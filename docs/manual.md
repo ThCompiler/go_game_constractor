@@ -36,7 +36,7 @@ touch skill.yml
 ```yaml
 name: 'echo_game'
 startScene: "hello"
-goodByeCommand: "GoodeBye"
+goodByeCommand: "Goodbye"
 goodByeScene: "goodbye"
 script:
   goodbye:
@@ -47,12 +47,10 @@ script:
       - 'goodbye'
   hello:
     text:
-      string: "Hello."
-      tts: "Hello."
+      string: "Hello boy"
+      tts: "Hello boy"
     nextScene: 'echo'
     isInfoScene: true
-    error:
-      scene: "goodbye"
   echo:
     text:
       string: "I will Repeat you word"
@@ -64,9 +62,8 @@ script:
         name: 'sayed'
         type: 'string'
     matchers:
-      - 'any'
-    error:
-      base: "number"
+      - name: 'any'
+        toScene: 'echoRepeat'
   echoRepeat:
     text:
       string: "You say {userText}"
@@ -82,9 +79,8 @@ script:
         name: 'sayed'
         type: 'string'
     matchers:
-      - 'any'
-    error:
-      base: "number"
+      - name: 'any'
+        toScene: 'echoRepeat'
 ```
 
 ??? info "Дополнительно"
@@ -149,7 +145,7 @@ sudo docker run -v tredis-vol:/data -p 6380:6379 --name tredis -d redis redis-se
 
 Собрать сервис в папку `/bin`:
 ```cmd
-go build -o bin/skill scg/cmd
+go build -o bin/skill ./scg/cmd
 ```
 
 Приложение запускается на `8080` порту, убедитесь, что он свободен, или замените порт сервера в файле `scg/config/config.yml`:
