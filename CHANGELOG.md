@@ -171,7 +171,7 @@ Some modification and addition of new functionality.
 
 #### Library
 
-* Close unused channels in `pkg/marusia/runner/hub/hub.go` and 
+* Close unused channels in `pkg/marusia/runner/hub/hub.go`
 * Change type of channel to pointer in `pkg/marusia/runner/hub/hub.go`
 
 #### Generator
