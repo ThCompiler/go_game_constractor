@@ -163,3 +163,26 @@ Some modification and addition of new functionality.
 #### Documentation
 
 * Cosmetic changes to the documentation
+
+
+## 0.2.5-alpha
+
+### Added
+
+#### Library
+
+* Close unused channels in `pkg/marusia/runner/hub/hub.go` and 
+* Change type of channel to pointer in `pkg/marusia/runner/hub/hub.go`
+
+#### Generator
+
+* `isEnd` field to `scene` struct
+* Auto setup of `isEnd` field for goodbye scene in true
+* Setup `FinishScene` command for scene with `isEnd` field in true
+
+### Changes
+
+#### Generator
+
+* Add logging error in scene functions
+

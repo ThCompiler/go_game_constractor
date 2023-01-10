@@ -15,6 +15,7 @@ type Scene struct {
 	Error       Error             `yaml:"error,omitempty" json:"error,omitempty" xml:"error,omitempty"`
 	Buttons     map[string]Button `yaml:"buttons,omitempty" json:"buttons,omitempty" xml:"buttons,omitempty"`
 	Context     Context           `yaml:"context" json:"context" xml:"context"`
+	IsEnd       bool              `yaml:"isEnd,omitempty" json:"is_end,omitempty" xml:"isEnd,omitempty"`
 }
 
 func (s *Scene) IsValid(userMatchers map[string]ScriptMatcher) (bool, error) {
