@@ -1,21 +1,22 @@
 package scene
 
 import (
+	"golang.org/x/exp/slices"
+
 	"github.com/ThCompiler/go_game_constractor/scg/script/errors"
 	"github.com/ThCompiler/go_game_constractor/scg/script/matchers"
-	"golang.org/x/exp/slices"
 )
 
 type Scene struct {
-	Text        Text              `yaml:"text" json:"text" xml:"text"`
-	NextScene   string            `yaml:"nextScene,omitempty" json:"next_scene,omitempty" xml:"nextScene,omitempty"`
-	NextScenes  []string          `yaml:"nextScenes,omitempty" json:"next_scenes.md,omitempty" xml:"nextScenes,omitempty"`
-	IsInfoScene bool              `yaml:"isInfoScene,omitempty" json:"is_info_scene,omitempty" xml:"isInfoScene,omitempty"`
-	Matchers    []Matcher         `yaml:"matchers,omitempty" json:"matchers,omitempty" xml:"matchers,omitempty"`
-	Error       Error             `yaml:"error,omitempty" json:"error,omitempty" xml:"error,omitempty"`
-	Buttons     map[string]Button `yaml:"buttons,omitempty" json:"buttons,omitempty" xml:"buttons,omitempty"`
-	Context     Context           `yaml:"context" json:"context" xml:"context"`
 	IsEnd       bool              `yaml:"isEnd,omitempty" json:"is_end,omitempty" xml:"isEnd,omitempty"`
+	IsInfoScene bool              `yaml:"isInfoScene,omitempty" json:"is_info_scene,omitempty" xml:"isInfoScene,omitempty"`
+	NextScene   string            `yaml:"nextScene,omitempty" json:"next_scene,omitempty" xml:"nextScene,omitempty"`
+	Text        Text              `yaml:"text" json:"text" xml:"text"`
+	Error       Error             `yaml:"error,omitempty" json:"error,omitempty" xml:"error,omitempty"`
+	Context     Context           `yaml:"context" json:"context" xml:"context"`
+	NextScenes  []string          `yaml:"nextScenes,omitempty" json:"next_scenes,omitempty" xml:"nextScenes,omitempty"`
+	Matchers    []Matcher         `yaml:"matchers,omitempty" json:"matchers,omitempty" xml:"matchers,omitempty"`
+	Buttons     map[string]Button `yaml:"buttons,omitempty" json:"buttons,omitempty" xml:"buttons,omitempty"`
 }
 
 func (s *Scene) IsValid(userMatchers map[string]ScriptMatcher) (bool, error) {

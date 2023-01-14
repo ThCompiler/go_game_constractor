@@ -1,23 +1,25 @@
 package codegen
 
 import (
+	"path"
+	"path/filepath"
+
+	"github.com/google/uuid"
+
 	"github.com/ThCompiler/go_game_constractor/scg/expr"
 	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 	"github.com/ThCompiler/go_game_constractor/scg/go/types"
-	"github.com/google/uuid"
-	"path"
-	"path/filepath"
 )
 
 // TextManagerFile returns saved text with add values from store
-func TextManagerFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func TextManagerFile(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	usecaseFile := usecase(rootPkg, rootDir, scriptInfo)
 	interfaceFile := managerInterface(rootPkg, rootDir, scriptInfo)
 
 	return []*codegen.File{interfaceFile, usecaseFile}
 }
 
-func usecase(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func usecase(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "internal", "texts", "manager", "usecase", "usecase.go")
@@ -52,7 +54,7 @@ func usecase(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codege
 	return &codegen.File{Path: fpath, SectionTemplates: sections}
 }
 
-func managerInterface(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func managerInterface(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "internal", "texts", "manager", "interface.go")

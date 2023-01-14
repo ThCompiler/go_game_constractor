@@ -11,7 +11,6 @@ package manager
 import "github.com/ThCompiler/go_game_constractor/director"
 
 type TextManager interface {
-
 	// GetEchoText get text for echo scene with variables
 	GetEchoText() (director.Text, error)
 

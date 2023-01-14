@@ -3,11 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+	"strings"
+
 	"github.com/ThCompiler/go_game_constractor"
 	"github.com/ThCompiler/go_game_constractor/scg/expr"
 	"github.com/ThCompiler/go_game_constractor/scg/generator"
-	"os"
-	"strings"
 )
 
 func main() {
@@ -22,10 +23,10 @@ func main() {
 	{
 		flagStringVar(&out, "output", "o", "", "Path to directory, where you want generate code for script")
 		flagStringVar(&script, "script", "s", "", "Path to config file as yaml, json or xml with info about script")
-		flagBoolVar(&update, "update", "u", false, "Show program version")
-		flagBoolVar(&version, "version", "v", false, "Save user changes in files")
-		flagBoolVar(&help, "help", "h", false, "Save user changes in files")
-		flagBoolVar(&server, "http-server", "", false, "Save user changes in files")
+		flagBoolVar(&update, "update", "u", "Show program version")
+		flagBoolVar(&version, "version", "v", "Save user changes in files")
+		flagBoolVar(&help, "help", "h", "Save user changes in files")
+		flagBoolVar(&server, "http-server", "", "Save user changes in files")
 	}
 
 	{
@@ -37,7 +38,8 @@ func main() {
 		}
 
 		if version {
-			_, _ = fmt.Printf("%s", go_game_constractor.Version) //nolint:forbidigo //golangci not support forbidigo default patterns
+			_, _ = fmt.Printf("%s", //nolint:forbidigo //golangci not support forbidigo default patterns
+				go_game_constractor.Version)
 
 			return
 		}
@@ -61,17 +63,18 @@ func main() {
 		fail(err.Error())
 	}
 
-	_, _ = fmt.Printf("%s", strings.Join(outputs, "\n")) //nolint:forbidigo //golangci not support forbidigo default patterns
+	_, _ = fmt.Printf("%s", //nolint:forbidigo //golangci not support forbidigo default patterns
+		strings.Join(outputs, "\n"))
 }
 
-func flagStringVar(str *string, longName string, shortName string, defaultValue string, description string) {
+func flagStringVar(str *string, longName, shortName, defaultValue, description string) {
 	flag.StringVar(str, longName, defaultValue, description)
 	flag.StringVar(str, shortName, defaultValue, description)
 }
 
-func flagBoolVar(str *bool, longName string, shortName string, defaultValue bool, description string) {
-	flag.BoolVar(str, longName, defaultValue, description)
-	flag.BoolVar(str, shortName, defaultValue, description)
+func flagBoolVar(str *bool, longName, shortName, description string) {
+	flag.BoolVar(str, longName, false, description)
+	flag.BoolVar(str, shortName, false, description)
 }
 
 func fail(msg string, vals ...interface{}) {
@@ -89,7 +92,8 @@ func failFlag(msg string, vals ...interface{}) {
 
 func printHelp() {
 	_, _ = fmt.Printf("%s", //nolint:forbidigo //golangci not support forbidigo default patterns
-		`SCG - script generator. Generate script structs, functions for store texts of script in redis from yml, or json, or xml file.
+		`SCG - script generator. Generate script structs, `+
+			`functions for store texts of script in redis from yml, or json, or xml file.
 
 Usage:
     scg ( (-o | --output=<file>) (-s | --script=<file>) | [options] | (-v | --version) | (-h | --help) )

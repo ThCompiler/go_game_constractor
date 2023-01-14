@@ -2,10 +2,12 @@ package http
 
 import (
 	"context"
-	"github.com/ThCompiler/go_game_constractor/pkg/logger"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"time"
+
+	"github.com/ThCompiler/go_game_constractor/pkg/logger"
 )
 
 func GinRequestLogger(l logger.Interface) gin.HandlerFunc {

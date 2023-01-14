@@ -2,12 +2,13 @@ package scriptdirector
 
 import (
 	"context"
+	"strings"
+
 	"github.com/ThCompiler/go_game_constractor/director"
 	"github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
 	"github.com/ThCompiler/go_game_constractor/marusia"
 	"github.com/ThCompiler/go_game_constractor/pkg/stringutilits"
 	"github.com/ThCompiler/go_game_constractor/pkg/structures"
-	"strings"
 )
 
 // SceneDirectorConfig - config for director.
@@ -83,7 +84,9 @@ func (so *ScriptDirector) PlayScene(req director.SceneRequest) director.Result {
 	}
 }
 
-func (so *ScriptDirector) operateBaseScenes(req director.SceneRequest, sceneInfo scene.Info, ctx *scene.Context) scene.Error {
+func (so *ScriptDirector) operateBaseScenes(req director.SceneRequest, sceneInfo scene.Info,
+	ctx *scene.Context,
+) scene.Error {
 	var cmd, name string
 	if req.Request.WasButton {
 		cmd, name = so.matchButton(req.Request.Command, sceneInfo.Buttons)
@@ -99,10 +102,13 @@ func (so *ScriptDirector) operateBaseScenes(req director.SceneRequest, sceneInfo
 	} else {
 		return sceneInfo.Err
 	}
+
 	return nil
 }
 
-func (so *ScriptDirector) errorAction(info *scene.Info, errScene scene.Error, ctx *scene.Context, sceneInfo scene.Info) {
+func (so *ScriptDirector) errorAction(info *scene.Info, errScene scene.Error,
+	ctx *scene.Context, sceneInfo scene.Info,
+) {
 	if errScene.IsErrorScene() {
 		errCmd := errScene.GetErrorScene().React(ctx)
 		tmpScene, ErrInfo := so.baseSceneInfo(errScene.GetErrorScene().Next(), ctx)

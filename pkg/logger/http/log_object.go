@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+
 	"github.com/ThCompiler/go_game_constractor/pkg/logger"
 )
 

@@ -1,8 +1,9 @@
 package expr
 
 import (
-	"github.com/pkg/errors"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 var (
@@ -20,12 +21,12 @@ func errorNameSceneNotFound(sceneName string) error {
 	return errors.Wrap(ErrorNameSceneNotFound, "with name: \""+sceneName+"\"")
 }
 
-func errorNotFoundLoadingContext(valueName string, sceneName string, visitedScenes []string) error {
-	return errors.Wrap(ErrorNotFoundSLoadedContext, "with context value name: \""+valueName+"\", in the scene \""+sceneName+
-		"\"not found as saved in higher-level scenes: "+strings.Join(visitedScenes, ", "))
+func errorNotFoundLoadingContext(valueName, sceneName string, visitedScenes []string) error {
+	return errors.Wrap(ErrorNotFoundSLoadedContext, "with context value name: \""+valueName+"\", in the scene \""+
+		sceneName+"\"not found as saved in higher-level scenes: "+strings.Join(visitedScenes, ", "))
 }
 
-func errorNotFoundLoadingContextInValues(valueName string, sceneName string, visitedScenes []string) error {
-	return errors.Wrap(ErrorNotFoundSLoadedContext, "with value name: \""+valueName+"\", in text of the scene \""+sceneName+
-		"\"not found as saved in higher-level scenes: "+strings.Join(visitedScenes, ", "))
+func errorNotFoundLoadingContextInValues(valueName, sceneName string, visitedScenes []string) error {
+	return errors.Wrap(ErrorNotFoundSLoadedContext, "with value name: \""+valueName+"\", in text of the scene \""+
+		sceneName+"\"not found as saved in higher-level scenes: "+strings.Join(visitedScenes, ", "))
 }

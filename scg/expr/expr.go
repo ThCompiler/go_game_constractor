@@ -2,11 +2,13 @@ package expr
 
 import (
 	"fmt"
+
+	"github.com/pkg/errors"
+
 	"github.com/ThCompiler/go_game_constractor/pkg/cleanenv"
 	"github.com/ThCompiler/go_game_constractor/pkg/graph"
 	"github.com/ThCompiler/go_game_constractor/scg/expr/scene"
 	"github.com/ThCompiler/go_game_constractor/scg/script/matchers"
-	"github.com/pkg/errors"
 )
 
 type Script map[string]scene.Scene
@@ -16,20 +18,20 @@ type ScriptInfo struct {
 	Name           string                         `yaml:"name" json:"name" xml:"name"`
 	GoodByeCommand string                         `yaml:"goodByeCommand" json:"good_bye_command" xml:"goodByeCommand"`
 	GoodByeScene   string                         `yaml:"goodByeScene" json:"good_bye_scene" xml:"goodByeScene"`
-	UserMatchers   map[string]scene.ScriptMatcher `yaml:"matchers,omitempty" json:"matchers,omitempty" xml:"matchers,omitempty"`
+	UserMatchers   map[string]scene.ScriptMatcher `yaml:"matchers,omitempty" json:"matchers,omitempty" xml:"matchers,omitempty"` //nolint:lll // Go not support multiline tags
 	Script         Script                         `yaml:"script" json:"script" xml:"script"`
 }
 
 func (si *ScriptInfo) IsValid() (is bool, err error) {
-	if is, err = si.checkValidScenes(); !is {
+	if is, err = si.isValidScenes(); !is {
 		return is, err
 	}
 
-	if is, err = si.checkNextScenes(); !is {
+	if is, err = si.isValidNextScenes(); !is {
 		return is, err
 	}
 
-	if is, err = si.checkValidMatcherName(); !is {
+	if is, err = si.isValidMatcherName(); !is {
 		return is, err
 	}
 
@@ -44,14 +46,14 @@ func (si *ScriptInfo) IsValid() (is bool, err error) {
 		return false, ErrorStartSceneNotFound
 	}
 
-	if is, err = si.checkContext(); !is {
+	if is, err = si.checkAndUpdateContext(); !is {
 		return is, err
 	}
 
 	return true, nil
 }
 
-func (si *ScriptInfo) checkValidScenes() (is bool, err error) {
+func (si *ScriptInfo) isValidScenes() (is bool, err error) {
 	for _, sc := range si.Script {
 		if is, err = sc.IsValid(si.UserMatchers); !is {
 			break
@@ -61,7 +63,7 @@ func (si *ScriptInfo) checkValidScenes() (is bool, err error) {
 	return is, err
 }
 
-func (si *ScriptInfo) checkValidMatcherName() (is bool, err error) {
+func (si *ScriptInfo) isValidMatcherName() (is bool, err error) {
 	is = true
 
 	for name, matcher := range si.UserMatchers {
@@ -79,7 +81,7 @@ func (si *ScriptInfo) checkValidMatcherName() (is bool, err error) {
 	return is, err
 }
 
-func (si *ScriptInfo) checkNextScenes() (is bool, err error) {
+func (si *ScriptInfo) isValidNextScenes() (is bool, err error) {
 	unknownScene := ""
 up:
 	for _, sc := range si.Script {
@@ -114,28 +116,30 @@ type sceneContext struct {
 	sceneName string
 }
 
-func (si *ScriptInfo) checkContext() (bool, error) {
+func (si *ScriptInfo) checkAndUpdateContext() (bool, error) {
 	sceneGraph, err := si.initSceneGraph()
 	if err != nil {
 		return false, err
 	}
 
-	if is, errLoadContext := si.checkLoadContext(sceneGraph); !is {
+	if is, errLoadContext := si.checkAndUpdateLoadContext(sceneGraph); !is {
 		return is, errLoadContext
 	}
 
-	if is, errValueContext := si.checkValueContext(sceneGraph); !is {
+	if is, errValueContext := si.checkAndUpdateValueContext(sceneGraph); !is {
 		return is, errValueContext
 	}
 
 	return err == nil, err
 }
 
-func (si *ScriptInfo) checkLoadContext(sceneGraph *graph.Graph[*sceneContext, string]) (bool, error) {
+func (si *ScriptInfo) checkAndUpdateLoadContext(sceneGraph *graph.Graph[*sceneContext, string]) (bool, error) {
 	err := error(nil)
 up:
 	for name, sc := range si.Script {
 		for i, load := range sc.Context.LoadValue {
+			load := load
+
 			visited := make([]string, 0)
 			found := false
 
@@ -165,11 +169,13 @@ up:
 	return err == nil, err
 }
 
-func (si *ScriptInfo) checkValueContext(sceneGraph *graph.Graph[*sceneContext, string]) (bool, error) {
+func (si *ScriptInfo) checkAndUpdateValueContext(sceneGraph *graph.Graph[*sceneContext, string]) (bool, error) {
 	err := error(nil)
 up:
 	for name, sc := range si.Script {
 		for _, value := range sc.Text.Values {
+			value := value
+
 			if value.FromContext == "" {
 				continue
 			}

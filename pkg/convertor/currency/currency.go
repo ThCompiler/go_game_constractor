@@ -33,7 +33,6 @@ type NounGender struct {
 }
 
 type CustomCurrency struct {
-
 	/**
 	 * Integer currency name forms\
 	 * for digits [1, 2-4, 5-9]\

@@ -45,7 +45,6 @@ func (sc *Goodbye) Next() scene.Scene {
 
 // GetSceneInfo function returning info about scene
 func (sc *Goodbye) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
-
 	// TODO Write some actions for get data for texts
 
 	text, _ := sc.TextManager.GetGoodbyeText()

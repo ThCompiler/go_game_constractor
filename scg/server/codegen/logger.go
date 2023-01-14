@@ -1,21 +1,22 @@
 package codegen
 
 import (
-	"github.com/ThCompiler/go_game_constractor/scg/expr"
-	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 	"path"
 	"path/filepath"
+
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 )
 
 // LoggerPrepareFile returns logger prepare file
-func LoggerPrepareFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func LoggerPrepareFile(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	loggerPrepareIOFile := generateLoggerPrepareIO(rootPkg, rootDir, scriptInfo)
 	loggerPrepareConfig := generateLoggerPrepareConfig(rootPkg, rootDir, scriptInfo)
 
 	return []*codegen.File{loggerPrepareIOFile, loggerPrepareConfig}
 }
 
-func generateLoggerPrepareIO(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateLoggerPrepareIO(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "pkg", "logger", "prepare", "io.go")
@@ -27,7 +28,12 @@ func generateLoggerPrepareIO(_ string, rootDir string, scriptInfo expr.ScriptInf
 	}
 
 	sections = []*codegen.SectionTemplate{
-		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Logger prepare file with open log file ", "prepare", imports, false),
+		codegen.Header(
+			codegen.ToTitle(scriptInfo.Name)+"-Logger prepare file with open log file ",
+			"prepare",
+			imports,
+			false,
+		),
 	}
 
 	sections = append(sections, &codegen.SectionTemplate{
@@ -38,7 +44,7 @@ func generateLoggerPrepareIO(_ string, rootDir string, scriptInfo expr.ScriptInf
 	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: false}
 }
 
-func generateLoggerPrepareConfig(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateLoggerPrepareConfig(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "pkg", "logger", "prepare", "config.go")
@@ -47,7 +53,12 @@ func generateLoggerPrepareConfig(_ string, rootDir string, scriptInfo expr.Scrip
 	}
 
 	sections = []*codegen.SectionTemplate{
-		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Logger prepare file with config for logger ", "prepare", imports, false),
+		codegen.Header(
+			codegen.ToTitle(scriptInfo.Name)+"-Logger prepare file with config for logger ",
+			"prepare",
+			imports,
+			false,
+		),
 	}
 
 	sections = append(sections, &codegen.SectionTemplate{
@@ -91,9 +102,12 @@ func OpenLogDir(dir string) (*os.File, error) {
 
 const loggerPrepareConfigStructT = `type Config struct {
     Level                    logger.LogLevel ` + "`" + `env-required:"true" yaml:"level" env:"LOG_LEVEL"` + "`" + `
-    LogDir                   string          ` + "`" + `env-required:"true" yaml:"log_dir,omitempty,omitempty" env:"LOG_DIR"` + "`" + `
-    UseStdAndFIle            bool            ` + "`" + `env-required:"true" yaml:"use_std_and_file,omitempty" env:"USER_STD_AND_FILE"` + "`" + `
-    AddLowPriorityLevelToCmd bool            ` + "`" + `env-required:"true" yaml:"add_low_priority_level_to_cmd,omitempty" env:"ADD_LPL_TO_CMD"` + "`" + `
+    LogDir                   string          ` + "`" +
+	`env-required:"true" yaml:"log_dir,omitempty,omitempty" env:"LOG_DIR"` + "`" + `
+    UseStdAndFIle            bool            ` + "`" +
+	`env-required:"true" yaml:"use_std_and_file,omitempty" env:"USER_STD_AND_FILE"` + "`" + `
+    AddLowPriorityLevelToCmd bool            ` + "`" +
+	`env-required:"true" yaml:"add_low_priority_level_to_cmd,omitempty" env:"ADD_LPL_TO_CMD"` + "`" + `
 }
 
 `

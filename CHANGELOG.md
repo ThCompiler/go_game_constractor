@@ -185,4 +185,8 @@ Some modification and addition of new functionality.
 #### Generator
 
 * Add logging error in scene functions
+* Переименнованно поле `string` в описании текста сцены на `text` в yaml формате
+* Переименнованно поле `url` в описании кнопки сцены на `URL` в json формате
+* Исправлено название поля `nextScenes` для json формата
+* Исправлено название поля `replace_message` для json формата
 

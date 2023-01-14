@@ -2,8 +2,10 @@ package scene
 
 import (
 	"encoding/xml"
-	"github.com/ThCompiler/go_game_constractor/scg/expr/parser"
+
 	"gopkg.in/yaml.v3"
+
+	"github.com/ThCompiler/go_game_constractor/scg/expr/parser"
 )
 
 type Value struct {

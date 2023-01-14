@@ -55,7 +55,8 @@ type AsyncQueue[T any] struct {
 func NewAsyncQueue[T any]() *AsyncQueue[T] {
 	return &AsyncQueue[T]{
 		lock:  sync.Mutex{},
-		queue: NewQueue[T]()}
+		queue: NewQueue[T](),
+	}
 }
 
 func (st *AsyncQueue[T]) Push(value T) {

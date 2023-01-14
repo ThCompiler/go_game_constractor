@@ -1,21 +1,22 @@
 package codegen
 
 import (
-	"github.com/ThCompiler/go_game_constractor/scg/expr"
-	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 	"path"
 	"path/filepath"
+
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 )
 
 // ConfigFile returns config file
-func ConfigFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func ConfigFile(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	configGoFile := generateConfigGO(rootPkg, rootDir, scriptInfo)
 	configYmlFile := generateConfigYml(rootPkg, rootDir, scriptInfo)
 
 	return []*codegen.File{configGoFile, configYmlFile}
 }
 
-func generateConfigGO(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateConfigGO(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "config", "config.go")
@@ -38,7 +39,7 @@ func generateConfigGO(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo
 	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
-func generateConfigYml(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateConfigYml(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "config", "config.yml")

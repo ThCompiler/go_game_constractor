@@ -7,7 +7,7 @@ import (
 )
 
 // Script add generate code of script
-func Script(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) ([]*codegen.File, error) {
+func Script(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) ([]*codegen.File, error) {
 	var files []*codegen.File
 
 	files = append(files, scriptcodegen.MatchersFile(rootPkg, rootDir, scriptInfo)...)

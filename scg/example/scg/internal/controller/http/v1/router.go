@@ -11,12 +11,13 @@ package v1
 import (
 	"net/http"
 
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+
 	"github.com/ThCompiler/go_game_constractor/director/scriptdirector"
 	"github.com/ThCompiler/go_game_constractor/marusia/runner"
 	"github.com/ThCompiler/go_game_constractor/pkg/logger"
 	loghttp "github.com/ThCompiler/go_game_constractor/pkg/logger/http"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
 )
 
 // NewRouter -.

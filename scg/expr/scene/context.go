@@ -1,77 +1,79 @@
 package scene
 
 import (
-    "encoding/xml"
-    "github.com/ThCompiler/go_game_constractor/scg/expr/parser"
-    "github.com/ThCompiler/go_game_constractor/scg/go/types"
-    "gopkg.in/yaml.v3"
+	"encoding/xml"
+
+	"gopkg.in/yaml.v3"
+
+	"github.com/ThCompiler/go_game_constractor/scg/expr/parser"
+	"github.com/ThCompiler/go_game_constractor/scg/go/types"
 )
 
 const nLoadValueFields = 1
 
 type Context struct {
-    SaveValue *SaveValue  `yaml:"saveValue" json:"save_value" xml:"saveValue"`
-    LoadValue []LoadValue `yaml:"loadValue" json:"load_value" xml:"loadValue"`
+	SaveValue *SaveValue  `yaml:"saveValue" json:"save_value" xml:"saveValue"`
+	LoadValue []LoadValue `yaml:"loadValue" json:"load_value" xml:"loadValue"`
 }
 
 func (ct *Context) checkValuesType() (err error) {
-    err = nil
+	err = nil
 
-    if ct.SaveValue != nil {
-        if !types.IsValidType(ct.SaveValue.Type) {
-            err = errorUnknownTypeOfValue(ct.SaveValue.Type)
-        }
-    }
+	if ct.SaveValue != nil {
+		if !types.IsValidType(ct.SaveValue.Type) {
+			err = errorUnknownTypeOfValue(ct.SaveValue.Type)
+		}
+	}
 
-    return
+	return
 }
 
 type SaveValue struct {
-    Name string `yaml:"name" json:"name" xml:"name"`
-    Type string `yaml:"type" json:"type" xml:"type"`
+	Name string `yaml:"name" json:"name" xml:"name"`
+	Type string `yaml:"type" json:"type" xml:"type"`
 }
 
 type LoadValue struct {
-    Name string
-    Type string
+	Name string
+	Type string
 }
 
 type _loadValue struct {
-    Name string
+	Name string
 }
 
 func (lv *LoadValue) UnmarshalYAML(n *yaml.Node) (err error) {
-    return lv.unmarshal(&parser.UnmarshalerYAML{N: n})
+	return lv.unmarshal(&parser.UnmarshalerYAML{N: n})
 }
 
 func (lv *LoadValue) UnmarshalJSON(bs []byte) error {
-    return lv.unmarshal(&parser.UnmarshalerJSON{Bs: bs})
+	return lv.unmarshal(&parser.UnmarshalerJSON{Bs: bs})
 }
 
 func (lv *LoadValue) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-    return lv.unmarshal(&parser.UnmarshalerXML{D: d, Start: start})
+	return lv.unmarshal(&parser.UnmarshalerXML{D: d, Start: start})
 }
 
 func (lv *LoadValue) unmarshal(unm parser.Unmarshaler) (err error) {
-    tmp := make(map[string]interface{})
-    if err = unm.Unmarshal(&tmp); err != nil {
-        if err = unm.Unmarshal(&lv.Name); err == nil {
-            return nil
-        }
+	tmp := make(map[string]interface{})
+	if err = unm.Unmarshal(&tmp); err != nil {
+		if err = unm.Unmarshal(&lv.Name); err == nil {
+			return nil
+		}
 
-        return err
-    }
+		return err
+	}
 
-    tmpMatcher := _loadValue{}
-    if err = unm.Unmarshal(&tmpMatcher); err == nil {
-        lv.Name = tmpMatcher.Name
+	tmpMatcher := _loadValue{}
+	if err = unm.Unmarshal(&tmpMatcher); err == nil {
+		lv.Name = tmpMatcher.Name
 
-        return nil
-    }
+		return nil
+	}
 
-    if len(tmp) > nLoadValueFields {
-        return ErrorTooManyFields
-    }
+	if len(tmp) > nLoadValueFields {
+		return ErrorTooManyFields
+	}
 
-    return err
+	return err
 }

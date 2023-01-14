@@ -3,6 +3,7 @@ package director
 import (
 	"context"
 	"encoding/json"
+
 	"github.com/ThCompiler/go_game_constractor/marusia"
 	"github.com/ThCompiler/go_game_constractor/pkg/language"
 )

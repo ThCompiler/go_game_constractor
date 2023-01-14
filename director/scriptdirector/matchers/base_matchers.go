@@ -1,8 +1,9 @@
 package matchers
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words2num"
 	"strconv"
+
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words2num"
 )
 
 const (
@@ -15,25 +16,26 @@ const (
 
 var (
 	NumberMatcher         = NewRegexMather(`[\-]{0,1}[0-9]+[\.][0-9]+|[\-]{0,1}[0-9]+`, NumberMatchedString)
-	PositiveNumberMatcher = NewRegexMather(`^\+?(0*[1-9]\d*(?:[\., ]\d+)*) *(?:\p{Sc}|°[FC])?$`, PositiveNumberMatchedString)
-	AnyMatcher            = NewRegexMather(`.*`, AnyMatchedString)
-	FirstWordMatcher      = NewRegexMather(`[^\s]+`, FirstWordMatchedString)
+	PositiveNumberMatcher = NewRegexMather(
+		`^\+?(0*[1-9]\d*(?:[\., ]\d+)*) *(?:\p{Sc}|°[FC])?$`,
+		PositiveNumberMatchedString,
+	)
+	AnyMatcher       = NewRegexMather(`.*`, AnyMatchedString)
+	FirstWordMatcher = NewRegexMather(`[^\s]+`, FirstWordMatchedString)
 )
 
 const (
 	AgreeMatchedString = "Точно!"
 )
 
-var (
-	Agree = NewSelectorMatcher(
-		[]string{
-			"Точно",
-			"Согласен",
-			"Да",
-			"Ага",
-		},
-		AgreeMatchedString,
-	)
+var Agree = NewSelectorMatcher(
+	[]string{
+		"Точно",
+		"Согласен",
+		"Да",
+		"Ага",
+	},
+	AgreeMatchedString,
 )
 
 type NumberMatchers struct{}

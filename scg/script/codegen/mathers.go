@@ -1,21 +1,22 @@
 package codegen
 
 import (
+	"path"
+	"path/filepath"
+
 	"github.com/ThCompiler/go_game_constractor/scg/expr"
 	"github.com/ThCompiler/go_game_constractor/scg/expr/scene"
 	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-	"path"
-	"path/filepath"
 )
 
 // MatchersFile returns custom mathers
-func MatchersFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func MatchersFile(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	mathersFile := generateMatchers(rootPkg, rootDir, scriptInfo)
 
 	return []*codegen.File{mathersFile}
 }
 
-func generateMatchers(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateMatchers(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "internal", "script", "matchers", "matchers.go")

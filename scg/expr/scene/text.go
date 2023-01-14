@@ -1,12 +1,13 @@
 package scene
 
 import (
-	"github.com/ThCompiler/go_game_constractor/scg/go/types"
 	"strings"
+
+	"github.com/ThCompiler/go_game_constractor/scg/go/types"
 )
 
 type Text struct {
-	Text   string           `yaml:"string" json:"text" xml:"text"`
+	Text   string           `yaml:"text" json:"text" xml:"text"`
 	TTS    string           `yaml:"tts" json:"tts" xml:"tts"`
 	Values map[string]Value `yaml:"values,omitempty" json:"values,omitempty" xml:"values,omitempty"`
 }

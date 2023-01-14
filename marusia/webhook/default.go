@@ -1,16 +1,19 @@
 package webhook
 
 import (
+	"time"
+
 	sd "github.com/ThCompiler/go_game_constractor/director/scriptdirector"
 	"github.com/ThCompiler/go_game_constractor/marusia"
 	"github.com/ThCompiler/go_game_constractor/marusia/runner"
 	"github.com/ThCompiler/go_game_constractor/pkg/logger"
-	"time"
 )
 
 const RequestTime = 60 * time.Second
 
-func NewDefaultMarusiaWebhook(l logger.Interface, runnerHub runner.ScriptRunner, sdc sd.SceneDirectorConfig) *marusia.Webhook {
+func NewDefaultMarusiaWebhook(l logger.Interface, runnerHub runner.ScriptRunner,
+	sdc sd.SceneDirectorConfig,
+) *marusia.Webhook {
 	wh := marusia.NewWebhook(l)
 
 	wh.OnEvent(func(r marusia.Request) (resp marusia.Response, err error) {
