@@ -25,7 +25,7 @@ func GinRequestLogger(l logger.Interface) gin.HandlerFunc {
 		}
 
 		lg := l.With(URL, path).With(RequestID, requestID).With(Method, method)
-		c.Set(context2.LoggerField, lg)
+		c.Set(string(context2.LoggerField), lg)
 
 		// Process request
 		c.Next()

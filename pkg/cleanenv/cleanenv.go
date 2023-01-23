@@ -563,26 +563,26 @@ func parseValue(field reflect.Value, value, sep string, layout *string) error {
 
 type parseFuncType func(valueType reflect.Type, value, sep string, layout *string, field *reflect.Value) error
 
-var parsersMap = map[reflect.Kind]parseFuncType{
-	reflect.Bool:    parseValueToBool,
-	reflect.Int:     parseValueToInt81632,
-	reflect.Int8:    parseValueToInt81632,
-	reflect.Int16:   parseValueToInt81632,
-	reflect.Int32:   parseValueToInt81632,
-	reflect.Int64:   parseValueToInt81632,
-	reflect.Uint:    parseValueToUint,
-	reflect.Uint8:   parseValueToUint,
-	reflect.Uint16:  parseValueToUint,
-	reflect.Uint32:  parseValueToUint,
-	reflect.Uint64:  parseValueToUint,
-	reflect.Float32: parseValueToFloat,
-	reflect.Float64: parseValueToFloat,
-	reflect.Slice:   parseValueToSlice,
-	reflect.Map:     parseValueToMap,
-}
-
 func parseFromBaseTypes(field *reflect.Value, value, sep string, layout *string) error {
 	valueType := field.Type()
+
+	var parsersMap = map[reflect.Kind]parseFuncType{
+		reflect.Bool:    parseValueToBool,
+		reflect.Int:     parseValueToInt81632,
+		reflect.Int8:    parseValueToInt81632,
+		reflect.Int16:   parseValueToInt81632,
+		reflect.Int32:   parseValueToInt81632,
+		reflect.Int64:   parseValueToInt64,
+		reflect.Uint:    parseValueToUint,
+		reflect.Uint8:   parseValueToUint,
+		reflect.Uint16:  parseValueToUint,
+		reflect.Uint32:  parseValueToUint,
+		reflect.Uint64:  parseValueToUint,
+		reflect.Float32: parseValueToFloat,
+		reflect.Float64: parseValueToFloat,
+		reflect.Slice:   parseValueToSlice,
+		reflect.Map:     parseValueToMap,
+	}
 
 	if fun, ok := parsersMap[valueType.Kind()]; ok {
 		return fun(valueType, value, sep, layout, field)
