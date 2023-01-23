@@ -24,6 +24,8 @@ import (
 	"github.com/joho/godotenv"
 	"gopkg.in/yaml.v3"
 	"olympos.io/encoding/edn"
+
+	"github.com/ThCompiler/go_game_constractor/pkg/structures"
 )
 
 type ConfigType int64
@@ -390,19 +392,22 @@ var validStructs = map[reflect.Type]parseFunc{
 	},
 }
 
+type cfgNode struct {
+	Val    interface{}
+	Prefix string
+}
+
 // readStructMetadata reads structure metadata (types, tags, etc.)
 func readStructMetadata(cfgRoot interface{}) ([]structMeta, error) {
-	type cfgNode struct {
-		Val    interface{}
-		Prefix string
-	}
+	cfgStack := structures.NewStack[cfgNode]()
+	cfgStack.Push(cfgNode{cfgRoot, ""})
 
-	cfgStack := []cfgNode{{cfgRoot, ""}}
 	metas := make([]structMeta, 0)
 
-	for i := 0; i < len(cfgStack); i++ {
-		s := reflect.ValueOf(cfgStack[i].Val)
-		sPrefix := cfgStack[i].Prefix
+	for !cfgStack.Empty() {
+		node := cfgStack.MustPop()
+		s := reflect.ValueOf(node.Val)
+		sPrefix := node.Prefix
 
 		// unwrap pointer
 		if s.Kind() == reflect.Ptr {
@@ -414,79 +419,87 @@ func readStructMetadata(cfgRoot interface{}) ([]structMeta, error) {
 			return nil, errorWrongTypeOfField(s.Kind())
 		}
 
-		typeInfo := s.Type()
-
-		// read tags
-		for idx := 0; idx < s.NumField(); idx++ {
-			fType := typeInfo.Field(idx)
-
-			var (
-				defValue  *string
-				layout    *string
-				separator string
-			)
-
-			// process nested structure (except of supported ones)
-			if fld := s.Field(idx); fld.Kind() == reflect.Struct {
-				// add structure to parsing structures
-				if _, found := validStructs[fld.Type()]; !found {
-					prefix, _ := fType.Tag.Lookup(TagEnvPrefix)
-					cfgStack = append(cfgStack, cfgNode{fld.Addr().Interface(), sPrefix + prefix})
-
-					continue
-				}
-
-				// process time.Time
-				if l, ok := fType.Tag.Lookup(TagEnvLayout); ok {
-					layout = &l
-				}
-			}
-
-			// check is the field value can be changed
-			if !s.Field(idx).CanSet() {
-				continue
-			}
-
-			if def, ok := fType.Tag.Lookup(TagEnvDefault); ok {
-				defValue = &def
-			}
-
-			if sep, ok := fType.Tag.Lookup(TagEnvSeparator); ok {
-				separator = sep
-			} else {
-				separator = DefaultSeparator
-			}
-
-			_, upd := fType.Tag.Lookup(TagEnvUpd)
-
-			_, required := fType.Tag.Lookup(TagEnvRequired)
-
-			envList := make([]string, 0)
-
-			if envs, ok := fType.Tag.Lookup(TagEnv); ok && len(envs) != 0 {
-				envList = strings.Split(envs, DefaultSeparator)
-				if sPrefix != "" {
-					for i := range envList {
-						envList[i] = sPrefix + envList[i]
-					}
-				}
-			}
-
-			metas = append(metas, structMeta{
-				envList:     envList,
-				fieldName:   s.Type().Field(idx).Name,
-				fieldValue:  s.Field(idx),
-				defValue:    defValue,
-				layout:      layout,
-				separator:   separator,
-				description: fType.Tag.Get(TagEnvDescription),
-				updatable:   upd,
-				required:    required,
-			})
-		}
+		metas = readTags(metas, s, cfgStack, sPrefix)
 	}
 
 	return metas, nil
+}
+
+func readTags(metas []structMeta, s reflect.Value, cfgStack structures.Stack[cfgNode], sPrefix string) []structMeta {
+	typeInfo := s.Type()
+
+	// read tags
+	for idx := 0; idx < s.NumField(); idx++ {
+		fType := typeInfo.Field(idx)
+
+		var layout *string
+
+		// process nested structure (except of supported ones)
+		if fld := s.Field(idx); fld.Kind() == reflect.Struct {
+			// add structure to parsing structures
+			if _, found := validStructs[fld.Type()]; !found {
+				prefix, _ := fType.Tag.Lookup(TagEnvPrefix)
+				cfgStack.Push(cfgNode{fld.Interface(), sPrefix + prefix})
+
+				continue
+			}
+
+			// process time.Time
+			if l, ok := fType.Tag.Lookup(TagEnvLayout); ok {
+				layout = &l
+			}
+		}
+
+		defValue, separator, envList, upd, required := parseStruct(fType, sPrefix)
+
+		metas = append(metas, structMeta{
+			envList:     envList,
+			fieldName:   s.Type().Field(idx).Name,
+			fieldValue:  s.Field(idx),
+			defValue:    defValue,
+			layout:      layout,
+			separator:   separator,
+			description: fType.Tag.Get(TagEnvDescription),
+			updatable:   upd,
+			required:    required,
+		})
+	}
+
+	return metas
+}
+
+func parseStruct(fType reflect.StructField, sPrefix string) (*string, string, []string, bool, bool) {
+	var (
+		defValue  *string
+		separator string
+	)
+
+	if def, ok := fType.Tag.Lookup(TagEnvDefault); ok {
+		defValue = &def
+	}
+
+	if sep, ok := fType.Tag.Lookup(TagEnvSeparator); ok {
+		separator = sep
+	} else {
+		separator = DefaultSeparator
+	}
+
+	_, upd := fType.Tag.Lookup(TagEnvUpd)
+
+	_, required := fType.Tag.Lookup(TagEnvRequired)
+
+	envList := make([]string, 0)
+
+	if envs, ok := fType.Tag.Lookup(TagEnv); ok && len(envs) != 0 {
+		envList = strings.Split(envs, DefaultSeparator)
+		if sPrefix != "" {
+			for i := range envList {
+				envList[i] = sPrefix + envList[i]
+			}
+		}
+	}
+
+	return defValue, separator, envList, upd, required
 }
 
 // readEnvVars reads environment variables to the provided configuration structure
@@ -541,102 +554,147 @@ func readEnvVars(cfg interface{}, update bool) error {
 // parseValue parses value into the corresponding field.
 // In case of maps and slices it uses provided separator to split raw value string
 func parseValue(field reflect.Value, value, sep string, layout *string) error {
+	if ok, err := parseFromInterface(&field, value); ok {
+		return err
+	}
+
+	return parseFromBaseTypes(&field, value, sep, layout)
+}
+
+type parseFuncType func(valueType reflect.Type, value, sep string, layout *string, field *reflect.Value) error
+
+var parsersMap = map[reflect.Kind]parseFuncType{
+	reflect.Bool:    parseValueToBool,
+	reflect.Int:     parseValueToInt81632,
+	reflect.Int8:    parseValueToInt81632,
+	reflect.Int16:   parseValueToInt81632,
+	reflect.Int32:   parseValueToInt81632,
+	reflect.Int64:   parseValueToInt81632,
+	reflect.Uint:    parseValueToUint,
+	reflect.Uint8:   parseValueToUint,
+	reflect.Uint16:  parseValueToUint,
+	reflect.Uint32:  parseValueToUint,
+	reflect.Uint64:  parseValueToUint,
+	reflect.Float32: parseValueToFloat,
+	reflect.Float64: parseValueToFloat,
+	reflect.Slice:   parseValueToSlice,
+	reflect.Map:     parseValueToMap,
+}
+
+func parseFromBaseTypes(field *reflect.Value, value, sep string, layout *string) error {
+	valueType := field.Type()
+
+	if fun, ok := parsersMap[valueType.Kind()]; ok {
+		return fun(valueType, value, sep, layout, field)
+	} else {
+		return parseFromOtherSupportedTypes(valueType, value, layout, field)
+	}
+}
+
+func parseFromInterface(field *reflect.Value, value string) (bool, error) {
 	if field.CanInterface() {
 		if cs, ok := field.Interface().(Setter); ok {
-			return cs.SetValue(value)
+			return true, cs.SetValue(value)
 		} else if csp, ok := field.Addr().Interface().(Setter); ok {
-			return csp.SetValue(value)
+			return true, csp.SetValue(value)
 		}
 	}
 
-	valueType := field.Type()
+	return false, nil
+}
 
-	switch valueType.Kind() { //nolint:exhaustive // it is not necessary to consider all options
-	// parse string value
-	case reflect.String:
-		field.SetString(value)
-
-	// parse boolean value
-	case reflect.Bool:
-		b, err := strconv.ParseBool(value)
+func parseValueToInt64(valueType reflect.Type, value, _ string, _ *string, field *reflect.Value) error {
+	if valueType == reflect.TypeOf(time.Duration(0)) {
+		// try to parse time
+		d, err := time.ParseDuration(value)
 		if err != nil {
 			return err
 		}
 
-		field.SetBool(b)
-
-	// parse integer
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32:
+		field.SetInt(int64(d))
+	} else {
+		// parse regular integer
 		number, err := strconv.ParseInt(value, 0, valueType.Bits())
 		if err != nil {
 			return err
 		}
 
 		field.SetInt(number)
-
-	case reflect.Int64:
-		if valueType == reflect.TypeOf(time.Duration(0)) {
-			// try to parse time
-			d, err := time.ParseDuration(value)
-			if err != nil {
-				return err
-			}
-
-			field.SetInt(int64(d))
-		} else {
-			// parse regular integer
-			number, err := strconv.ParseInt(value, 0, valueType.Bits())
-			if err != nil {
-				return err
-			}
-
-			field.SetInt(number)
-		}
-
-	// parse unsigned integer value
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		number, err := strconv.ParseUint(value, 0, valueType.Bits())
-		if err != nil {
-			return err
-		}
-
-		field.SetUint(number)
-
-	// parse floating point value
-	case reflect.Float32, reflect.Float64:
-		number, err := strconv.ParseFloat(value, valueType.Bits())
-		if err != nil {
-			return err
-		}
-
-		field.SetFloat(number)
-
-	// parse sliced value
-	case reflect.Slice:
-		sliceValue, err := parseSlice(valueType, value, sep, layout)
-		if err != nil {
-			return err
-		}
-
-		field.Set(*sliceValue)
-
-	// parse mapped value
-	case reflect.Map:
-		mapValue, err := parseMap(valueType, value, sep, layout)
-		if err != nil {
-			return err
-		}
-
-		field.Set(*mapValue)
-
-	default:
-		// look for supported struct parser
-		if structParser, found := validStructs[valueType]; found {
-			return structParser(&field, value, layout)
-		}
-
-		return errorNotSupportedType(valueType.PkgPath(), valueType.Name())
 	}
+
+	return nil
+}
+
+func parseFromOtherSupportedTypes(valueType reflect.Type, value string, layout *string, field *reflect.Value) error {
+	if structParser, found := validStructs[valueType]; found {
+		return structParser(field, value, layout)
+	}
+
+	return errorNotSupportedType(valueType.PkgPath(), valueType.Name())
+}
+
+func parseValueToMap(valueType reflect.Type, value, sep string, layout *string, field *reflect.Value) error {
+	mapValue, err := parseMap(valueType, value, sep, layout)
+	if err != nil {
+		return err
+	}
+
+	field.Set(*mapValue)
+
+	return nil
+}
+
+func parseValueToSlice(valueType reflect.Type, value, sep string, layout *string, field *reflect.Value) error {
+	sliceValue, err := parseSlice(valueType, value, sep, layout)
+	if err != nil {
+		return err
+	}
+
+	field.Set(*sliceValue)
+
+	return nil
+}
+
+func parseValueToBool(_ reflect.Type, value, _ string, _ *string, field *reflect.Value) error {
+	b, err := strconv.ParseBool(value)
+	if err != nil {
+		return err
+	}
+
+	field.SetBool(b)
+
+	return nil
+}
+
+func parseValueToInt81632(valueType reflect.Type, value, _ string, _ *string, field *reflect.Value) error {
+	number, err := strconv.ParseInt(value, 0, valueType.Bits())
+	if err != nil {
+		return err
+	}
+
+	field.SetInt(number)
+
+	return nil
+}
+
+func parseValueToUint(valueType reflect.Type, value, _ string, _ *string, field *reflect.Value) error {
+	number, err := strconv.ParseUint(value, 0, valueType.Bits())
+	if err != nil {
+		return err
+	}
+
+	field.SetUint(number)
+
+	return nil
+}
+
+func parseValueToFloat(valueType reflect.Type, value, _ string, _ *string, field *reflect.Value) error {
+	number, err := strconv.ParseFloat(value, valueType.Bits())
+	if err != nil {
+		return err
+	}
+
+	field.SetFloat(number)
 
 	return nil
 }

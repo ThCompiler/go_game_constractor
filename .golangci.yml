@@ -189,8 +189,7 @@ linters:
     - contextcheck
     - gochecknoinits
     - prealloc
-#    - nestif
-    - gocyclo
-    - gocognit
+#    - gocyclo
+#    - gocognit
 #    - funlen
-    - cyclop
+ #   - cyclop

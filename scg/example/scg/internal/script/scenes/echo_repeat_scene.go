@@ -12,7 +12,7 @@ import (
 	"github.com/ThCompiler/go_game_constractor/director"
 	base_matchers "github.com/ThCompiler/go_game_constractor/director/scriptdirector/matchers"
 	"github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
-	loghttp "github.com/ThCompiler/go_game_constractor/pkg/logger/http"
+	loghttp "github.com/ThCompiler/go_game_constractor/pkg/logger/context"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/texts/manager"
 	"github.com/ThCompiler/go_game_constractor/scg/go/types"
 )

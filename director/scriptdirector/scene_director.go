@@ -7,6 +7,7 @@ import (
 	"github.com/ThCompiler/go_game_constractor/director"
 	"github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
 	"github.com/ThCompiler/go_game_constractor/marusia"
+	context2 "github.com/ThCompiler/go_game_constractor/pkg/logger/context"
 	"github.com/ThCompiler/go_game_constractor/pkg/stringutilits"
 	"github.com/ThCompiler/go_game_constractor/pkg/structures"
 )
@@ -20,6 +21,7 @@ type SceneDirectorConfig struct {
 
 // ScriptDirector - implementation game director for script games.
 type ScriptDirector struct {
+	context2.LogObject
 	stashedScene  structures.Stack[scene.Scene]
 	currentScene  scene.Scene
 	isEndOfScript bool

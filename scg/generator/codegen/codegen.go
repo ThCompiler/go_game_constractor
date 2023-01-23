@@ -25,6 +25,11 @@ import (
 const Gendir = "scg"
 
 const (
+	StartGenComment = "// <<<<<<< Generated"
+	EndGenComment   = "// >>>>>>> Generated"
+)
+
+const (
 	filePermMode = 0o644
 	dirPermMode  = 0o755
 )
@@ -170,74 +175,118 @@ func (f *File) baseRender(path string) error {
 }
 
 func (f *File) renderWithUpdate(path string) error {
-	fileStrings, err := getFileLines(path)
-	if err != nil {
-		return err
+	fileStrings, errFileLines := getFileLines(path)
+	if errFileLines != nil {
+		return errFileLines
 	}
 
-	generatedStrings, err := f.getGenLines(path)
-	if err != nil {
-		return err
+	generatedStrings, errGenLines := f.getGenLines(path)
+	if errGenLines != nil {
+		return errGenLines
 	}
 
 	differ := NewDiffer(generatedStrings, fileStrings)
 
 	diff := differ.GetLineStates()
 
-	file, err := os.OpenFile(
+	file, errOpenFile := os.OpenFile(
 		path,
 		os.O_WRONLY,
 		filePermMode,
 	)
-	if err != nil {
-		return err
+
+	if errOpenFile != nil {
+		return errOpenFile
 	}
 
-up:
-	for _, df := range diff {
-		if df.Tag == Equal {
-			for _, line := range generatedStrings[df.firstStart:df.firstEnd] {
-				if _, err = file.WriteString(line + "\n"); err != nil {
-					break up
-				}
-			}
-
-			continue
-		}
-
-		if df.Tag == Replace || df.Tag == Delete {
-			if _, err = file.WriteString("// >>>>>>> Generated \n"); err != nil {
-				break up
-			}
-
-			for _, line := range generatedStrings[df.firstStart:df.firstEnd] {
-				if _, err = file.WriteString("// " + line + "\n"); err != nil {
-					break up
-				}
-			}
-
-			if _, err = file.WriteString("// >>>>>>> Generated \n"); err != nil {
-				break up
-			}
-		}
-
-		if df.Tag == Replace || df.Tag == Insert {
-			for _, line := range fileStrings[df.secondStart:df.secondEnd] {
-				if _, err = file.WriteString(line + "\n"); err != nil {
-					break up
-				}
-			}
-		}
-	}
-
-	if err != nil {
+	if err := f.applyDiff(diff, generatedStrings, fileStrings, file); err != nil {
 		_ = file.Close()
 
 		return err
 	}
 
-	if err = file.Close(); err != nil {
+	if err := file.Close(); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (f *File) applyDiff(diff []LinesState, generatedStrings, fileStrings []string, file io.StringWriter) (err error) {
+up:
+	for _, df := range diff {
+		switch df.Tag {
+		case Equal:
+			if err = applyEqualDiff(df, generatedStrings, file); err != nil {
+				break up
+			}
+
+			continue up
+
+		case Delete:
+			if err = applyDeleteDiff(df, generatedStrings, file); err != nil {
+				break up
+			}
+
+		case Insert:
+			if err = applyInsertDiff(df, fileStrings, file); err != nil {
+				break up
+			}
+
+		case Replace:
+			if err = applyReplaceDiff(df, generatedStrings, fileStrings, file); err != nil {
+				break up
+			}
+
+		default:
+			panic(fmt.Sprintf("unknown diff tag: %d", df.Tag))
+		}
+	}
+
+	return err
+}
+
+func applyEqualDiff(df LinesState, generatedStrings []string, file io.StringWriter) error {
+	for _, line := range generatedStrings[df.firstStart:df.firstEnd] {
+		if _, err := file.WriteString(line + "\n"); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func applyReplaceDiff(df LinesState, generatedStrings, fileStrings []string, file io.StringWriter) error {
+	if err := applyDeleteDiff(df, generatedStrings, file); err != nil {
+		return err
+	}
+
+	return applyInsertDiff(df, fileStrings, file)
+}
+
+func applyDeleteDiff(df LinesState, generatedStrings []string, file io.StringWriter) error {
+	if _, err := file.WriteString(StartGenComment); err != nil {
+		return err
+	}
+
+	for _, line := range generatedStrings[df.firstStart:df.firstEnd] {
+		if _, err := file.WriteString("// " + line + "\n"); err != nil {
+			return err
+		}
+	}
+
+	if _, err := file.WriteString(EndGenComment); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func applyInsertDiff(df LinesState, fileStrings []string, file io.StringWriter) error {
+	for _, line := range fileStrings[df.secondStart:df.secondEnd] {
+		if _, err := file.WriteString(line + "\n"); err != nil {
+			return err
+		}
 	}
 
 	return nil

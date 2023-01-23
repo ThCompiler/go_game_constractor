@@ -23,20 +23,20 @@ func (te *TestExpected) HavePanicError() bool {
 	return te.PanicError != nil
 }
 
-func (ts *TestExpected) MustErrorExpected() TestErrorExpected {
-	if ts.Error == nil {
+func (te *TestExpected) MustErrorExpected() TestErrorExpected {
+	if te.Error == nil {
 		panic("Expected error, but not")
 	}
 
-	return *ts.Error
+	return *te.Error
 }
 
-func (ts *TestExpected) MustPanicErrorExpected() TestPanicErrorExpected {
-	if ts.PanicError == nil {
+func (te *TestExpected) MustPanicErrorExpected() TestPanicErrorExpected {
+	if te.PanicError == nil {
 		panic("Expected panic error, but not")
 	}
 
-	return *ts.PanicError
+	return *te.PanicError
 }
 
 func ToTestValuesExpected(expedites ...interface{}) TestExpected {
@@ -94,7 +94,8 @@ func TTPEE(msg interface{}) TestExpected {
 }
 
 func ToTestExpected(checkError bool, err error, withPanic bool, panicMsg interface{},
-	expedites ...interface{}) TestExpected {
+	expedites ...interface{},
+) TestExpected {
 	if withPanic {
 		return ToTestPanicErrorExpected(panicMsg)
 	}
@@ -111,6 +112,7 @@ func ToTestExpected(checkError bool, err error, withPanic bool, panicMsg interfa
 }
 
 func TTE(checkError bool, err error, withPanic bool, panicMsg string,
-	expedites ...interface{}) TestExpected {
+	expedites ...interface{},
+) TestExpected {
 	return ToTestExpected(checkError, err, withPanic, panicMsg, expedites...)
 }

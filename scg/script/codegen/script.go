@@ -96,7 +96,7 @@ func scriptScenes(rootPkg, rootDir, scriptName string, sceneInfo sceneWithName) 
 		codegen.SCGImport(path.Join("director")),
 		codegen.SCGImport(path.Join("director", "scriptdirector", "scene")),
 		codegen.SCGImport(path.Join("scg", "go", "types")),
-		codegen.SCGNamedImport(path.Join("pkg", "logger", "http"), "loghttp"),
+		codegen.SCGImport(path.Join("pkg", "logger", "context")),
 		codegen.SCGNamedImport(path.Join("director", "scriptdirector", "matchers"), "base_matchers"),
 		{Path: path.Join(rootPkg, "internal", "script", "matchers")},
 		{Path: path.Join(rootPkg, "internal", "script", "errors")},
@@ -189,7 +189,7 @@ const ( {{ range $name, $button := .Buttons }}
 )
 {{end}}// {{ ToTitle .Name }} scene
 type {{ ToTitle .Name }} struct {
-	loghttp.LogObject
+	context.LogObject
 	TextManager    manager.TextManager
 	NextScene 	   SceneName
 }

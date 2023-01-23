@@ -181,7 +181,7 @@ Some modification and addition of new functionality.
 * Setup `FinishScene` command for scene with `isEnd` field in true
 * Add logging error in scene functions
 
-#### Другое
+#### Other
 
 * `CHANGELOG` on russian
 

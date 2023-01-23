@@ -58,7 +58,7 @@ func generateRoute(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File 
 		codegen.SCGImport(path.Join("marusia", "webhook")),
 		codegen.SCGImport(path.Join("director", "scriptdirector")),
 		codegen.SCGImport(path.Join("pkg", "logger")),
-		codegen.SCGNamedImport(path.Join("pkg", "logger", "http"), "loghttp"),
+		codegen.SCGImport(path.Join("pkg", "logger", "context")),
 	}
 
 	sections = []*codegen.SectionTemplate{
@@ -108,7 +108,7 @@ func New{{ ToTitle .Name }}Router(
 `
 
 const routeStructT = `type {{ ToTitle .Name }}Route struct {
-    loghttp.LogObject
+    context.LogObject
     sdc     scriptdirector.SceneDirectorConfig
     sRunner runner.ScriptRunner
     wh      *marusia.Webhook
@@ -117,7 +117,7 @@ const routeStructT = `type {{ ToTitle .Name }}Route struct {
 func new{{ ToTitle .Name }}Route(handler *gin.RouterGroup, sdc scriptdirector.SceneDirectorConfig,
     sRunner runner.ScriptRunner, l logger.Interface) {
     r := &{{ ToTitle .Name }}Route{
-        LogObject: loghttp.NewLogObject(l),
+        LogObject: context.NewLogObject(l),
         sdc:       sdc,
         sRunner:   sRunner,
         wh: webhook.NewDefaultMarusiaWebhook(l, sRunner, sdc),

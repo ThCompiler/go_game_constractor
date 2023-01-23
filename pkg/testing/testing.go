@@ -81,6 +81,7 @@ func checkPanicErrorCorrect(t *testing.T, msg any, expected TestExpected, caseNa
 
 	if expected.HavePanicError() {
 		assert.EqualValuesf(t, msg, expected.MustPanicErrorExpected().Msg, "Testcase with name: %s", caseName)
+
 		return
 	}
 
@@ -89,7 +90,6 @@ func checkPanicErrorCorrect(t *testing.T, msg any, expected TestExpected, caseNa
 	}
 
 	assert.Failf(t, "Panic error testcase: ", "%s %v", caseName, msg)
-
 }
 
 func runTestCase(t *testing.T, test TestCase, fun TestFunction, ctrl *gomock.Controller) {

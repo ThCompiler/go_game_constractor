@@ -15,7 +15,7 @@ import (
 
 	"github.com/ThCompiler/go_game_constractor/pkg/language"
 	"github.com/ThCompiler/go_game_constractor/pkg/logger"
-	loghttp "github.com/ThCompiler/go_game_constractor/pkg/logger/http"
+	context2 "github.com/ThCompiler/go_game_constractor/pkg/logger/context"
 )
 
 // Version версия протокола.
@@ -348,14 +348,14 @@ type eventFunc func(r Request) (Response, error)
 
 // Webhook структура.
 type Webhook struct {
-	loghttp.LogObject
+	context2.LogObject
 	event eventFunc
 }
 
 // NewWebhook возвращает новый Webhook.
 func NewWebhook(l logger.Interface) *Webhook {
 	return &Webhook{
-		LogObject: loghttp.NewLogObject(l),
+		LogObject: context2.NewLogObject(l),
 	}
 }
 

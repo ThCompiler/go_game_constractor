@@ -28,28 +28,7 @@ func generateMatchers(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.Fi
 		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Custom user matchers", "matchers", imports, false),
 	}
 
-	regexMatchers := make([]scene.RegexMatcher, 0)
-	selectsMatchers := make([]scene.SelectMatcher, 0)
-
-	for name, matcher := range scriptInfo.UserMatchers {
-		if matcher.IsRegexMatcher() {
-			mc := matcher.MustRegexMatcher()
-			if mc.Name == "" {
-				mc.Name = name
-			}
-
-			regexMatchers = append(regexMatchers, mc)
-		}
-
-		if matcher.IsSelectMatcher() {
-			mc := matcher.MustSelectsMatcher()
-			if mc.Name == "" {
-				mc.Name = name
-			}
-
-			selectsMatchers = append(selectsMatchers, mc)
-		}
-	}
+	regexMatchers, selectsMatchers := prepareMatchers(scriptInfo)
 
 	sections = append(sections, &codegen.SectionTemplate{
 		Name:   "regex-consts-matchers",
@@ -88,6 +67,35 @@ func generateMatchers(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.Fi
 	})
 
 	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
+}
+
+func prepareMatchers(scriptInfo expr.ScriptInfo) (regexMatchers []scene.RegexMatcher,
+	selectsMatchers []scene.SelectMatcher,
+) {
+	regexMatchers = make([]scene.RegexMatcher, 0)
+	selectsMatchers = make([]scene.SelectMatcher, 0)
+
+	for name, matcher := range scriptInfo.UserMatchers {
+		if matcher.IsRegexMatcher() {
+			mc := matcher.MustRegexMatcher()
+			if mc.Name == "" {
+				mc.Name = name
+			}
+
+			regexMatchers = append(regexMatchers, mc)
+		}
+
+		if matcher.IsSelectMatcher() {
+			mc := matcher.MustSelectsMatcher()
+			if mc.Name == "" {
+				mc.Name = name
+			}
+
+			selectsMatchers = append(selectsMatchers, mc)
+		}
+	}
+
+	return regexMatchers, selectsMatchers
 }
 
 const regexConstStructT = `

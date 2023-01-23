@@ -20,12 +20,8 @@ type Scene struct {
 }
 
 func (s *Scene) IsValid(userMatchers map[string]ScriptMatcher) (bool, error) {
-	if s.IsInfoScene && len(s.NextScenes) != 0 && s.NextScene == "" {
-		return false, ErrorEmptyNextSceneWithInfoScene
-	}
-
-	if !s.IsInfoScene && len(s.NextScenes) == 0 && s.NextScene != "" {
-		return false, ErrorEmptyNextScenesWithNoInfoScene
+	if is, err := s.checkEmptyField(); !is {
+		return is, err
 	}
 
 	if is, err := s.isMatchersValid(userMatchers); !is {
@@ -45,6 +41,18 @@ func (s *Scene) IsValid(userMatchers map[string]ScriptMatcher) (bool, error) {
 	}
 
 	return s.Text.IsValid()
+}
+
+func (s *Scene) checkEmptyField() (bool, error) {
+	if s.IsInfoScene && len(s.NextScenes) != 0 && s.NextScene == "" {
+		return false, ErrorEmptyNextSceneWithInfoScene
+	}
+
+	if !s.IsInfoScene && len(s.NextScenes) == 0 && s.NextScene != "" {
+		return false, ErrorEmptyNextScenesWithNoInfoScene
+	}
+
+	return true, nil
 }
 
 func (s *Scene) isMatchersValid(userMatchers map[string]ScriptMatcher) (bool, error) {

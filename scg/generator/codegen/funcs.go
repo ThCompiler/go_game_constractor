@@ -124,81 +124,98 @@ func CamelCase(name string, firstUpper, acronym bool) string {
 		return ""
 	}
 
-	w, i := 0, 0 // index of start of word, scan
+	wordStart, i := 0, 0 // index of start of word, scan
 	for i+1 <= len(runes) {
-		eow := false // whether we hit the end of a word
-
+		var correct bool
 		// remove leading invalid identifiers
 		runes = removeInvalidAtIndex(i, runes)
 
-		switch {
-		case i+1 == len(runes):
-			eow = true
-
-		case !validIdentifier(runes[i]):
-			runes = append(runes[:i], runes[i+1:]...)
-
-		case runes[i+1] == '_':
-			// underscore; shift the remainder forward over any run of underscores
-			eow = true
-			n := 1
-
-			for i+n+1 < len(runes) && runes[i+n+1] == '_' {
-				n++
-			}
-
-			copy(runes[i+1:], runes[i+n+1:])
-			runes = runes[:len(runes)-n]
-
-		case isLower(runes[i]) && !isLower(runes[i+1]):
-			eow = true
-		}
+		runes, correct = checkAndCorrectRune(i, runes)
 
 		i++
 
-		if !eow {
+		if correct {
 			continue
 		}
 
-		// [w,i] is a word.
-		word := string(runes[w:i])
-		// is it one of our initialisms?
-
-		u := strings.ToUpper(word)
-
-		switch {
-		case commonInitialisms[u]:
-			{
-				switch {
-				case firstUpper && acronym:
-					// u is already in upper case. Nothing to do here.
-				case firstUpper && !acronym:
-					u = strings.ToLower(u)
-				case w > 0 && !acronym:
-					u = strings.ToLower(u)
-				case w == 0:
-					u = strings.ToLower(u)
-				}
-
-				// All the common initialisms are ASCII,
-				// so we can replace the bytes exactly.
-				copy(runes[w:], []rune(u))
-			}
-		case w > 0 && strings.ToLower(word) == word:
-			// already all lowercase, and not the first word, so uppercase the first character.
-			runes[w] = unicode.ToUpper(runes[w])
-		case w == 0 && strings.ToLower(word) == word && firstUpper:
-			runes[w] = unicode.ToUpper(runes[w])
-		}
-
-		if w == 0 && !firstUpper {
-			runes[w] = unicode.ToLower(runes[w])
-		}
-		// advance to next word
-		w = i
+		runes = updateWordInRuneWithCamelCase(wordStart, i, runes, firstUpper, acronym)
+		wordStart = i
 	}
 
 	return string(runes)
+}
+
+func checkAndCorrectRune(i int, runes []rune) ([]rune, bool) {
+	correct := true
+
+	switch {
+	case i+1 == len(runes):
+		correct = false
+
+	case !validIdentifier(runes[i]):
+		runes = append(runes[:i], runes[i+1:]...)
+
+	case runes[i+1] == '_':
+		// underscore; shift the remainder forward over any run of underscores
+		correct = false
+		j := 1
+
+		for i+j+1 < len(runes) && runes[i+j+1] == '_' {
+			j++
+		}
+
+		copy(runes[i+1:], runes[i+j+1:])
+		runes = runes[:len(runes)-j]
+
+	case isLower(runes[i]) && !isLower(runes[i+1]):
+		correct = false
+	}
+
+	return runes, correct
+}
+
+func updateWordInRuneWithCamelCase(wordStart, i int, runes []rune, firstUpper, acronym bool) []rune {
+	word := string(runes[wordStart:i])
+	// is it one of our initialisms?
+
+	acronyms := strings.ToUpper(word)
+
+	switch {
+	case commonInitialisms[acronyms]:
+		{
+			acronyms = prepareAcronyms(acronyms, wordStart, firstUpper, acronym)
+
+			// All the common initialisms are ASCII,
+			// so we can replace the bytes exactly.
+			copy(runes[wordStart:], []rune(acronyms))
+		}
+	case wordStart > 0 && strings.ToLower(word) == word:
+		// already all lowercase, and not the first word, so uppercase the first character.
+		runes[wordStart] = unicode.ToUpper(runes[wordStart])
+	case wordStart == 0 && strings.ToLower(word) == word && firstUpper:
+		runes[wordStart] = unicode.ToUpper(runes[wordStart])
+	}
+
+	if wordStart == 0 && !firstUpper {
+		runes[wordStart] = unicode.ToLower(runes[wordStart])
+	}
+
+	return runes
+}
+
+func prepareAcronyms(acronyms string, wordStart int, firstUpper, acronym bool) string {
+	switch {
+	case firstUpper && acronym:
+		// u is already in upper case. Nothing to do here.
+	case firstUpper && !acronym:
+		acronyms = strings.ToLower(acronyms)
+	case wordStart > 0 && !acronym:
+		acronyms = strings.ToLower(acronyms)
+	case wordStart == 0:
+		acronyms = strings.ToLower(acronyms)
+	}
+
+	return acronyms
 }
 
 // SnakeCase produces the snake_case version of the given CamelCase string.

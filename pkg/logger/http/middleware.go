@@ -1,13 +1,13 @@
 package http
 
 import (
-	"context"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
 	"github.com/ThCompiler/go_game_constractor/pkg/logger"
+	context2 "github.com/ThCompiler/go_game_constractor/pkg/logger/context"
 )
 
 func GinRequestLogger(l logger.Interface) gin.HandlerFunc {
@@ -25,7 +25,7 @@ func GinRequestLogger(l logger.Interface) gin.HandlerFunc {
 		}
 
 		lg := l.With(URL, path).With(RequestID, requestID).With(Method, method)
-		c.Set(ContextLoggerField, lg)
+		c.Set(context2.LoggerField, lg)
 
 		// Process request
 		c.Next()
@@ -53,13 +53,4 @@ func GinRequestLogger(l logger.Interface) gin.HandlerFunc {
 			errorMessage,
 		)
 	}
-}
-
-func GetLogger(ctx context.Context) logger.Interface {
-	ctxLogger := ctx.Value(ContextLoggerField)
-	if ctxLog, ok := ctxLogger.(logger.Interface); ok {
-		return ctxLog
-	}
-
-	return nil
 }
