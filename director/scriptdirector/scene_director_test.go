@@ -1,26 +1,22 @@
-package stringutilits
+package scriptdirector
 
 import (
-	"testing"
-
-	"github.com/stretchr/testify/suite"
-
 	ts "github.com/ThCompiler/go_game_constractor/pkg/testing"
 )
 
-type ClearStringFromPunctuationSuite struct {
+type SceneDirectorSuite struct {
 	ts.TestCasesSuite
 	RunFunc func(args ...interface{}) []interface{}
 }
 
-func (s *ClearStringFromPunctuationSuite) SetupTest() {
+/*func (s *SceneDirectorSuite) SetupTest() {
 	s.RunFunc = func(args ...interface{}) []interface{} {
 		res := ClearStringFromPunctuation(args[0].(string))
 		return []interface{}{res}
 	}
 }
 
-func (s *ClearStringFromPunctuationSuite) TestStrWithPunctuation() {
+func (s *SceneDirectorSuite) TestStrWithPunctuation() {
 	s.RunTest(
 		s.RunFunc,
 		ts.TestCase{
@@ -80,4 +76,4 @@ func (s *ClearStringFromPunctuationSuite) TestStrWithoutPunctuation() {
 
 func TestClearStringFromPunctuationSuite(t *testing.T) {
 	suite.Run(t, new(ClearStringFromPunctuationSuite))
-}
+}*/

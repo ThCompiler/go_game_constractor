@@ -179,14 +179,23 @@ Some modification and addition of new functionality.
 * `isEnd` field to `scene` struct
 * Auto setup of `isEnd` field for goodbye scene in true
 * Setup `FinishScene` command for scene with `isEnd` field in true
+* Add logging error in scene functions
+
+#### Другое
+
+* `CHANGELOG` on russian
 
 ### Changes
 
+#### Library
+
+* Change type of channel to pointer in `pkg/marusia/runner/hub/hub.go`
+
 #### Generator
 
-* Add logging error in scene functions
 * Переименнованно поле `string` в описании текста сцены на `text` в yaml формате
 * Переименнованно поле `url` в описании кнопки сцены на `URL` в json формате
 * Исправлено название поля `nextScenes` для json формата
 * Исправлено название поля `replace_message` для json формата
+
 

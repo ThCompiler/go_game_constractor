@@ -15,7 +15,7 @@ require (
 	github.com/stretchr/testify v1.8.0
 	go.uber.org/zap v1.23.0
 	golang.org/x/exp v0.0.0-20221114191408-850992195362
-	golang.org/x/tools v0.2.0
+	golang.org/x/tools v0.5.0
 	gopkg.in/yaml.v3 v3.0.1
 	olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3
 )
@@ -29,6 +29,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/goccy/go-json v0.9.7 // indirect
+	github.com/golang/mock v1.6.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
@@ -40,10 +41,10 @@ require (
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
 	golang.org/x/crypto v0.1.0 // indirect
-	golang.org/x/mod v0.6.0 // indirect
-	golang.org/x/net v0.1.0 // indirect
-	golang.org/x/sys v0.1.0 // indirect
-	golang.org/x/text v0.4.0 // indirect
+	golang.org/x/mod v0.7.0 // indirect
+	golang.org/x/net v0.5.0 // indirect
+	golang.org/x/sys v0.4.0 // indirect
+	golang.org/x/text v0.6.0 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

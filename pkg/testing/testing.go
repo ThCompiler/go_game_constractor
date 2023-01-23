@@ -3,24 +3,21 @@ package testing
 import (
 	"testing"
 
+	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 )
 
-type TestExpected struct {
-	CheckError      bool // mean only check error without compare
-	HaveError       bool // in returning values end of values is error
-	ExpectedErr     error
-	ExpectedReturns []interface{}
-}
+type MockTestFunction func(ctrl *gomock.Controller) []interface{}
 
 type TestFunction func(args ...interface{}) []interface{}
 
 type TestCase struct {
-	Name     string
-	Args     []interface{}
-	Expected TestExpected
+	Name      string
+	Args      []interface{}
+	Expected  TestExpected
+	InitMocks MockTestFunction
 }
 
 type TestCasesSuite struct {
@@ -28,18 +25,13 @@ type TestCasesSuite struct {
 }
 
 func (s *TestCasesSuite) RunTest(fun TestFunction, cases ...TestCase) {
-	for _, cs := range cases {
-		cs := cs
-		s.T().Run(cs.Name, func(t *testing.T) {
-			runTestCase(t, cs, fun)
-		})
-	}
+	RunTest(s.T(), fun, cases...)
 }
 
 func checkExpected(t *testing.T, res []interface{}, expected TestExpected, caseName string) {
 	t.Helper()
 
-	if expected.HaveError {
+	if expected.HaveError() {
 		checkWithError(t, &res, expected, caseName)
 	} else {
 		require.Equalf(t, len(res), len(expected.ExpectedReturns),
@@ -63,7 +55,7 @@ func checkWithError(t *testing.T, res *[]interface{}, expected TestExpected, cas
 			"Testcase with name: %s", caseName)
 	}
 
-	if expected.CheckError {
+	if expected.MustErrorExpected().CheckError {
 		assert.Error(t, gottenError, "Testcase with name: %s", caseName)
 	} else {
 		checkErrorCorrect(t, gottenError, expected, caseName)
@@ -75,31 +67,46 @@ func checkWithError(t *testing.T, res *[]interface{}, expected TestExpected, cas
 func checkErrorCorrect(t *testing.T, gottenError error, expected TestExpected, caseName string) {
 	t.Helper()
 
-	if expected.ExpectedErr == nil {
+	if expected.MustErrorExpected().Error == nil {
 		assert.NoError(t, gottenError,
 			"Testcase with name: %s", caseName)
 	} else {
-		assert.EqualError(t, gottenError, expected.ExpectedErr.Error(),
+		assert.EqualError(t, gottenError, expected.MustErrorExpected().Error.Error(),
 			"Testcase with name: %s", caseName)
 	}
 }
 
-func runTestCase(t *testing.T, test TestCase, fun TestFunction) {
+func checkPanicErrorCorrect(t *testing.T, msg any, expected TestExpected, caseName string) {
 	t.Helper()
 
-	defer func(t *testing.T) {
+	if expected.HavePanicError() {
+		assert.EqualValuesf(t, msg, expected.MustPanicErrorExpected().Msg, "Testcase with name: %s", caseName)
+		return
+	}
+
+	if err, is := msg.(error); is {
+		assert.Failf(t, "Panic error testcase: ", "%s %s", caseName, err)
+	}
+
+	assert.Failf(t, "Panic error testcase: ", "%s %v", caseName, msg)
+
+}
+
+func runTestCase(t *testing.T, test TestCase, fun TestFunction, ctrl *gomock.Controller) {
+	t.Helper()
+
+	defer func(t *testing.T, test TestCase) {
 		t.Helper()
 
 		if r := recover(); r != nil {
-			if err, is := r.(error); is {
-				assert.Failf(t, "Error testcase: ", "%s %s", test.Name, err)
-			}
-
-			assert.Failf(t, "Error testcase: ", "%s %v", test.Name, r)
+			checkPanicErrorCorrect(t, r, test.Expected, test.Name)
 		}
-	}(t)
+	}(t, test)
 
-	res := fun(test.Args...)
+	mocks := test.InitMocks(ctrl)
+
+	args := append(mocks, test.Args...)
+	res := fun(args...)
 
 	checkExpected(t, res, test.Expected, test.Name)
 }
@@ -107,10 +114,13 @@ func runTestCase(t *testing.T, test TestCase, fun TestFunction) {
 func RunTest(t *testing.T, fun TestFunction, cases ...TestCase) {
 	t.Helper()
 
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
 	for _, cs := range cases {
 		cs := cs
 		t.Run(cs.Name, func(t *testing.T) {
-			runTestCase(t, cs, fun)
+			runTestCase(t, cs, fun, ctrl)
 		})
 	}
 }
@@ -119,34 +129,6 @@ func ToTestArgs(args ...interface{}) []interface{} {
 	return args
 }
 
-func ToTestValuesExpected(expedites ...interface{}) TestExpected {
-	return TestExpected{
-		ExpectedReturns: expedites,
-	}
-}
-
-func ToTestErrorExpected(err error) TestExpected {
-	return TestExpected{
-		ExpectedErr: err,
-		HaveError:   true,
-	}
-}
-
-func ToTestCheckErrorExpected() TestExpected {
-	return TestExpected{
-		HaveError:  true,
-		CheckError: true,
-	}
-}
-
-func ToTestExpected(checkError bool, err error, expedites ...interface{}) TestExpected {
-	if !checkError && err != nil {
-		return ToTestValuesExpected(expedites...)
-	}
-
-	if checkError {
-		return ToTestCheckErrorExpected()
-	}
-
-	return ToTestErrorExpected(err)
+func TTA(args ...interface{}) []interface{} {
+	return ToTestArgs(args...)
 }
