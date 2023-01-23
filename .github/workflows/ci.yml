@@ -61,7 +61,7 @@ jobs:
       - name: Run go vet
         run: go vet ./...
   test:
-    needs: [vet, lint]
+    needs: [vet, lint, golangci-lint]
     runs-on: ubuntu-latest
     steps:
       - name: checkout

@@ -566,7 +566,7 @@ type parseFuncType func(valueType reflect.Type, value, sep string, layout *strin
 func parseFromBaseTypes(field *reflect.Value, value, sep string, layout *string) error {
 	valueType := field.Type()
 
-	var parsersMap = map[reflect.Kind]parseFuncType{
+	parsersMap := map[reflect.Kind]parseFuncType{
 		reflect.Bool:    parseValueToBool,
 		reflect.Int:     parseValueToInt81632,
 		reflect.Int8:    parseValueToInt81632,
@@ -586,9 +586,9 @@ func parseFromBaseTypes(field *reflect.Value, value, sep string, layout *string)
 
 	if fun, ok := parsersMap[valueType.Kind()]; ok {
 		return fun(valueType, value, sep, layout, field)
-	} else {
-		return parseFromOtherSupportedTypes(valueType, value, layout, field)
 	}
+
+	return parseFromOtherSupportedTypes(valueType, value, layout, field)
 }
 
 func parseFromInterface(field *reflect.Value, value string) (bool, error) {
