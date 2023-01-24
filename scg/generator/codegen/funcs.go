@@ -254,7 +254,7 @@ func SnakeCase(name string) string {
 		isLower = unicode.IsLower(r) && unicode.IsLetter(r) || unicode.IsDigit(r)
 		isUnder = r == '_'
 
-		addUnderliningToStr(isLower, lastLower, isUnder, lastUnder, &b, rune(name[i+1]), ln <= i+1)
+		addUnderliningToStr(isLower, lastLower, isUnder, lastUnder, &b, name, i, ln <= i+1)
 
 		b.WriteRune(unicode.ToLower(r))
 
@@ -265,7 +265,8 @@ func SnakeCase(name string) string {
 	return b.String()
 }
 
-func addUnderliningToStr(isLower, lastLower, isUnder, lastUnder bool, b *bytes.Buffer, r rune, isLast bool) {
+func addUnderliningToStr(isLower, lastLower, isUnder, lastUnder bool, b *bytes.Buffer, name string, i int,
+	isLast bool) {
 	if isLower || isUnder {
 		return
 	}
@@ -273,7 +274,7 @@ func addUnderliningToStr(isLower, lastLower, isUnder, lastUnder bool, b *bytes.B
 	if lastLower && !lastUnder {
 		b.WriteRune('_')
 	} else if !isLast {
-		rn := r
+		rn := rune(name[i+1])
 		if unicode.IsLower(rn) && rn != '_' && !lastUnder {
 			b.WriteRune('_')
 		}

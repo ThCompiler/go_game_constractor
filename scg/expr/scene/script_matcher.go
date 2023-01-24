@@ -3,8 +3,6 @@ package scene
 import (
 	"encoding/xml"
 
-	"gopkg.in/yaml.v3"
-
 	"github.com/ThCompiler/go_game_constractor/scg/expr/parser"
 )
 
@@ -83,8 +81,8 @@ func (m *ScriptMatcher) IsSelectMatcher() bool {
 	return m.typeMatch == selects
 }
 
-func (m *ScriptMatcher) UnmarshalYAML(n *yaml.Node) (err error) {
-	return m.unmarshal(&parser.UnmarshalerYAML{N: n})
+func (m *ScriptMatcher) UnmarshalYAML(un func(interface{}) error) (err error) {
+	return m.unmarshal(&parser.UnmarshalerYAML{UN: un})
 }
 
 func (m *ScriptMatcher) UnmarshalJSON(bs []byte) error {

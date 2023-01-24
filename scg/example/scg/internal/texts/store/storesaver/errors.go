@@ -10,4 +10,6 @@ package storesaver
 
 import "github.com/pkg/errors"
 
-var ScriptAlreadySaveError = errors.New("this script has already saved")
+var (
+	ScriptAlreadySaveError = errors.New("this script has already saved")
+)

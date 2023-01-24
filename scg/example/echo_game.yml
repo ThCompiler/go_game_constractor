@@ -1,17 +1,18 @@
 name: 'echo_game'
 startScene: "hello"
-goodByeCommand: "GoodeBye"
+goodByeCommand: "GoodBye"
 goodByeScene: "goodbye"
 script:
   goodbye:
     text:
-      string: "GoodyBye"
-      tts: "GoodyBye"
+      text: "GoodBye"
+      tts: "GoodBye"
     nextScenes:
       - 'goodbye'
+    isEnd: true
   hello:
     text:
-      string: "Hello boy. Is number {number}"
+      text: "Hello boy. Is number {number}"
       tts: "Hello boy. Is number {number}"
       values:
         number: 'int64'
@@ -21,7 +22,7 @@ script:
       scene: "goodbye"
   echo:
     text:
-      string: "I will Repeat you word"
+      text: "I will Repeat you word"
       tts: "I will Repeat you word"
     nextScenes:
       - 'echoRepeat'
@@ -30,12 +31,13 @@ script:
         name: 'sayed'
         type: 'string'
     matchers:
-      - 'any'
+      - name: 'any'
+        toScene: 'echoRepeat'
     error:
       base: "number"
   echoRepeat:
     text:
-      string: "You say {userText}"
+      text: "You say {userText}"
       tts: "You say {userText}"
       values:
         userText:
@@ -48,6 +50,7 @@ script:
         name: 'sayed'
         type: 'string'
     matchers:
-      - 'any'
+      - name: 'any'
+        toScene: 'echoRepeat'
     error:
       base: "number"

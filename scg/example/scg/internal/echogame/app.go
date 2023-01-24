@@ -16,9 +16,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/gin-gonic/gin"
-	redis "github.com/go-redis/redis/v8"
-
 	"github.com/ThCompiler/go_game_constractor/marusia/runner/hub"
 	"github.com/ThCompiler/go_game_constractor/pkg/logger/zap"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/config"
@@ -29,6 +26,8 @@ import (
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/texts/store/storesaver"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/pkg/httpserver"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/pkg/logger/prepare"
+	"github.com/gin-gonic/gin"
+	redis "github.com/go-redis/redis/v8"
 )
 
 // Run creates objects via constructors.

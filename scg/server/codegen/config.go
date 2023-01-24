@@ -21,8 +21,8 @@ func generateConfigGO(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) *code
 
 	fpath := filepath.Join(rootDir, "config", "config.go")
 	imports := []*codegen.ImportSpec{
-		{Path: path.Join(rootPkg, "pkg", "logger", "prepare")},
 		{Path: path.Join("fmt")},
+		{Path: path.Join(rootPkg, "pkg", "logger", "prepare")},
 		{Path: path.Join("github.com", "ilyakaznacheev", "cleanenv")},
 	}
 

@@ -3,8 +3,6 @@ package scene
 import (
 	"encoding/xml"
 
-	"gopkg.in/yaml.v3"
-
 	"github.com/ThCompiler/go_game_constractor/scg/expr/parser"
 )
 
@@ -18,8 +16,8 @@ type _value struct {
 	FromContext string `yaml:"fromContext" json:"from_context" xml:"fromContext"`
 }
 
-func (v *Value) UnmarshalYAML(n *yaml.Node) (err error) {
-	return v.unmarshal(&parser.UnmarshalerYAML{N: n})
+func (v *Value) UnmarshalYAML(un func(interface{}) error) (err error) {
+	return v.unmarshal(&parser.UnmarshalerYAML{UN: un})
 }
 
 func (v *Value) UnmarshalJSON(bs []byte) error {

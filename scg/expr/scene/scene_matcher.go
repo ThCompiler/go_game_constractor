@@ -3,8 +3,6 @@ package scene
 import (
 	"encoding/xml"
 
-	"gopkg.in/yaml.v3"
-
 	"github.com/ThCompiler/go_game_constractor/scg/expr/parser"
 )
 
@@ -20,8 +18,8 @@ type _matcher struct {
 	ToScene string `yaml:"toScene,omitempty" json:"to_scene,omitempty" xml:"toScene,omitempty"`
 }
 
-func (m *Matcher) UnmarshalYAML(n *yaml.Node) (err error) {
-	return m.unmarshal(&parser.UnmarshalerYAML{N: n})
+func (m *Matcher) UnmarshalYAML(un func(interface{}) error) (err error) {
+	return m.unmarshal(&parser.UnmarshalerYAML{UN: un})
 }
 
 func (m *Matcher) UnmarshalJSON(bs []byte) error {

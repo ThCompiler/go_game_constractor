@@ -103,9 +103,12 @@ func runTestCase(t *testing.T, test TestCase, fun TestFunction, ctrl *gomock.Con
 		}
 	}(t, test)
 
-	mocks := test.InitMocks(ctrl)
+	args := test.Args
+	if test.InitMocks != nil {
+		mocks := test.InitMocks(ctrl)
 
-	args := append(mocks, test.Args...)
+		args = append(mocks, args...)
+	}
 	res := fun(args...)
 
 	checkExpected(t, res, test.Expected, test.Name)

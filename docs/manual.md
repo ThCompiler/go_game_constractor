@@ -36,24 +36,29 @@ touch skill.yml
 ```yaml
 name: 'echo_game'
 startScene: "hello"
-goodByeCommand: "Goodbye"
+goodByeCommand: "GoodBye"
 goodByeScene: "goodbye"
 script:
   goodbye:
     text:
-      string: "GoodyBye"
-      tts: "GoodyBye"
+      text: "GoodBye"
+      tts: "GoodBye"
     nextScenes:
       - 'goodbye'
+    isEnd: true
   hello:
     text:
-      string: "Hello boy"
-      tts: "Hello boy"
+      text: "Hello boy."
+      tts: "Hello boy."
+      values:
+        number: 'int64'
     nextScene: 'echo'
     isInfoScene: true
+    error:
+      scene: "goodbye"
   echo:
     text:
-      string: "I will Repeat you word"
+      text: "I will Repeat you word"
       tts: "I will Repeat you word"
     nextScenes:
       - 'echoRepeat'
@@ -64,12 +69,14 @@ script:
     matchers:
       - name: 'any'
         toScene: 'echoRepeat'
+    error:
+      base: "number"
   echoRepeat:
     text:
-      string: "You say {userText}"
+      text: "You say {userText}"
       tts: "You say {userText}"
       values:
-        userText: 
+        userText:
           type: 'string'
           fromContext: 'sayed'
     nextScenes:
@@ -81,6 +88,8 @@ script:
     matchers:
       - name: 'any'
         toScene: 'echoRepeat'
+    error:
+      base: "number"
 ```
 
 ??? info "Дополнительно"

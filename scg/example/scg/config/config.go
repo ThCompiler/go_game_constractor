@@ -11,9 +11,8 @@ package config
 import (
 	"fmt"
 
-	"github.com/ilyakaznacheev/cleanenv"
-
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/pkg/logger/prepare"
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type (

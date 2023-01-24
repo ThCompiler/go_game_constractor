@@ -9,14 +9,13 @@
 package v1
 
 import (
-	"github.com/gin-gonic/gin"
-
 	"github.com/ThCompiler/go_game_constractor/director/scriptdirector"
 	"github.com/ThCompiler/go_game_constractor/marusia"
 	"github.com/ThCompiler/go_game_constractor/marusia/runner"
 	"github.com/ThCompiler/go_game_constractor/marusia/webhook"
 	"github.com/ThCompiler/go_game_constractor/pkg/logger"
 	"github.com/ThCompiler/go_game_constractor/pkg/logger/context"
+	"github.com/gin-gonic/gin"
 )
 
 type EchoGameRoute struct {
@@ -27,8 +26,7 @@ type EchoGameRoute struct {
 }
 
 func newEchoGameRoute(handler *gin.RouterGroup, sdc scriptdirector.SceneDirectorConfig,
-	sRunner runner.ScriptRunner, l logger.Interface,
-) {
+	sRunner runner.ScriptRunner, l logger.Interface) {
 	r := &EchoGameRoute{
 		LogObject: context.NewLogObject(l),
 		sdc:       sdc,

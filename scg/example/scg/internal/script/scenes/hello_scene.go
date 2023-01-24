@@ -11,19 +11,20 @@ package scenes
 import (
 	"github.com/ThCompiler/go_game_constractor/director"
 	"github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
-	loghttp "github.com/ThCompiler/go_game_constractor/pkg/logger/context"
+	"github.com/ThCompiler/go_game_constractor/pkg/logger/context"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/texts/manager"
 )
 
 // Hello scene
 type Hello struct {
-	loghttp.LogObject
+	context.LogObject
 	TextManager manager.TextManager
 	NextScene   SceneName
 }
 
 // React function of actions after scene has been played
 func (sc *Hello) React(_ *scene.Context) scene.Command {
+
 	return scene.NoCommand
 }
 
@@ -35,14 +36,22 @@ func (sc *Hello) Next() scene.Scene {
 }
 
 // GetSceneInfo function returning info about scene
-func (sc *Hello) GetSceneInfo(_ *scene.Context) (scene.Info, bool) {
-	var number int64
+func (sc *Hello) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
+	var (
+		number int64
+	)
 
 	// TODO Write some actions for get data for texts
 
-	text, _ := sc.TextManager.GetHelloText(
+	text, err := sc.TextManager.GetHelloText(
 		number,
 	)
+	if err != nil {
+		sc.Log(ctx).Error(err, "error while getting text for Hello scene")
+
+		return scene.Info{}, false
+	}
+
 	return scene.Info{
 		Text:             text,
 		ExpectedMessages: []scene.MessageMatcher{},

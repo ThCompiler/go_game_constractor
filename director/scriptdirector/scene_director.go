@@ -55,7 +55,7 @@ func (so *ScriptDirector) PlayScene(req director.SceneRequest) director.Result {
 	case strings.EqualFold(marusia.OnStart, req.Request.Command) || req.Info.IsNewSession:
 		so.currentScene = so.cf.StartScene
 
-	case strings.EqualFold(marusia.OnInterrupt, req.Request.Command),
+	case strings.EqualFold(marusia.OnInterrupt, req.Request.Command) ||
 		strings.EqualFold(stringutilits.ClearStringFromPunctuation(so.cf.EndCommand), req.Request.Command):
 		so.stashedScene.Push(so.currentScene)
 		sceneCmd := so.cf.GoodbyeScene.React(ctx)

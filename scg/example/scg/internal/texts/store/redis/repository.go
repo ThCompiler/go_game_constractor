@@ -27,8 +27,9 @@ func NewScriptRepository(RedisClient *redis.Client) *ScriptRepository {
 	}
 }
 
-func (repo *ScriptRepository) SetText(name, value string) error {
+func (repo *ScriptRepository) SetText(name string, value string) error {
 	err := repo.rdc.Set(repo.ctx, name, value, 0).Err()
+
 	if err != nil {
 		return errors.Wrapf(err,
 			"error when try add value with key: %s, and value: %s", name, value)
@@ -49,6 +50,7 @@ func (repo *ScriptRepository) GetText(name string) (string, error) {
 
 func (repo *ScriptRepository) DeleteText(name string) error {
 	err := repo.rdc.Del(repo.ctx, name).Err()
+
 	if err != nil {
 		return errors.Wrapf(err,
 			"error when try delete value with key: %s", name)

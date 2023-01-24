@@ -193,9 +193,14 @@ Some modification and addition of new functionality.
 
 #### Generator
 
-* Переименнованно поле `string` в описании текста сцены на `text` в yaml формате
-* Переименнованно поле `url` в описании кнопки сцены на `URL` в json формате
-* Исправлено название поля `nextScenes` для json формата
-* Исправлено название поля `replace_message` для json формата
+* Renamed the `string` field in the description of the scene text to `text` in yaml format
+* Renamed the `url` field in the description of the scene button to `URL` in json format
+* Fixed the name of the `nextScenes` field for json format
+* Fixed the name of the `replace_message` field for json format
+* Replaced the `yaml` parser for checking unknown fields of the `yaml` file
+* Fixed checking the command to complete the skill
+* Update example
 
+#### Documentation
 
+* Update example

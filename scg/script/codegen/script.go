@@ -246,8 +246,7 @@ func (sc *{{ ToTitle .Name }}) Next() scene.Scene { {{ if not .IsInfoScene }}
 }
 
 // GetSceneInfo function returning info about scene
-func (sc *{{ ToTitle .Name }}) GetSceneInfo({{ 
-		if HaveLoadFromContextValue .Text.Values }}ctx{{else}}_{{end}} *scene.Context) (scene.Info, bool) {
+func (sc *{{ ToTitle .Name }}) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
 	{{ if .Text.Values }}var (
 		{{ range $nameVar, $typeVar := .Text.Values }}{{ $nameVar }} {{ ToGoType $typeVar.Type }}{{
                 if $typeVar.FromContext }} = sc.Get{{ ToTitle $typeVar.FromContext }}ContextValue(ctx){{end}}
@@ -260,7 +259,7 @@ func (sc *{{ ToTitle .Name }}) GetSceneInfo({{
 		{{ range $nameVar, $typeVar := .Text.Values }}{{$nameVar}},
 		{{end}})
 	if err != nil {
-		sc.Log().Error(err, "error while getting text for {{ ToTitle .Name }} scene")
+		sc.Log(ctx).Error(err, "error while getting text for {{ ToTitle .Name }} scene")
 
 		return scene.Info{}, false
 	}

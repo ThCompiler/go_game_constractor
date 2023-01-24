@@ -3,8 +3,6 @@ package scene
 import (
 	"encoding/xml"
 
-	"gopkg.in/yaml.v3"
-
 	"github.com/ThCompiler/go_game_constractor/scg/expr/parser"
 	"github.com/ThCompiler/go_game_constractor/scg/go/types"
 )
@@ -42,8 +40,8 @@ type _loadValue struct {
 	Name string
 }
 
-func (lv *LoadValue) UnmarshalYAML(n *yaml.Node) (err error) {
-	return lv.unmarshal(&parser.UnmarshalerYAML{N: n})
+func (lv *LoadValue) UnmarshalYAML(un func(interface{}) error) (err error) {
+	return lv.unmarshal(&parser.UnmarshalerYAML{UN: un})
 }
 
 func (lv *LoadValue) UnmarshalJSON(bs []byte) error {
