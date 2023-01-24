@@ -1,0 +1,1099 @@
+
+<!doctype html>
+<html lang="ru" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../gen_info/">
+      
+      
+        <link rel="next" href="../lib_info/">
+      
+      <link rel="icon" href="../icon/logo.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
+    
+    
+      
+        <title>Поля конфигурационного файла - SCG</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Перейти к содержанию
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Верхний колонтитул">
+    <a href=".." title="SCG" class="md-header__button md-logo" aria-label="SCG" data-md-component="logo">
+      
+  <img src="../icon/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SCG
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Поля конфигурационного файла
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent=""  aria-label="Переключить на тёмную тему"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Переключить на тёмную тему" for="__palette_3" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="grey" data-md-color-accent=""  aria-label="Переключить на тему системы"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Переключить на тему системы" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent=""  aria-label="Переключить на светлую тему"  type="radio" name="__palette" id="__palette_3">
+          
+            <label class="md-header__button md-icon" title="Переключить на светлую тему" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Поиск" placeholder="Поиск" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Поиск">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Очистить" aria-label="Очистить" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Инициализация поиска
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ThCompiler/go_game_constractor" title="Перейти к репозиторию" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ThCompiler/go_game_constractor
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Навигация" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="SCG" class="md-nav__button md-logo" aria-label="SCG" data-md-component="logo">
+      
+  <img src="../icon/logo.png" alt="logo">
+
+    </a>
+    SCG
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ThCompiler/go_game_constractor" title="Перейти к репозиторию" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ThCompiler/go_game_constractor
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Главная
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../install/" class="md-nav__link">
+        Установка
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manual/" class="md-nav__link">
+        Быстрый старт
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_4" tabindex="0" aria-expanded="true">
+          Генератор
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Генератор" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Генератор
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gen_info/" class="md-nav__link">
+        Описание
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Поля файла описания
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Поля файла описания
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание раздела">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание раздела
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    Сценарий
+  </a>
+  
+    <nav class="md-nav" aria-label="Сценарий">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#name-" class="md-nav__link">
+     name - название скилла
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#startscene-" class="md-nav__link">
+     startScene - стартовая сцена
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#goodbyecommand-" class="md-nav__link">
+     goodByeCommand - команда окончания скилла
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#goodbyescene-" class="md-nav__link">
+     goodByeScene - сцена прощания
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matchers-" class="md-nav__link">
+     matchers - описание правил проверки введённых данных
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#script-" class="md-nav__link">
+     script - сцены скилла
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    Сцена
+  </a>
+  
+    <nav class="md-nav" aria-label="Сцена">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#text-" class="md-nav__link">
+     text - текст сцены
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#isinfoscene-" class="md-nav__link">
+     isInfoScene - является ли сцена информационной
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nextscenes-nextscene-" class="md-nav__link">
+     nextScenes /  nextScene - следующие сцены
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buttons-" class="md-nav__link">
+     buttons - кнопки, отображаемые в сцене
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matchers-_1" class="md-nav__link">
+     matchers - имена наборов правил проверки пользовательского ввода
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-" class="md-nav__link">
+     error - текст сообщения в случае неверного ответа пользователя
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="false">
+          Библиотека
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Библиотека" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Библиотека
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lib_info/" class="md-nav__link">
+        Описание
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lib_words/" class="md-nav__link">
+        Ключевые понятия
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lib_marusia_structs/" class="md-nav__link">
+        Структуры общения с голосовым помощником
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lib_structs/" class="md-nav__link">
+        Структуры
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lib_hints/" class="md-nav__link">
+        Дополнительно
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../links/" class="md-nav__link">
+        Ссылки
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание раздела">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание раздела
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    Сценарий
+  </a>
+  
+    <nav class="md-nav" aria-label="Сценарий">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#name-" class="md-nav__link">
+     name - название скилла
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#startscene-" class="md-nav__link">
+     startScene - стартовая сцена
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#goodbyecommand-" class="md-nav__link">
+     goodByeCommand - команда окончания скилла
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#goodbyescene-" class="md-nav__link">
+     goodByeScene - сцена прощания
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matchers-" class="md-nav__link">
+     matchers - описание правил проверки введённых данных
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#script-" class="md-nav__link">
+     script - сцены скилла
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    Сцена
+  </a>
+  
+    <nav class="md-nav" aria-label="Сцена">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#text-" class="md-nav__link">
+     text - текст сцены
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#isinfoscene-" class="md-nav__link">
+     isInfoScene - является ли сцена информационной
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nextscenes-nextscene-" class="md-nav__link">
+     nextScenes /  nextScene - следующие сцены
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buttons-" class="md-nav__link">
+     buttons - кнопки, отображаемые в сцене
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#matchers-_1" class="md-nav__link">
+     matchers - имена наборов правил проверки пользовательского ввода
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-" class="md-nav__link">
+     error - текст сообщения в случае неверного ответа пользователя
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+  <h1>Поля файла описания</h1>
+
+<h3 id="_1">Сценарий</h3>
+<p>Сценарий содержит следующие поля:</p>
+<ul>
+<li><a href="#name"><strong><em>name</em></strong></a></li>
+<li><a href="#startScene"><strong><em>startScene</em></strong></a></li>
+<li><a href="#goodByeCommand"><strong><em>goodByeCommand</em></strong></a></li>
+<li><a href="#goodByeScene"><strong><em>goodByeScene</em></strong></a></li>
+<li><a href="#matchers"><strong><em>matchers</em></strong></a></li>
+<li><a href="#script"><strong><em>script</em></strong></a></li>
+</ul>
+<h5 id="name-"><a id="name"></a> name - название скилла</h5>
+<p>Указывается название реализуемой скилл.
+<div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;echo_game&#39;</span>
+</code></pre></div></p>
+<h5 id="startscene-"><a id="startScene"></a> startScene - стартовая сцена</h5>
+<p>Указывается название стартовой сцены, которая описывается в разделе <a href="#сцены-скилла"><strong><em>script</em></strong></a> вместе с остальными сценами.
+<div class="highlight"><pre><span></span><code><span class="nt">startScene</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;hello&#39;</span>
+</code></pre></div></p>
+<h5 id="goodbyecommand-"><a id="goodByeCommand"></a> goodByeCommand - команда окончания скилла</h5>
+<p>Указывается строка, отображаемая на кнопке, при нажатии на которую голосовой ассистент воспроизведет сцену прощания и завершит скилл.
+<div class="highlight"><pre><span></span><code><span class="nt">goodByeCommand</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Закончить&quot;</span>
+</code></pre></div></p>
+<h5 id="goodbyescene-"><a id="goodByeScene"></a> goodByeScene - сцена прощания</h5>
+<p>Указывается реплика, которую воспроизведет голосовой ассистент при желании пользователя выйти из скилла.
+<div class="highlight"><pre><span></span><code><span class="nt">goodByeScene</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;goodbye&quot;</span>
+</code></pre></div></p>
+<h5 id="matchers-"><a id="matchers"></a> matchers - описание правил проверки введённых данных</h5>
+<p>Описываются пользовательские наборы правил для проверки введённых данных.
+Генератор поддерживает два типа таких наборов:</p>
+<ul>
+<li>
+<p>Сопоставление пользовательского ввода с различными вариантами:</p>
+<ul>
+<li><code>selects</code> - список вариантов, с которыми требуется сопоставить ввод пользователя.
+  Для корректной работы указывать без каких-либо знаков препинания, а также избегать слов <em>Закончить</em> или <em>Хватит</em>, так как данные слова воспринимаются голосовым ассистентом как желание завершить скилл;</li>
+<li><code>replaceMessage</code> - сообщение, которое будет использовано для идентификации набора с выполнившимися правилами, также этим сообщением будет заменён пользовательский ввод;</li>
+<li><code>BuyDrops</code> - имя набора.
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">BuyDrops</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">selects</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Хочу</span><span class="nv"> </span><span class="s">купить</span><span class="nv"> </span><span class="s">капельки&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Капельки&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Купить</span><span class="nv"> </span><span class="s">капельки&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Купить</span><span class="nv"> </span><span class="s">капли&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Капли&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Воду&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Хочу</span><span class="nv"> </span><span class="s">купить</span><span class="nv"> </span><span class="s">воду&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Хочу</span><span class="nv"> </span><span class="s">купить</span><span class="nv"> </span><span class="s">капли&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Купить</span><span class="nv"> </span><span class="s">воду&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Вода&quot;</span>
+<span class="w">    </span><span class="nt">replaceMessage</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Вода&quot;</span>
+</code></pre></div></li>
+</ul>
+</li>
+<li>
+<p>Проверка на основе регулярных выражений</p>
+<ul>
+<li><code>regex</code> - правило, основанное на регулярном выражении, пользовательский ввод будет заменён на фразу, удовлетворяющею данному регулярному выражению;</li>
+<li><code>nameMatched</code> - сообщение, которое будет использовано для идентификации набора с выполнившимися правилами;</li>
+<li><code>BuyDrops</code> - имя набора.
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="nt">BuyDrops</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">regex</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;*</span><span class="nv"> </span><span class="s">капли&quot;</span>
+<span class="w">    </span><span class="nt">nameMatched</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Вода&quot;</span>
+</code></pre></div></li>
+</ul>
+</li>
+</ul>
+<h5 id="script-"><a id="script"></a> script - сцены скилла</h5>
+<p>Описывается список сцен скилла.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">script</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">goodbye</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">string</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;GoodyBye&quot;</span>
+<span class="w">      </span><span class="nt">tts</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;GoodyBye&quot;</span>
+<span class="w">    </span><span class="nt">nextScenes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;goodbye&#39;</span>
+<span class="w">  </span><span class="nt">hello</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">string</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Hello</span><span class="nv"> </span><span class="s">boy.</span><span class="nv"> </span><span class="s">Is</span><span class="nv"> </span><span class="s">number</span><span class="nv"> </span><span class="s">{number}&quot;</span>
+<span class="w">      </span><span class="nt">tts</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Hello</span><span class="nv"> </span><span class="s">boy.</span><span class="nv"> </span><span class="s">Is</span><span class="nv"> </span><span class="s">number</span><span class="nv"> </span><span class="s">{number}&quot;</span>
+<span class="w">      </span><span class="nt">values</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">number</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;int64&#39;</span>
+<span class="w">    </span><span class="nt">nextScene</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;echo&#39;</span>
+<span class="w">    </span><span class="nt">isInfoScene</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">error</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">scene</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;goodbye&quot;</span>
+<span class="w">  </span><span class="nt">echo</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">string</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;I</span><span class="nv"> </span><span class="s">will</span><span class="nv"> </span><span class="s">Repeat</span><span class="nv"> </span><span class="s">you</span><span class="nv"> </span><span class="s">word&quot;</span>
+<span class="w">      </span><span class="nt">tts</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;I</span><span class="nv"> </span><span class="s">will</span><span class="nv"> </span><span class="s">Repeat</span><span class="nv"> </span><span class="s">you</span><span class="nv"> </span><span class="s">word&quot;</span>
+<span class="w">    </span><span class="nt">nextScenes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;echoRepeat&#39;</span>
+<span class="w">    </span><span class="nt">matchers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;any&#39;</span>
+<span class="w">    </span><span class="nt">error</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">base</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;number&quot;</span>
+<span class="w">  </span><span class="nt">echoRepeat</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">string</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;You</span><span class="nv"> </span><span class="s">say</span><span class="nv"> </span><span class="s">{userText}&quot;</span>
+<span class="w">      </span><span class="nt">tts</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;You</span><span class="nv"> </span><span class="s">say</span><span class="nv"> </span><span class="s">{userText}&quot;</span>
+<span class="w">      </span><span class="nt">values</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">userText</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;string&#39;</span>
+<span class="w">    </span><span class="nt">nextScenes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;echoRepeat&#39;</span>
+<span class="w">    </span><span class="nt">matchers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;any&#39;</span>
+<span class="w">    </span><span class="nt">error</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">base</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;number&quot;</span>
+</code></pre></div>
+<hr />
+<h3 id="_2">Сцена</h3>
+<p>Каждая сцена содержит следующие поля:</p>
+<ul>
+<li><a href="#text"><strong><em>text</em></strong></a></li>
+<li><a href="#isInfoScene"><strong><em>isInfoScene</em></strong></a></li>
+<li><a href="#nextScenes"><strong><em>nextScenes/nextScene</em></strong></a></li>
+<li><a href="#buttons"><strong><em>buttons</em></strong></a></li>
+<li><a href="#matchers"><strong><em>matchers</em></strong></a></li>
+<li><a href="#error"><strong><em>error</em></strong></a></li>
+</ul>
+<h5 id="text-"><a id="text"></a> text - текст сцены</h5>
+<p>Текст, который будет выводиться в начале сцены. Поддерживается передача параметров в строку через использование конструкции <code>{nameValue}</code>. <strong>Очень важно отсутствие пробелов между <code>{</code> и <code>}</code> и именем значения.</strong></p>
+<ul>
+<li><code>string</code> - текст, который будет выведен в сообщении;</li>
+<li><code>tts</code> - текст, который будет озвучен голосовым ассистентом. С правилами составления tts можно ознакомиться в <a href="https://dev.vk.com/marusia/tts">документации</a>.</li>
+<li><code>values</code> - значения, которые должны встраиваться в текст. <strong>Эти значения обязательно должны присутствовать в обоих строках</strong><ul>
+<li>Представляет собой словарь. Поддерживаются все стандартные типы <em>Go</em>. Название переменной обязательно должно соответствовать указанному внутри строки.
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="nt">text</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">string</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;You</span><span class="nv"> </span><span class="s">say</span><span class="nv"> </span><span class="s">{userText}&quot;</span>
+<span class="w">      </span><span class="nt">tts</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;You</span><span class="nv"> </span><span class="s">say</span><span class="nv"> </span><span class="s">{userText}&quot;</span>
+<span class="w">      </span><span class="nt">values</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">userText</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;string&#39;</span>
+</code></pre></div></li>
+</ul>
+</li>
+</ul>
+<h5 id="isinfoscene-"><a id="isInfoScene"></a> isInfoScene - является ли сцена информационной</h5>
+<p>Примает значение 'true', если данная сцена является информационной, то есть не требует ответа пользователя.
+Если сцена информационная, требуется указывать <strong>только одну следующую сцену в поле <code>nextScene</code></strong>, следующие поля не влияют на результат генерации: <code>buttons</code>, <code>matchers</code>, <code>error</code>.
+<div class="highlight"><pre><span></span><code><span class="nt">isInfoScene</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div></p>
+<h5 id="nextscenes-nextscene-"><a id="nextScenes"></a> nextScenes / <a id="nextScene"></a> nextScene - следующие сцены</h5>
+<p>Имена следующих сцен. Если текущая сцена информационная, то требуется указывать
+только одну следующую сцену в поле <code>nextScene</code>, иначе - список сцен в поле <code>nextScenes</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">isInfoScene</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">nextScene</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;echo&#39;</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="nt">nextScenes</span><span class="p">:</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;echoRepeat&#39;</span>
+</code></pre></div>
+<h5 id="buttons-"><a id="buttons"></a> buttons - кнопки, отображаемые в сцене</h5>
+<p>Описание кнопок, которые будут отображены в текущей сцене.</p>
+<ul>
+<li><code>agree</code> - имя кнопки;</li>
+<li><code>text</code> - текст кнопки;</li>
+<li><code>URL</code> - необязательное поле - ссылка, которая откроется по нажатию на эту кнопку;</li>
+<li><code>Payload</code> - некоторая структура, которую нужно передать вместе с кнопкой, когда кнопка будет нажата. <em>Генератор также создает структуры </em>Go<em>, соответствующие описанным полям.</em>
+<div class="highlight"><pre><span></span><code><span class="nt">buttons</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">agree</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Ага&quot;</span>
+<span class="w">    </span><span class="nt">URL</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;vk.com&quot;</span>
+<span class="w">    </span><span class="nt">Payload</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">ID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+</code></pre></div></li>
+</ul>
+<h5 id="matchers-_1"><a id="matchers"></a> matchers - имена наборов правил проверки пользовательского ввода</h5>
+<p>Есть следующие стандартные наборы:</p>
+<ul>
+<li><code>number</code> - набор, выделяющий любое число из ввода пользователя;</li>
+<li><code>positive_number</code> - набор, выделяющий любое положительное число из ввода пользователя;</li>
+<li><code>positive_number_in_words</code> - набор, выделяющий любое положительное число слов в вводе пользователя;</li>
+<li><code>any</code> - набор, принимающий любое сообщение пользователя;</li>
+<li><code>first_word</code> - набор, выделяющий первое слово из сообщения пользователя;</li>
+<li><code>agree</code> - набор, определяющий согласие пользователя.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nt">matchers</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;agree&quot;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Back&quot;</span>
+</code></pre></div>
+<h5 id="error-"><a id="error"></a> error - текст сообщения в случае неверного ответа пользователя</h5>
+<p>Вызываемое сообщение или сцена в случае, если ни один из наборов правил не соответствует реплике пользователя.
+Есть три вида ошибок:</p>
+<ul>
+<li>Стандартная<ul>
+<li><code>base</code> - имя стандартной ошибки
+<div class="highlight"><pre><span></span><code><span class="nt">error</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;number&quot;</span>
+</code></pre></div></li>
+</ul>
+</li>
+<li>
+<p>Сцена ошибки
+<div class="highlight"><pre><span></span><code><span class="nt">error</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scene</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;goodbye&quot;</span>
+</code></pre></div></p>
+</li>
+<li>
+<p>Текстовая ошибка</p>
+<ul>
+<li><code>name</code> - имя ошибки. <strong>Должно быть уникальным</strong>. Используется для удобного обращения к тексту ошибки внутри кода.</li>
+<li><code>text</code> - текст ошибки
+<div class="highlight"><pre><span></span><code><span class="nt">error</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;NotUnderstandHealSale&quot;</span>
+<span class="w">  </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Я</span><span class="nv"> </span><span class="s">не</span><span class="nv"> </span><span class="s">понимаю</span><span class="nv"> </span><span class="s">о</span><span class="nv"> </span><span class="s">чём</span><span class="nv"> </span><span class="s">вы.</span><span class="nv"> </span><span class="s">Хотите</span><span class="nv"> </span><span class="s">ли</span><span class="nv"> </span><span class="s">вы</span><span class="nv"> </span><span class="s">купить</span><span class="nv"> </span><span class="s">аптечку?&quot;</span>
+</code></pre></div></li>
+</ul>
+</li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">hint</p>
+<p>Ключевые понятия, такие как <strong>сцена</strong>, <strong>контекст</strong>, <strong>режиссёр</strong> и другие, рассматриваются в разделе <a href="../lib_words/">"Ключевые понятия"</a></p>
+</div>
+
+
+
+
+
+<h2 id="__comments">Комментарии</h2>
+<script src="https://giscus.app/client.js"
+        data-repo="ThCompiler/go_game_constractor"
+        data-repo-id="R_kgDOITmXxQ"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOITmXxc4CSl2-"
+        data-mapping="title"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="top"
+        data-theme="preferred_color_scheme"
+        data-lang="ru"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+  var giscus = document.querySelector("script[src*=giscus]")
+
+  /* Set palette on initial load */
+  var palette = __md_get("__palette")
+  if (palette && typeof palette.color === "object") {
+    var theme = palette.color.scheme === "slate" ? "dark" : "light"
+    giscus.setAttribute("data-theme", theme)
+  }
+
+  /* Register event handlers after documented loaded */
+  document.addEventListener("DOMContentLoaded", function() {
+    var ref = document.querySelector("[data-md-component=palette]")
+    ref.addEventListener("change", function() {
+      var palette = __md_get("__palette")
+      if (palette && typeof palette.color === "object") {
+        var theme = palette.color.scheme === "slate" ? "dark" : "light"
+
+        /* Instruct Giscus to change theme */
+        var frame = document.querySelector(".giscus-frame")
+        frame.contentWindow.postMessage(
+                { giscus: { setConfig: { theme } } },
+                "https://giscus.app"
+        )
+      }
+    })
+  })
+</script>
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2022 TBD team
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    <a href="https://github.com/ThCompiler/go_game_constractor" target="_blank" rel="noopener" title="github repository" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["search.suggest", "search.highlight", "navigation.instant", "navigation.indexes", "toc.follow"], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+    
+  </body>
+</html>
