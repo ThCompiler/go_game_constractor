@@ -14,21 +14,22 @@ import (
 	"github.com/ThCompiler/go_game_constractor/marusia/runner"
 	"github.com/ThCompiler/go_game_constractor/marusia/webhook"
 	"github.com/ThCompiler/go_game_constractor/pkg/logger"
-	loghttp "github.com/ThCompiler/go_game_constractor/pkg/logger/http"
+	"github.com/ThCompiler/go_game_constractor/pkg/logger/context"
 	"github.com/gin-gonic/gin"
 )
 
 type EchoGameRoute struct {
-	loghttp.LogObject
+	context.LogObject
 	sdc     scriptdirector.SceneDirectorConfig
 	sRunner runner.ScriptRunner
 	wh      *marusia.Webhook
 }
 
 func newEchoGameRoute(handler *gin.RouterGroup, sdc scriptdirector.SceneDirectorConfig,
-	sRunner runner.ScriptRunner, l logger.Interface) {
+	sRunner runner.ScriptRunner, l logger.Interface,
+) {
 	r := &EchoGameRoute{
-		LogObject: loghttp.NewLogObject(l),
+		LogObject: context.NewLogObject(l),
 		sdc:       sdc,
 		sRunner:   sRunner,
 		wh:        webhook.NewDefaultMarusiaWebhook(l, sRunner, sdc),

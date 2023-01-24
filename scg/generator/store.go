@@ -7,7 +7,7 @@ import (
 )
 
 // Store add generate code of script store
-func Store(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) ([]*codegen.File, error) {
+func Store(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) ([]*codegen.File, error) {
 	var files []*codegen.File
 
 	files = append(files, storecodegen.ScriptStoreFiles(rootPkg, rootDir, scriptInfo)...)

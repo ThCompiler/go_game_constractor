@@ -2,8 +2,9 @@ package structures
 
 import (
 	"errors"
-	"golang.org/x/exp/slices"
 	"sync"
+
+	"golang.org/x/exp/slices"
 )
 
 var ErrorEmptyDequeue = errors.New("empty dequeue")
@@ -98,7 +99,8 @@ type AsyncDequeue[T any] struct {
 func NewAsyncDequeue[T any]() *AsyncDequeue[T] {
 	return &AsyncDequeue[T]{
 		lock:    sync.Mutex{},
-		dequeue: NewDequeue[T]()}
+		dequeue: NewDequeue[T](),
+	}
 }
 
 func (st *AsyncDequeue[T]) PushBack(value T) {

@@ -1,13 +1,14 @@
 package codegen
 
 import (
+	"path/filepath"
+
 	"github.com/ThCompiler/go_game_constractor/scg/expr"
 	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-	"path/filepath"
 )
 
 // ScriptStoreFiles returns redis store for scripts implementation
-func ScriptStoreFiles(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func ScriptStoreFiles(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	repositoryFile := repository(rootPkg, rootDir, scriptInfo)
 	interfaceStoreFile := scriptStore(rootPkg, rootDir, scriptInfo)
 
@@ -15,7 +16,7 @@ func ScriptStoreFiles(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo
 }
 
 // client returns the files defining the gRPC client.
-func repository(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func repository(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "internal", "texts", "store", "redis", "repository.go")
@@ -37,7 +38,7 @@ func repository(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.F
 	return &codegen.File{Path: fpath, SectionTemplates: sections}
 }
 
-func scriptStore(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func scriptStore(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "internal", "texts", "store", "interface.go")

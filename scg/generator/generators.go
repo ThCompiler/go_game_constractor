@@ -6,7 +6,7 @@ import (
 )
 
 // Genfunc is the type of the functions invoked to generate code.
-type Genfunc func(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) ([]*codegen.File, error)
+type Genfunc func(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) ([]*codegen.File, error)
 
 // Generators returns the qualified paths (including the package name) to the
 // code generator functions for the given command, an error if the command is
@@ -19,5 +19,6 @@ func generators(addServer bool) []Genfunc {
 	if addServer {
 		return []Genfunc{Store, Script, Server}
 	}
+
 	return []Genfunc{Store, Script}
 }

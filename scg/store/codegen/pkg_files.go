@@ -1,19 +1,20 @@
 package codegen
 
 import (
+	"path/filepath"
+
 	"github.com/ThCompiler/go_game_constractor/scg/expr"
 	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-	"path/filepath"
 )
 
 // PkgFiles returns files for pkg dir
-func PkgFiles(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func PkgFiles(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	stringFormatFile := stringFormat(rootPkg, rootDir, scriptInfo)
 
 	return []*codegen.File{stringFormatFile}
 }
 
-func stringFormat(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func stringFormat(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "pkg", "str", "string_format.go")

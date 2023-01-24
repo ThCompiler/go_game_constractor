@@ -1,21 +1,22 @@
 package codegen
 
 import (
+	"path"
+	"path/filepath"
+
 	"github.com/ThCompiler/go_game_constractor/scg/expr"
 	"github.com/ThCompiler/go_game_constractor/scg/expr/scene"
 	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-	"path"
-	"path/filepath"
 )
 
 // MatchersFile returns custom mathers
-func MatchersFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func MatchersFile(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	mathersFile := generateMatchers(rootPkg, rootDir, scriptInfo)
 
 	return []*codegen.File{mathersFile}
 }
 
-func generateMatchers(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateMatchers(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "internal", "script", "matchers", "matchers.go")
@@ -27,28 +28,7 @@ func generateMatchers(_ string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Custom user matchers", "matchers", imports, false),
 	}
 
-	regexMatchers := make([]scene.RegexMatcher, 0)
-	selectsMatchers := make([]scene.SelectMatcher, 0)
-
-	for name, matcher := range scriptInfo.UserMatchers {
-		if matcher.IsRegexMatcher() {
-			mc := matcher.MustRegexMatcher()
-			if mc.Name == "" {
-				mc.Name = name
-			}
-
-			regexMatchers = append(regexMatchers, mc)
-		}
-
-		if matcher.IsSelectMatcher() {
-			mc := matcher.MustSelectsMatcher()
-			if mc.Name == "" {
-				mc.Name = name
-			}
-
-			selectsMatchers = append(selectsMatchers, mc)
-		}
-	}
+	regexMatchers, selectsMatchers := prepareMatchers(scriptInfo)
 
 	sections = append(sections, &codegen.SectionTemplate{
 		Name:   "regex-consts-matchers",
@@ -87,6 +67,35 @@ func generateMatchers(_ string, rootDir string, scriptInfo expr.ScriptInfo) *cod
 	})
 
 	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
+}
+
+func prepareMatchers(scriptInfo expr.ScriptInfo) (regexMatchers []scene.RegexMatcher,
+	selectsMatchers []scene.SelectMatcher,
+) {
+	regexMatchers = make([]scene.RegexMatcher, 0)
+	selectsMatchers = make([]scene.SelectMatcher, 0)
+
+	for name, matcher := range scriptInfo.UserMatchers {
+		if matcher.IsRegexMatcher() {
+			mc := matcher.MustRegexMatcher()
+			if mc.Name == "" {
+				mc.Name = name
+			}
+
+			regexMatchers = append(regexMatchers, mc)
+		}
+
+		if matcher.IsSelectMatcher() {
+			mc := matcher.MustSelectsMatcher()
+			if mc.Name == "" {
+				mc.Name = name
+			}
+
+			selectsMatchers = append(selectsMatchers, mc)
+		}
+	}
+
+	return regexMatchers, selectsMatchers
 }
 
 const regexConstStructT = `

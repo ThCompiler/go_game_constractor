@@ -1,15 +1,16 @@
 package codegen
 
 import (
+	"path"
+	"path/filepath"
+
 	"github.com/ThCompiler/go_game_constractor/scg/expr"
 	"github.com/ThCompiler/go_game_constractor/scg/expr/scene"
 	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-	"path"
-	"path/filepath"
 )
 
 // PayloadsFile returns custom buttonsPayload
-func PayloadsFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func PayloadsFile(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	payloadFiles := make([]*codegen.File, 0)
 
 	for key, value := range scriptInfo.Script {

@@ -163,3 +163,44 @@ Some modification and addition of new functionality.
 #### Documentation
 
 * Cosmetic changes to the documentation
+
+
+## 0.2.5-alpha
+
+### Added
+
+#### Library
+
+* Close unused channels in `pkg/marusia/runner/hub/hub.go`
+* Change type of channel to pointer in `pkg/marusia/runner/hub/hub.go`
+
+#### Generator
+
+* `isEnd` field to `scene` struct
+* Auto setup of `isEnd` field for goodbye scene in true
+* Setup `FinishScene` command for scene with `isEnd` field in true
+* Add logging error in scene functions
+
+#### Other
+
+* `CHANGELOG` on russian
+
+### Changes
+
+#### Library
+
+* Change type of channel to pointer in `pkg/marusia/runner/hub/hub.go`
+
+#### Generator
+
+* Renamed the `string` field in the description of the scene text to `text` in yaml format
+* Renamed the `url` field in the description of the scene button to `URL` in json format
+* Fixed the name of the `nextScenes` field for json format
+* Fixed the name of the `replace_message` field for json format
+* Replaced the `yaml` parser for checking unknown fields of the `yaml` file
+* Fixed checking the command to complete the skill
+* Update example
+
+#### Documentation
+
+* Update example

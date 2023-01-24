@@ -11,5 +11,9 @@ func ToDigit(r rune) int8 {
 }
 
 func ToRune(n int8) rune {
+	if n < 0 || n > 9 {
+		return rune(0)
+	}
+
 	return rune('0' + n)
 }

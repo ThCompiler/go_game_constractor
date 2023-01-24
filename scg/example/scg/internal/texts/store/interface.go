@@ -10,7 +10,7 @@ package store
 
 type ScriptStore interface {
 	GetText(name string) (string, error)
-	SetText(name string, value string) error
+	SetText(name, value string) error
 	DeleteText(name string) error
 	GetAllTextKeyForScript(name string) ([]string, error)
 }

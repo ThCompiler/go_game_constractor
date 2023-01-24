@@ -7,7 +7,7 @@ import (
 
 type sceneMessage struct {
 	sessionID string
-	answer    chan runner.PlayedSceneResult
+	answer    chan *runner.PlayedSceneResult
 	req       runner.Request
 }
 
@@ -61,8 +61,8 @@ func (h *ScriptHub) detachDirector(drt *director) {
 	h.dettacher <- drt
 }
 
-func (h *ScriptHub) RunScene(req runner.Request) chan runner.PlayedSceneResult {
-	answer := make(chan runner.PlayedSceneResult)
+func (h *ScriptHub) RunScene(req runner.Request) chan *runner.PlayedSceneResult {
+	answer := make(chan *runner.PlayedSceneResult)
 	h.broadcast <- &(sceneMessage{
 		sessionID: req.Session.SessionID,
 		req:       req,
@@ -84,11 +84,12 @@ func (h *ScriptHub) detachAll() {
 
 func (h *ScriptHub) runScene(msg *sceneMessage) {
 	if drt, ok := h.directors[msg.sessionID]; ok {
-		go func(ans chan runner.PlayedSceneResult, drt *director) {
-			ans <- runner.PlayedSceneResult{
+		go func(ans chan *runner.PlayedSceneResult, drt *director) {
+			ans <- &runner.PlayedSceneResult{
 				Result:         ToRunnerResult(drt.PlayScene(*msg)),
 				WorkedDirector: drt,
 			}
+			close(ans)
 		}(msg.answer, drt)
 	}
 }

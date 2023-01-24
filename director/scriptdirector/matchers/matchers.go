@@ -10,7 +10,7 @@ type RegexMatcher struct {
 	nameMatched string
 }
 
-func NewRegexMather(pattern string, nameMatched string) *RegexMatcher {
+func NewRegexMather(pattern, nameMatched string) *RegexMatcher {
 	return &RegexMatcher{
 		pattern:     regexp.MustCompile(pattern),
 		nameMatched: nameMatched,
@@ -19,7 +19,7 @@ func NewRegexMather(pattern string, nameMatched string) *RegexMatcher {
 
 func (rm *RegexMatcher) Match(message string) (bool, string) {
 	res := rm.pattern.FindString(message)
-	
+
 	return res != "", res
 }
 

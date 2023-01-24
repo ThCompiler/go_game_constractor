@@ -7,7 +7,7 @@ import (
 )
 
 // Server add generate code of server
-func Server(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) ([]*codegen.File, error) {
+func Server(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) ([]*codegen.File, error) {
 	var files []*codegen.File
 
 	files = append(files, servercodegen.ServerFile(rootPkg, rootDir, scriptInfo)...)
