@@ -56,9 +56,7 @@ func (sc *EchoRepeat) Next() scene.Scene {
 
 // GetSceneInfo function returning info about scene
 func (sc *EchoRepeat) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
-	var (
-		userText string = sc.GetSayedContextValue(ctx)
-	)
+	var userText string = sc.GetSayedContextValue(ctx)
 
 	// TODO Write some actions for get data for texts
 

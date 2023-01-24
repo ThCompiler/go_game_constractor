@@ -24,7 +24,6 @@ type Hello struct {
 
 // React function of actions after scene has been played
 func (sc *Hello) React(_ *scene.Context) scene.Command {
-
 	return scene.NoCommand
 }
 
@@ -37,9 +36,7 @@ func (sc *Hello) Next() scene.Scene {
 
 // GetSceneInfo function returning info about scene
 func (sc *Hello) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
-	var (
-		number int64
-	)
+	var number int64
 
 	// TODO Write some actions for get data for texts
 

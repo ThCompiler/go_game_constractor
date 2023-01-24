@@ -266,7 +266,8 @@ func SnakeCase(name string) string {
 }
 
 func addUnderliningToStr(isLower, lastLower, isUnder, lastUnder bool, b *bytes.Buffer, name string, i int,
-	isLast bool) {
+	isLast bool,
+) {
 	if isLower || isUnder {
 		return
 	}

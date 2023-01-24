@@ -64,6 +64,7 @@ func saveScripts(st store.ScriptStore) error {
 
 	return nil
 }
+
 func clearOldStores(st store.ScriptStore) error {
 	// Get all keys for currentScript of saving text
 	keys, err := st.GetAllTextKeyForScript("EchoGame")

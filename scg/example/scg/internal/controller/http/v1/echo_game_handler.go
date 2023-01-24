@@ -26,7 +26,8 @@ type EchoGameRoute struct {
 }
 
 func newEchoGameRoute(handler *gin.RouterGroup, sdc scriptdirector.SceneDirectorConfig,
-	sRunner runner.ScriptRunner, l logger.Interface) {
+	sRunner runner.ScriptRunner, l logger.Interface,
+) {
 	r := &EchoGameRoute{
 		LogObject: context.NewLogObject(l),
 		sdc:       sdc,
