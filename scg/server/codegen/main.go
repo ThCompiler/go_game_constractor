@@ -1,21 +1,22 @@
 package codegen
 
 import (
-	"github.com/ThCompiler/go_game_constractor/scg/expr"
-	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 	"path"
 	"path/filepath"
 	"strings"
+
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 )
 
 // MainFile returns main file
-func MainFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func MainFile(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	mainFile := generateMain(rootPkg, rootDir, scriptInfo)
 
 	return []*codegen.File{mainFile}
 }
 
-func generateMain(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateMain(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "cmd", "main.go")

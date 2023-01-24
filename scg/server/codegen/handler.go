@@ -1,21 +1,22 @@
 package codegen
 
 import (
-	"github.com/ThCompiler/go_game_constractor/scg/expr"
-	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 	"path"
 	"path/filepath"
+
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 )
 
 // HandlerFile returns server file
-func HandlerFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func HandlerFile(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	routerFile := generateRouter(rootPkg, rootDir, scriptInfo)
 	routeFile := generateRoute(rootPkg, rootDir, scriptInfo)
 
 	return []*codegen.File{routeFile, routerFile}
 }
 
-func generateRouter(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateRouter(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "internal", "controller", "http", "v1", "router.go")
@@ -45,10 +46,11 @@ func generateRouter(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codeg
 	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
-func generateRoute(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateRoute(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
-	fpath := filepath.Join(rootDir, "internal", "controller", "http", "v1", codegen.SnakeCase(scriptInfo.Name)+"_handler.go")
+	fpath := filepath.Join(rootDir, "internal", "controller", "http",
+		"v1", codegen.SnakeCase(scriptInfo.Name)+"_handler.go")
 	imports := []*codegen.ImportSpec{
 		{Path: path.Join("github.com", "gin-gonic", "gin")},
 		codegen.SCGImport(path.Join("marusia", "runner")),
@@ -56,7 +58,7 @@ func generateRoute(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codege
 		codegen.SCGImport(path.Join("marusia", "webhook")),
 		codegen.SCGImport(path.Join("director", "scriptdirector")),
 		codegen.SCGImport(path.Join("pkg", "logger")),
-		codegen.SCGNamedImport(path.Join("pkg", "logger", "http"), "loghttp"),
+		codegen.SCGImport(path.Join("pkg", "logger", "context")),
 	}
 
 	sections = []*codegen.SectionTemplate{
@@ -106,7 +108,7 @@ func New{{ ToTitle .Name }}Router(
 `
 
 const routeStructT = `type {{ ToTitle .Name }}Route struct {
-    loghttp.LogObject
+    context.LogObject
     sdc     scriptdirector.SceneDirectorConfig
     sRunner runner.ScriptRunner
     wh      *marusia.Webhook
@@ -115,7 +117,7 @@ const routeStructT = `type {{ ToTitle .Name }}Route struct {
 func new{{ ToTitle .Name }}Route(handler *gin.RouterGroup, sdc scriptdirector.SceneDirectorConfig,
     sRunner runner.ScriptRunner, l logger.Interface) {
     r := &{{ ToTitle .Name }}Route{
-        LogObject: loghttp.NewLogObject(l),
+        LogObject: context.NewLogObject(l),
         sdc:       sdc,
         sRunner:   sRunner,
         wh: webhook.NewDefaultMarusiaWebhook(l, sRunner, sdc),

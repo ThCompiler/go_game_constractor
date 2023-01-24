@@ -1,11 +1,12 @@
 package words
 
 import (
+	"gopkg.in/yaml.v3"
+
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/num2words/objects"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words/declension"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words/genders"
-	"gopkg.in/yaml.v3"
 )
 
 type gendersWordT map[genders.Gender]string

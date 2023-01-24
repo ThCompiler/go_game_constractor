@@ -5,8 +5,10 @@ import (
 	"github.com/ThCompiler/go_game_constractor/pkg/stringutilits"
 )
 
-type ScaleForm int8
-type Digit int8
+type (
+	ScaleForm int8
+	Digit     int8
+)
 
 type Number struct {
 	Sign       string
@@ -35,9 +37,11 @@ type digitTriplet[T any] struct {
 	Hundreds T
 }
 
-type RuneDigitTriplet digitTriplet[rune]
-type StringDigitTriplet digitTriplet[string]
-type NumericDigitTriplet digitTriplet[Digit]
+type (
+	RuneDigitTriplet    digitTriplet[rune]
+	StringDigitTriplet  digitTriplet[string]
+	NumericDigitTriplet digitTriplet[Digit]
+)
 
 func (ndt NumericDigitTriplet) IsZeros() bool {
 	return ndt.Units == 0 && ndt.Dozens == 0 && ndt.Hundreds == 0

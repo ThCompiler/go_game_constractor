@@ -1,9 +1,10 @@
 package ru
 
 import (
-    _ "embed" //nolint:golint //these are the rules for working with embed
-    "github.com/ThCompiler/go_game_constractor/pkg/cleanenv"
-    "github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/entity"
+	_ "embed" //nolint:golint //these are the rules for working with embed
+
+	"github.com/ThCompiler/go_game_constractor/pkg/cleanenv"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/entity"
 )
 
 //go:embed currencies_strings.yml
@@ -25,17 +26,17 @@ var sign []byte
 var slashNumberUnitPrefixes []byte
 
 //go:embed unit_scales_names.yml
-var UnitScalesNames []byte
+var unitScalesNames []byte
 
 func GerResources() entity.Resources {
-    return entity.Resources{
-        CurrenciesStrings:       currenciesStrings,
-        DigitWords:              digitWords,
-        FractionalUnit:          fractionalUnit,
-        OrdinalNumbers:          ordinalNumbers,
-        Sign:                    sign,
-        SlashNumberUnitPrefixes: slashNumberUnitPrefixes,
-        UnitScalesNames:         UnitScalesNames,
-        Ext:                     cleanenv.YAML,
-    }
+	return entity.Resources{
+		CurrenciesStrings:       currenciesStrings,
+		DigitWords:              digitWords,
+		FractionalUnit:          fractionalUnit,
+		OrdinalNumbers:          ordinalNumbers,
+		Sign:                    sign,
+		SlashNumberUnitPrefixes: slashNumberUnitPrefixes,
+		UnitScalesNames:         unitScalesNames,
+		Ext:                     cleanenv.YAML,
+	}
 }

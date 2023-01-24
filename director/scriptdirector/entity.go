@@ -2,6 +2,7 @@ package scriptdirector
 
 import (
 	"context"
+
 	"github.com/ThCompiler/go_game_constractor/director"
 	"github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
 )

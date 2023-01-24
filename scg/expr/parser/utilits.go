@@ -3,7 +3,6 @@ package parser
 import (
 	"encoding/json"
 	"encoding/xml"
-	"gopkg.in/yaml.v3"
 )
 
 type Unmarshaler interface {
@@ -11,11 +10,11 @@ type Unmarshaler interface {
 }
 
 type UnmarshalerYAML struct {
-	N *yaml.Node
+	UN func(interface{}) error
 }
 
 func (u *UnmarshalerYAML) Unmarshal(value interface{}) error {
-	return u.N.Decode(value)
+	return u.UN(value)
 }
 
 type UnmarshalerJSON struct {
@@ -41,8 +40,8 @@ type MultiParser struct {
 	Fun UnmarshalFunc
 }
 
-func (mp *MultiParser) UnmarshalYAML(n *yaml.Node) (err error) {
-	return mp.Fun(&UnmarshalerYAML{N: n})
+func (mp *MultiParser) UnmarshalYAML(un func(interface{}) error) (err error) {
+	return mp.Fun(&UnmarshalerYAML{UN: un})
 }
 
 func (mp *MultiParser) UnmarshalJSON(bs []byte) error {

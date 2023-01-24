@@ -1,8 +1,9 @@
 package convertor
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor/num2words/functions"
 	"strconv"
+
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor/num2words/functions"
 )
 
 // Convert convertor number into the words representation.

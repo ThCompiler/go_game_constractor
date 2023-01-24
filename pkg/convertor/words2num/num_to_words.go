@@ -1,9 +1,10 @@
 package words2num
 
 import (
-	words2 "github.com/ThCompiler/go_game_constractor/pkg/convertor/words"
 	"math"
 	"strings"
+
+	words2 "github.com/ThCompiler/go_game_constractor/pkg/convertor/words"
 )
 
 // Convert convertor number into the words representation.
@@ -26,18 +27,32 @@ func convert(str string) (int64, error) {
 	res := int64(0)
 
 	for _, word := range words {
-		if value, is := words2.WordConstants.W2n.Digit.Units[word]; is {
-			res += int64(value)
-		} else if value, is = words2.WordConstants.W2n.Digit.Tens[word]; is {
-			res += ten + int64(value)
-		} else if value, is = words2.WordConstants.W2n.Digit.Dozens[word]; is {
-			res += int64(value) * ten
-		} else if value, is = words2.WordConstants.W2n.Digit.Hundreds[word]; is {
-			res += int64(value) * hundred
-		} else if scale, is := words2.WordConstants.W2n.UnitScalesNamesToNumber.Words[word]; is {
-			res *= int64(math.Pow(thousand, float64(scale)))
-		}
+		res = AddConvertedWordToNumber(word, res)
 	}
 
 	return res, nil
+}
+
+func AddConvertedWordToNumber(word string, number int64) int64 {
+	if value, is := words2.WordConstants.W2n.Digit.Units[word]; is {
+		return number + int64(value)
+	}
+
+	if value, is := words2.WordConstants.W2n.Digit.Tens[word]; is {
+		return number + ten + int64(value)
+	}
+
+	if value, is := words2.WordConstants.W2n.Digit.Dozens[word]; is {
+		return number + int64(value)*ten
+	}
+
+	if value, is := words2.WordConstants.W2n.Digit.Hundreds[word]; is {
+		return number + int64(value)*hundred
+	}
+
+	if scale, is := words2.WordConstants.W2n.UnitScalesNamesToNumber.Words[word]; is {
+		return number * int64(math.Pow(thousand, float64(scale)))
+	}
+
+	return number
 }

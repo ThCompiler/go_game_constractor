@@ -3,14 +3,16 @@ package words
 import (
 	"bytes"
 	"fmt"
+	"os"
+	"path"
+	"path/filepath"
+
+	"github.com/pkg/errors"
+
 	"github.com/ThCompiler/go_game_constractor/pkg/cleanenv"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/currency"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words/languages"
-	"github.com/pkg/errors"
-	"os"
-	"path"
-	"path/filepath"
 )
 
 type wordConstants struct {
@@ -88,7 +90,10 @@ func LoadWordsConstantsFromFile(lang languages.Language, resourcesDirPath string
 	}
 
 	// Slash number unit prefixes
-	err = cleanenv.ReadConfig(filepath.Join(dir, "slash_number_unit_prefixes.yml"), &WordConstants.N2w.SlashNumberUnitPrefixes)
+	err = cleanenv.ReadConfig(
+		filepath.Join(dir, "slash_number_unit_prefixes.yml"),
+		&WordConstants.N2w.SlashNumberUnitPrefixes,
+	)
 	if err != nil {
 		return fmt.Errorf("error load %s slash number unit prefixes: %w", lang, err)
 	}

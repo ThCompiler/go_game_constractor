@@ -1,21 +1,22 @@
 package codegen
 
 import (
+	"path"
+	"path/filepath"
+
 	"github.com/ThCompiler/go_game_constractor/scg/expr"
 	"github.com/ThCompiler/go_game_constractor/scg/expr/scene"
 	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-	"path"
-	"path/filepath"
 )
 
 // ErrorsFile returns custom textError
-func ErrorsFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func ErrorsFile(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	errorsFile := generateTextErrors(rootPkg, rootDir, scriptInfo)
 
 	return []*codegen.File{errorsFile}
 }
 
-func generateTextErrors(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateTextErrors(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "internal", "script", "errors", "errors.go")

@@ -1,7 +1,8 @@
-package http
+package context
 
 import (
 	"context"
+
 	"github.com/ThCompiler/go_game_constractor/pkg/logger"
 )
 
@@ -22,7 +23,7 @@ func (l *LogObject) Log(ctx context.Context) logger.Interface {
 		return l.log.With("type", "base_log")
 	}
 
-	ctxLogger := ctx.Value(ContextLoggerField)
+	ctxLogger := ctx.Value(LoggerField)
 	log := l.log
 
 	if ctxLogger != nil {
@@ -32,4 +33,17 @@ func (l *LogObject) Log(ctx context.Context) logger.Interface {
 	}
 
 	return log
+}
+
+func GetLogger(ctx context.Context) logger.Interface {
+	ctxLogger := ctx.Value(LoggerField)
+	if ctxLog, ok := ctxLogger.(logger.Interface); ok {
+		return ctxLog
+	}
+
+	return nil
+}
+
+func SaveLogger(ctx context.Context, log logger.Interface) context.Context {
+	return context.WithValue(ctx, LoggerField, log)
 }

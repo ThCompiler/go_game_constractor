@@ -26,15 +26,7 @@ func GetCurrencyWord(
 
 	// Если падеж "именительный" или "винительный" и множественное число
 	if (decl == declension.NOMINATIVE || decl == declension.ACCUSATIVE) && scaleNameForm >= 1 {
-		// Если валюта указана как "number"
-		if curc == currency.NUMBER {
-			scaleForm = 1
-		} else {
-			scaleForm = 1
-			if scaleNameForm == 1 {
-				scaleForm = 0
-			}
-		}
+		scaleForm = getScaleForm(curc, scaleNameForm)
 		// Использовать родительный падеж.
 		currentDeclension = declension.GENITIVE
 	}
@@ -44,5 +36,19 @@ func GetCurrencyWord(
 		// Всегда родительный падеж и множественное число
 		currentDeclension = declension.GENITIVE
 	}
+
 	return declensionsObject[currentDeclension][scaleForm]
+}
+
+func getScaleForm(curc currency.Currency, scaleNameForm objects.ScaleForm) int {
+	// Если валюта указана как "number"
+	if curc == currency.NUMBER {
+		return 1
+	}
+
+	if scaleNameForm == 1 {
+		return 0
+	}
+
+	return 1
 }

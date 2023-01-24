@@ -2,12 +2,14 @@ package zap
 
 import (
 	"fmt"
-	log "github.com/ThCompiler/go_game_constractor/pkg/logger"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 	"io"
 	"os"
 	"strings"
+
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+
+	log "github.com/ThCompiler/go_game_constractor/pkg/logger"
 )
 
 type Params struct {
@@ -64,51 +66,59 @@ func newZapCore(param Params, out io.Writer) (core zapcore.Core) {
 	})
 
 	if param.AddLowPriorityLevelToCmd { // separate levels
-		lowPriority := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
-			return lvl < toZapLevel(param.Level)
-		})
-
-		topicDebugging := zapcore.AddSync(out)
-		topicErrors := zapcore.AddSync(out)
-		fileEncoder := zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
-
-		if param.UseStdAndFIle && param.LogDir != "" {
-			consoleDebugging := zapcore.Lock(os.Stdout)
-			consoleErrors := zapcore.Lock(os.Stderr)
-			consoleEncoder := zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
-
-			core = zapcore.NewTee(
-				zapcore.NewCore(fileEncoder, topicErrors, highPriority),
-				zapcore.NewCore(consoleEncoder, consoleErrors, highPriority),
-				zapcore.NewCore(fileEncoder, topicDebugging, lowPriority),
-				zapcore.NewCore(consoleEncoder, consoleDebugging, lowPriority),
-			)
-		} else {
-			core = zapcore.NewTee(
-				zapcore.NewCore(fileEncoder, topicErrors, highPriority),
-				zapcore.NewCore(fileEncoder, topicDebugging, lowPriority),
-			)
-		}
+		core = withLowePriorityLevel(param, out, highPriority)
 	} else { // not separate levels
-		topicErrors := zapcore.AddSync(out)
-		fileEncoder := zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
-
-		if param.UseStdAndFIle && param.LogDir != "" {
-			consoleErrors := zapcore.Lock(os.Stderr)
-			consoleEncoder := zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
-
-			core = zapcore.NewTee(
-				zapcore.NewCore(fileEncoder, topicErrors, highPriority),
-				zapcore.NewCore(consoleEncoder, consoleErrors, highPriority),
-			)
-		} else {
-			core = zapcore.NewTee(
-				zapcore.NewCore(fileEncoder, topicErrors, highPriority),
-			)
-		}
+		core = withoutLowePriorityLevel(param, out, highPriority)
 	}
 
 	return core
+}
+
+func withoutLowePriorityLevel(param Params, out io.Writer, highPriority zap.LevelEnablerFunc) zapcore.Core {
+	topicErrors := zapcore.AddSync(out)
+	fileEncoder := zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
+
+	if param.UseStdAndFIle && param.LogDir != "" {
+		consoleErrors := zapcore.Lock(os.Stderr)
+		consoleEncoder := zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
+
+		return zapcore.NewTee(
+			zapcore.NewCore(fileEncoder, topicErrors, highPriority),
+			zapcore.NewCore(consoleEncoder, consoleErrors, highPriority),
+		)
+	}
+
+	return zapcore.NewTee(
+		zapcore.NewCore(fileEncoder, topicErrors, highPriority),
+	)
+}
+
+func withLowePriorityLevel(param Params, out io.Writer, highPriority zap.LevelEnablerFunc) zapcore.Core {
+	lowPriority := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+		return lvl < toZapLevel(param.Level)
+	})
+
+	topicDebugging := zapcore.AddSync(out)
+	topicErrors := zapcore.AddSync(out)
+	fileEncoder := zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig())
+
+	if param.UseStdAndFIle && param.LogDir != "" {
+		consoleDebugging := zapcore.Lock(os.Stdout)
+		consoleErrors := zapcore.Lock(os.Stderr)
+		consoleEncoder := zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
+
+		return zapcore.NewTee(
+			zapcore.NewCore(fileEncoder, topicErrors, highPriority),
+			zapcore.NewCore(consoleEncoder, consoleErrors, highPriority),
+			zapcore.NewCore(fileEncoder, topicDebugging, lowPriority),
+			zapcore.NewCore(consoleEncoder, consoleDebugging, lowPriority),
+		)
+	}
+
+	return zapcore.NewTee(
+		zapcore.NewCore(fileEncoder, topicErrors, highPriority),
+		zapcore.NewCore(fileEncoder, topicDebugging, lowPriority),
+	)
 }
 
 func (l *Logger) Sync() error {

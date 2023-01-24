@@ -12,14 +12,14 @@ import (
 	"github.com/ThCompiler/go_game_constractor/director"
 	base_matchers "github.com/ThCompiler/go_game_constractor/director/scriptdirector/matchers"
 	"github.com/ThCompiler/go_game_constractor/director/scriptdirector/scene"
-	loghttp "github.com/ThCompiler/go_game_constractor/pkg/logger/http"
+	"github.com/ThCompiler/go_game_constractor/pkg/logger/context"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/texts/manager"
 	"github.com/ThCompiler/go_game_constractor/scg/go/types"
 )
 
 // EchoRepeat scene
 type EchoRepeat struct {
-	loghttp.LogObject
+	context.LogObject
 	TextManager manager.TextManager
 	NextScene   SceneName
 }
@@ -33,7 +33,7 @@ func (sc *EchoRepeat) React(ctx *scene.Context) scene.Command {
 
 	// Matcher select
 	case ctx.Request.NameMatched == base_matchers.AnyMatchedString:
-
+		sc.NextScene = EchoRepeatScene
 	default:
 		sc.NextScene = EchoRepeatScene
 	}
@@ -56,15 +56,19 @@ func (sc *EchoRepeat) Next() scene.Scene {
 
 // GetSceneInfo function returning info about scene
 func (sc *EchoRepeat) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
-	var (
-		userText string = sc.GetSayedContextValue(ctx)
-	)
+	var userText string = sc.GetSayedContextValue(ctx)
 
 	// TODO Write some actions for get data for texts
 
-	text, _ := sc.TextManager.GetEchoRepeatText(
+	text, err := sc.TextManager.GetEchoRepeatText(
 		userText,
 	)
+	if err != nil {
+		sc.Log(ctx).Error(err, "error while getting text for EchoRepeat scene")
+
+		return scene.Info{}, false
+	}
+
 	return scene.Info{
 		Text: text,
 		ExpectedMessages: []scene.MessageMatcher{

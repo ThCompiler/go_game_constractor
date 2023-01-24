@@ -1,9 +1,10 @@
 package functions
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor/num2words/objects"
 	"math"
 	"strings"
+
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor/num2words/objects"
 )
 
 const countPart = 3
@@ -26,5 +27,6 @@ func NumberToScales(number string) []objects.RuneDigitTriplet {
 			Units:    r[i+2],
 		})
 	}
+
 	return cutNumber
 }

@@ -1,11 +1,13 @@
 package scene
 
 import (
+	"strings"
+
+	"github.com/pkg/errors"
+
 	"github.com/ThCompiler/go_game_constractor/scg/go/types"
 	errors2 "github.com/ThCompiler/go_game_constractor/scg/script/errors"
 	"github.com/ThCompiler/go_game_constractor/scg/script/matchers"
-	"github.com/pkg/errors"
-	"strings"
 )
 
 var (
@@ -14,9 +16,10 @@ var (
 	ErrorEmptyNextSceneWithInfoScene    = errors.New("if scene is info scene use only flag NextScene")
 	ErrorEmptyNextScenesWithNoInfoScene = errors.New("if scene is not info scene use only flag NextScenes")
 	ErrorTooManyFields                  = errors.New("too many fields were passed to the matcher")
-	ErrorUnknownTypeOfValue             = errors.New("the type of values is not supported. Supported type is:" + types.GetSupportTypes())
-	ErrorNotFoundValueInText            = errors.New("settled value is not found in the text")
-	ErrorNotSupportedMatherType         = errors.New("the matcher name is not supported. Supported matchers is: " +
+	ErrorUnknownTypeOfValue             = errors.New("the type of values is not supported. Supported type is:" +
+		types.GetSupportTypes())
+	ErrorNotFoundValueInText    = errors.New("settled value is not found in the text")
+	ErrorNotSupportedMatherType = errors.New("the matcher name is not supported. Supported matchers is: " +
 		strings.Join(matchers.GetSupportedNames(), ", "))
 	ErrorNotFoundToSceneInMather = errors.New("not found scene that was bee settled in the matcher. " +
 		"The name of the scene must be specified in the nextScene field of the current scene")
@@ -40,12 +43,12 @@ func errorNotSupportedMatherType(matcherName string) error {
 	return errors.Wrap(ErrorNotSupportedMatherType, "with matcher name \""+matcherName+"\"")
 }
 
-func errorNotFoundToSceneInMather(sceneName string, matcherName string) error {
+func errorNotFoundToSceneInMather(sceneName, matcherName string) error {
 	return errors.Wrap(ErrorNotFoundToSceneInMather, "in the matcher \""+matcherName+
 		"\" with next scene name \""+sceneName+"\"")
 }
 
-func errorNotFoundToSceneInButton(sceneName string, buttonName string) error {
+func errorNotFoundToSceneInButton(sceneName, buttonName string) error {
 	return errors.Wrap(ErrorNotFoundToSceneInButton, "in the button \""+buttonName+
 		"\" with next scene name \""+sceneName+"\"")
 }

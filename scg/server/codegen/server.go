@@ -1,21 +1,22 @@
 package codegen
 
 import (
-	"github.com/ThCompiler/go_game_constractor/scg/expr"
-	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 	"path"
 	"path/filepath"
+
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 )
 
 // ServerFile returns server pkg file
-func ServerFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func ServerFile(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	serverFile := generateServer(rootPkg, rootDir, scriptInfo)
 	serverOptionFile := generateServerOption(rootPkg, rootDir, scriptInfo)
 
 	return []*codegen.File{serverOptionFile, serverFile}
 }
 
-func generateServer(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateServer(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "pkg", "httpserver", "server.go")
@@ -37,7 +38,7 @@ func generateServer(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codeg
 	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: false}
 }
 
-func generateServerOption(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateServerOption(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "pkg", "httpserver", "option.go")

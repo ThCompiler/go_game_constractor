@@ -18,5 +18,5 @@ func StringFormat(format string, args ...interface{}) string {
 
 	r := strings.NewReplacer(preparedArgs...)
 
-	return fmt.Sprint(r.Replace(format))
+	return r.Replace(format)
 }

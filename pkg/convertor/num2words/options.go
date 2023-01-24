@@ -71,8 +71,9 @@ type Options struct {
 
 func NewOptions(currency currency.Currency, declension declension.Declension,
 	roundNumber int64, convertMinusSignToWord bool,
-	showNumberParts NumberPart, convertNumberToWords NumberPart,
-	showCurrency NumberPart, currencyInfo *currency.CustomCurrency) Options {
+	showNumberParts, convertNumberToWords, showCurrency NumberPart,
+	currencyInfo *currency.CustomCurrency,
+) Options {
 	return Options{
 		currency:               currency,
 		declension:             declension,

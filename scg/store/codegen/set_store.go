@@ -1,15 +1,17 @@
 package codegen
 
 import (
-	"github.com/ThCompiler/go_game_constractor/scg/expr"
-	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-	"github.com/google/uuid"
 	"path"
 	"path/filepath"
+
+	"github.com/google/uuid"
+
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 )
 
 // SaverStoreFile returns saver for store texts
-func SaverStoreFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func SaverStoreFile(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	constFile := constName(rootPkg, rootDir, scriptInfo)
 	saverFile := saverStore(rootPkg, rootDir, scriptInfo)
 	errorFile := errors(rootPkg, rootDir, scriptInfo)
@@ -17,7 +19,7 @@ func SaverStoreFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) 
 	return []*codegen.File{constFile, errorFile, saverFile}
 }
 
-func saverStore(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func saverStore(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "internal", "texts", "store", "storesaver", "init.go")
@@ -72,7 +74,7 @@ type constData struct {
 	Name   string
 }
 
-func constName(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func constName(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "internal", "texts", "consts", "textsname", "const.go")
@@ -101,7 +103,7 @@ func constName(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.Fi
 	return &codegen.File{Path: fpath, SectionTemplates: sections}
 }
 
-func errors(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func errors(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "internal", "texts", "store", "storesaver", "errors.go")

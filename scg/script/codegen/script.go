@@ -1,184 +1,185 @@
 package codegen
 
 import (
-    "github.com/ThCompiler/go_game_constractor/scg/expr"
-    "github.com/ThCompiler/go_game_constractor/scg/expr/scene"
-    "github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
-    "github.com/ThCompiler/go_game_constractor/scg/go/types"
-    errors2 "github.com/ThCompiler/go_game_constractor/scg/script/errors"
-    "github.com/ThCompiler/go_game_constractor/scg/script/matchers"
-    "path"
-    "path/filepath"
+	"path"
+	"path/filepath"
+
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/expr/scene"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
+	"github.com/ThCompiler/go_game_constractor/scg/go/types"
+	errors2 "github.com/ThCompiler/go_game_constractor/scg/script/errors"
+	"github.com/ThCompiler/go_game_constractor/scg/script/matchers"
 )
 
 // ScriptFile returns structs for script
-func ScriptFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
-    directorConfigFile := directorConfig(rootPkg, rootDir, scriptInfo)
-    scriptFiles := make([]*codegen.File, 0)
+func ScriptFile(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+	directorConfigFile := directorConfig(rootPkg, rootDir, scriptInfo)
+	scriptFiles := make([]*codegen.File, 0)
 
-    for key, value := range scriptInfo.Script {
-        scriptFiles = append(scriptFiles, scriptScenes(rootPkg, rootDir, scriptInfo.Name, sceneWithName{
-            Scene: value,
-            Name:  key,
-        }))
-    }
+	for key, value := range scriptInfo.Script {
+		scriptFiles = append(scriptFiles, scriptScenes(rootPkg, rootDir, scriptInfo.Name, sceneWithName{
+			Scene: value,
+			Name:  key,
+		}))
+	}
 
-    sceneNamesFile := sceneNames(rootPkg, rootDir, scriptInfo)
+	sceneNamesFile := sceneNames(rootPkg, rootDir, scriptInfo)
 
-    return append([]*codegen.File{directorConfigFile, sceneNamesFile}, scriptFiles...)
+	return append([]*codegen.File{directorConfigFile, sceneNamesFile}, scriptFiles...)
 }
 
-func directorConfig(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-    var sections []*codegen.SectionTemplate
+func directorConfig(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+	var sections []*codegen.SectionTemplate
 
-    fpath := filepath.Join(rootDir, "internal", "script", "init.go")
-    imports := []*codegen.ImportSpec{
-        {Path: path.Join(rootPkg, "internal", "texts", "manager")},
-        {Path: path.Join(rootPkg, "internal", "script", "scenes")},
-        codegen.SCGNamedImport(path.Join("director", "scriptdirector"), "game"),
-    }
+	fpath := filepath.Join(rootDir, "internal", "script", "init.go")
+	imports := []*codegen.ImportSpec{
+		{Path: path.Join(rootPkg, "internal", "texts", "manager")},
+		{Path: path.Join(rootPkg, "internal", "script", "scenes")},
+		codegen.SCGNamedImport(path.Join("director", "scriptdirector"), "game"),
+	}
 
-    sections = []*codegen.SectionTemplate{
-        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Director config", "script", imports, false),
-    }
+	sections = []*codegen.SectionTemplate{
+		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Director config", "script", imports, false),
+	}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "director-config",
-        Source: directorConfigStructT,
-        Data:   scriptInfo,
-        FuncMap: map[string]interface{}{
-            "ToTitle": codegen.ToTitle,
-            "IsLast":  storeLen,
-        },
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "director-config",
+		Source: directorConfigStructT,
+		Data:   scriptInfo,
+		FuncMap: map[string]interface{}{
+			"ToTitle": codegen.ToTitle,
+			"IsLast":  storeLen,
+		},
+	})
 
-    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
-func sceneNames(_ string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
-    var sections []*codegen.SectionTemplate
+func sceneNames(_, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+	var sections []*codegen.SectionTemplate
 
-    fpath := filepath.Join(rootDir, "internal", "script", "scenes", "names.go")
+	fpath := filepath.Join(rootDir, "internal", "script", "scenes", "names.go")
 
-    sections = []*codegen.SectionTemplate{
-        codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Scenes Name", "scenes", nil, false),
-    }
+	sections = []*codegen.SectionTemplate{
+		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-Scenes Name", "scenes", nil, false),
+	}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "scenes-name",
-        Source: scenesConstantConfigStructT,
-        Data:   scriptInfo,
-        FuncMap: map[string]interface{}{
-            "ToTitle": codegen.ToTitle,
-            "ToSnake": codegen.SnakeCase,
-        },
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "scenes-name",
+		Source: scenesConstantConfigStructT,
+		Data:   scriptInfo,
+		FuncMap: map[string]interface{}{
+			"ToTitle": codegen.ToTitle,
+			"ToSnake": codegen.SnakeCase,
+		},
+	})
 
-    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
 type sceneWithName struct {
-    scene.Scene
-    Name string
+	scene.Scene
+	Name string
 }
 
 type sceneLoadContext struct {
-    SceneName string
-    Loads     map[string]string
+	SceneName string
+	Loads     map[string]string
 }
 
-func scriptScenes(rootPkg string, rootDir string, scriptName string, sceneInfo sceneWithName) *codegen.File {
-    var sections []*codegen.SectionTemplate
+func scriptScenes(rootPkg, rootDir, scriptName string, sceneInfo sceneWithName) *codegen.File {
+	var sections []*codegen.SectionTemplate
 
-    fpath := filepath.Join(rootDir, "internal", "script", "scenes", codegen.SnakeCase(sceneInfo.Name)+"_scene.go")
-    imports := []*codegen.ImportSpec{
-        codegen.SCGImport(path.Join("director")),
-        codegen.SCGImport(path.Join("director", "scriptdirector", "scene")),
-        codegen.SCGImport(path.Join("scg", "go", "types")),
-        codegen.SCGNamedImport(path.Join("pkg", "logger", "http"), "loghttp"),
-        codegen.SCGNamedImport(path.Join("director", "scriptdirector", "matchers"), "base_matchers"),
-        {Path: path.Join(rootPkg, "internal", "script", "matchers")},
-        {Path: path.Join(rootPkg, "internal", "script", "errors")},
-        {Path: path.Join(rootPkg, "internal", "script", "payloads")},
-        {Path: path.Join(rootPkg, "internal", "texts", "manager")},
-    }
+	fpath := filepath.Join(rootDir, "internal", "script", "scenes", codegen.SnakeCase(sceneInfo.Name)+"_scene.go")
+	imports := []*codegen.ImportSpec{
+		codegen.SCGImport(path.Join("director")),
+		codegen.SCGImport(path.Join("director", "scriptdirector", "scene")),
+		codegen.SCGImport(path.Join("scg", "go", "types")),
+		codegen.SCGImport(path.Join("pkg", "logger", "context")),
+		codegen.SCGNamedImport(path.Join("director", "scriptdirector", "matchers"), "base_matchers"),
+		{Path: path.Join(rootPkg, "internal", "script", "matchers")},
+		{Path: path.Join(rootPkg, "internal", "script", "errors")},
+		{Path: path.Join(rootPkg, "internal", "script", "payloads")},
+		{Path: path.Join(rootPkg, "internal", "texts", "manager")},
+	}
 
-    sections = []*codegen.SectionTemplate{
-        codegen.Header(codegen.ToTitle(scriptName)+"-SceneStructs", "scenes", imports, true),
-    }
+	sections = []*codegen.SectionTemplate{
+		codegen.Header(codegen.ToTitle(scriptName)+"-SceneStructs", "scenes", imports, true),
+	}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "scene-struct-" + sceneInfo.Name,
-        Source: sceneStructT,
-        Data:   sceneInfo,
-        FuncMap: map[string]interface{}{
-            "ToTitle":                  codegen.ToTitle,
-            "ConvertNameToMatcher":     matchers.ConvertNameToMatcher,
-            "ConvertNameToError":       errors2.ConvertNameToError,
-            "IsBaseMather":             matchers.IsCorrectNameOfMather,
-            "HaveMatchedString":        haveMatchedString,
-            "HaveLoadFromContextValue": haveLoadFromContextValue,
-            "ToGoType":                 types.ToGoType,
-        },
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "scene-struct-" + sceneInfo.Name,
+		Source: sceneStructT,
+		Data:   sceneInfo,
+		FuncMap: map[string]interface{}{
+			"ToTitle":                  codegen.ToTitle,
+			"ConvertNameToMatcher":     matchers.ConvertNameToMatcher,
+			"ConvertNameToError":       errors2.ConvertNameToError,
+			"IsBaseMather":             matchers.IsCorrectNameOfMather,
+			"HaveMatchedString":        haveMatchedString,
+			"HaveLoadFromContextValue": haveLoadFromContextValue,
+			"ToGoType":                 types.ToGoType,
+		},
+	})
 
-    sceneLoadsContext := sceneLoadContext{
-        SceneName: sceneInfo.Name,
-        Loads:     make(map[string]string),
-    }
+	sceneLoadsContext := sceneLoadContext{
+		SceneName: sceneInfo.Name,
+		Loads:     make(map[string]string),
+	}
 
-    for _, load := range sceneInfo.Context.LoadValue {
-        sceneLoadsContext.Loads[load.Name] = load.Type
-    }
+	for _, load := range sceneInfo.Context.LoadValue {
+		sceneLoadsContext.Loads[load.Name] = load.Type
+	}
 
-    for _, load := range sceneInfo.Text.Values {
-        if load.FromContext != "" {
-            sceneLoadsContext.Loads[load.FromContext] = load.Type
-        }
-    }
+	for _, load := range sceneInfo.Text.Values {
+		if load.FromContext != "" {
+			sceneLoadsContext.Loads[load.FromContext] = load.Type
+		}
+	}
 
-    sections = append(sections, &codegen.SectionTemplate{
-        Name:   "load-context-scene-struct-" + sceneInfo.Name,
-        Source: loadContextStructT,
-        Data:   sceneLoadsContext,
-        FuncMap: map[string]interface{}{
-            "ToTitle":  codegen.ToTitle,
-            "ToGoType": types.ToGoType,
-        },
-    })
+	sections = append(sections, &codegen.SectionTemplate{
+		Name:   "load-context-scene-struct-" + sceneInfo.Name,
+		Source: loadContextStructT,
+		Data:   sceneLoadsContext,
+		FuncMap: map[string]interface{}{
+			"ToTitle":  codegen.ToTitle,
+			"ToGoType": types.ToGoType,
+		},
+	})
 
-    return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
+	return &codegen.File{Path: fpath, SectionTemplates: sections, IsUpdatable: true}
 }
 
 func haveMatchedString(scene sceneWithName) bool {
-    return len(scene.Matchers) != 0 || len(scene.Buttons) != 0
+	return len(scene.Matchers) != 0 || len(scene.Buttons) != 0
 }
 
 func haveLoadFromContextValue(values map[string]scene.Value) bool {
-    found := false
+	found := false
 
-    for _, val := range values {
-        if val.FromContext != "" {
-            found = true
+	for _, val := range values {
+		if val.FromContext != "" {
+			found = true
 
-            break
-        }
-    }
+			break
+		}
+	}
 
-    return found
+	return found
 }
 
 var ln = 0
 
 func storeLen(l int) bool {
-    ln++
-    if l == ln {
-        ln = 0
+	ln++
+	if l == ln {
+		ln = 0
 
-        return true
-    }
+		return true
+	}
 
-    return false
+	return false
 }
 
 const sceneStructT = `{{ $sceneName := .Name }}{{ if .Buttons }} 
@@ -188,23 +189,26 @@ const ( {{ range $name, $button := .Buttons }}
 )
 {{end}}// {{ ToTitle .Name }} scene
 type {{ ToTitle .Name }} struct {
-	loghttp.LogObject
+	context.LogObject
 	TextManager    manager.TextManager
 	NextScene 	   SceneName
 }
 
 // React function of actions after scene has been played {{ if not .IsInfoScene }}
 func (sc *{{ ToTitle .Name }}) React({{ if HaveMatchedString . }}ctx{{else}}_{{end}} *scene.Context) scene.Command { 
-    {{ if .Context.SaveValue }} ctx.Set("{{ .Context.SaveValue.Name }}", types.MustConvert[{{ ToGoType .Context.SaveValue.Type }}](ctx.Request.SearchedMessage))
+    {{ if .Context.SaveValue }} ctx.Set("{{ .Context.SaveValue.Name }}", types.MustConvert[{{ 
+													ToGoType .Context.SaveValue.Type }}](ctx.Request.SearchedMessage))
     
     {{end}}// TODO Write the actions after {{ ToTitle .Name }} scene has been played {{ if HaveMatchedString . }}
 	switch { 
 		{{ if .Buttons }}// Buttons select 
-		{{end}}{{ range $name, $button := .Buttons }}case ctx.Request.NameMatched == {{ ToTitle $name }}{{ ToTitle $sceneName }}ButtonText && ctx.Request.WasButton:
+		{{end}}{{ range $name, $button := .Buttons }}case ctx.Request.NameMatched == {{ 
+											ToTitle $name }}{{ ToTitle $sceneName }}ButtonText && ctx.Request.WasButton:
             {{ if .ToScene }}sc.NextScene = {{ ToTitle .ToScene }}Scene{{end}}
 		{{end}}{{ if .Matchers }}
 		// Matcher select 
-		{{end}}{{ range .Matchers }}case ctx.Request.NameMatched == {{ if (IsBaseMather .Name) }}base_matchers.{{ToTitle .Name}}MatchedString{{
+		{{end}}{{ range .Matchers }}case ctx.Request.NameMatched == {{ 
+											if (IsBaseMather .Name) }}base_matchers.{{ToTitle .Name}}MatchedString{{
 		else}}matchers.{{ToTitle .Name}}MatchedString{{end}}:
             {{ if .ToScene }}sc.NextScene = {{ ToTitle .ToScene }}Scene{{end}}
 	{{end}}default:
@@ -213,11 +217,11 @@ func (sc *{{ ToTitle .Name }}) React({{ if HaveMatchedString . }}ctx{{else}}_{{e
 	{{else}}
 
 	sc.NextScene = {{ ToTitle .Name }}Scene // TODO: manually set next scene after reaction{{end}}
-	return scene.NoCommand
-}{{else}}
+{{else}}
 func (sc *{{ ToTitle .Name }}) React(_ *scene.Context) scene.Command { 
-	return scene.NoCommand
-}{{end}}
+{{end}}
+	return {{ if .IsEnd }} scene.FinishScene {{else}} scene.NoCommand {{end}}
+}
 
 // Next function returning next scene
 func (sc *{{ ToTitle .Name }}) Next() scene.Scene { {{ if not .IsInfoScene }}
@@ -242,7 +246,7 @@ func (sc *{{ ToTitle .Name }}) Next() scene.Scene { {{ if not .IsInfoScene }}
 }
 
 // GetSceneInfo function returning info about scene
-func (sc *{{ ToTitle .Name }}) GetSceneInfo({{ if HaveLoadFromContextValue .Text.Values }}ctx{{else}}_{{end}} *scene.Context) (scene.Info, bool) {
+func (sc *{{ ToTitle .Name }}) GetSceneInfo(ctx *scene.Context) (scene.Info, bool) {
 	{{ if .Text.Values }}var (
 		{{ range $nameVar, $typeVar := .Text.Values }}{{ $nameVar }} {{ ToGoType $typeVar.Type }}{{
                 if $typeVar.FromContext }} = sc.Get{{ ToTitle $typeVar.FromContext }}ContextValue(ctx){{end}}
@@ -251,9 +255,15 @@ func (sc *{{ ToTitle .Name }}) GetSceneInfo({{ if HaveLoadFromContextValue .Text
 	{{end}}
 	// TODO Write some actions for get data for texts
 
-	text, _ := sc.TextManager.Get{{ ToTitle .Name }}Text(
+	text, err := sc.TextManager.Get{{ ToTitle .Name }}Text(
 		{{ range $nameVar, $typeVar := .Text.Values }}{{$nameVar}},
 		{{end}})
+	if err != nil {
+		sc.Log(ctx).Error(err, "error while getting text for {{ ToTitle .Name }} scene")
+
+		return scene.Info{}, false
+	}
+
 	return scene.Info{
 		Text: text,
 		ExpectedMessages: []scene.MessageMatcher{ ` + sceneMatchersStructT + ` },
@@ -298,7 +308,8 @@ func New{{ ToTitle .Name }}Script(manager  manager.TextManager) game.SceneDirect
 
 const loadContextStructT = `{{ $sceneName := .SceneName }}{{ range $nameVar, $typeVar := .Loads }}
 //  Get{{ ToTitle $nameVar }}ContextValue function returning value from context about scene
-func (sc *{{ ToTitle $sceneName }}) Get{{ ToTitle $nameVar }}ContextValue(ctx *scene.Context) ({{ ToGoType $typeVar }}) {
+func (sc *{{ ToTitle $sceneName }}) Get{{ ToTitle $nameVar }}ContextValue(ctx *scene.Context) ({{
+																								ToGoType $typeVar }}) {
     return scene.GetContextAny[{{ ToGoType $typeVar }}](ctx, "{{$nameVar}}")
 }{{ end }}
 `

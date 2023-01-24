@@ -55,7 +55,8 @@ type AsyncStack[T any] struct {
 func NewAsyncStack[T any]() *AsyncStack[T] {
 	return &AsyncStack[T]{
 		lock:  sync.Mutex{},
-		stack: NewStack[T]()}
+		stack: NewStack[T](),
+	}
 }
 
 func (st *AsyncStack[T]) Push(value T) {

@@ -1,21 +1,22 @@
 package codegen
 
 import (
-	"github.com/ThCompiler/go_game_constractor/scg/expr"
-	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 	"path"
 	"path/filepath"
 	"strings"
+
+	"github.com/ThCompiler/go_game_constractor/scg/expr"
+	"github.com/ThCompiler/go_game_constractor/scg/generator/codegen"
 )
 
 // AppFile returns app file
-func AppFile(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
+func AppFile(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) []*codegen.File {
 	appFile := generateApp(rootPkg, rootDir, scriptInfo)
 
 	return []*codegen.File{appFile}
 }
 
-func generateApp(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
+func generateApp(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) *codegen.File {
 	var sections []*codegen.SectionTemplate
 
 	fpath := filepath.Join(rootDir, "internal", strings.ToLower(codegen.ToTitle(scriptInfo.Name)), "app.go")
@@ -29,7 +30,10 @@ func generateApp(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *co
 		{Path: path.Join(rootPkg, "internal", "script")},
 		{Path: path.Join(rootPkg, "internal", "controller", "http", "v1")},
 		{Path: path.Join(rootPkg, "internal", "texts", "manager", "usecase")},
-		{Path: path.Join(rootPkg, "internal", "texts", "store", "redis"), Name: codegen.SnakeCase(scriptInfo.Name) + "_redis"},
+		{
+			Path: path.Join(rootPkg, "internal", "texts", "store", "redis"),
+			Name: codegen.SnakeCase(scriptInfo.Name) + "_redis",
+		},
 		{Path: path.Join(rootPkg, "internal", "texts", "store", "storesaver")},
 		{Path: path.Join(rootPkg, "pkg", "logger", "prepare")},
 		{Path: path.Join(rootPkg, "pkg", "httpserver")},
@@ -40,7 +44,12 @@ func generateApp(rootPkg string, rootDir string, scriptInfo expr.ScriptInfo) *co
 		{Path: path.Join("github.com", "gin-gonic", "gin")},
 	}
 	sections = []*codegen.SectionTemplate{
-		codegen.Header(codegen.ToTitle(scriptInfo.Name)+"-App file", strings.ToLower(codegen.ToTitle(scriptInfo.Name)), imports, true),
+		codegen.Header(
+			codegen.ToTitle(scriptInfo.Name)+"-App file",
+			strings.ToLower(codegen.ToTitle(scriptInfo.Name)),
+			imports,
+			true,
+		),
 	}
 
 	sections = append(sections, &codegen.SectionTemplate{
@@ -112,7 +121,8 @@ func Run(cfg *config.Config) {
     
 
     // Game Director
-    gameDirectorConfig{{ ToTitle .Name }} := script.New{{ ToTitle .Name }}Script(usecase.NewTextUsecase({{ CamelCase .Name }}Store))
+    gameDirectorConfig{{ ToTitle .Name }} := script.New{{ ToTitle 
+													.Name }}Script(usecase.NewTextUsecase({{ CamelCase .Name }}Store))
 
 
     // HTTP Server
