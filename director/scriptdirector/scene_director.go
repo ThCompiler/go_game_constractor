@@ -17,6 +17,7 @@ type SceneDirectorConfig struct {
 	StartScene   scene.Scene
 	GoodbyeScene scene.Scene
 	EndCommand   string
+	//TODO System Error scene and handle system error
 }
 
 // ScriptDirector - implementation game director for script games.
@@ -30,18 +31,26 @@ type ScriptDirector struct {
 }
 
 // NewScriptDirector - create new ScriptDirector.
-func NewScriptDirector(cf SceneDirectorConfig) *ScriptDirector {
+func NewScriptDirector(cf SceneDirectorConfig) (*ScriptDirector, error) {
+	if cf.StartScene == nil || cf.GoodbyeScene == nil {
+		return nil, ErrorNotSetSettingsScene
+	}
+
 	return &ScriptDirector{
 		stashedScene:  structures.NewStack[scene.Scene](),
 		cf:            cf,
 		currentScene:  nil,
 		ctx:           context.Background(),
 		isEndOfScript: false,
-	}
+	}, nil
 }
 
 // PlayScene - .
 func (so *ScriptDirector) PlayScene(req director.SceneRequest) director.Result {
+	if so.isEndOfScript {
+		panic(ErrorRunFinishedDirector)
+	}
+
 	ctx := toSceneContext(so.ctx, req)
 
 	sceneInfo := scene.Info{}

@@ -1,4 +1,4 @@
 package go_game_constractor //nolint:stylecheck,revive,golint // it is root package
 
 // Version - version of app.
-const Version = "v0.2.5-alpha"
+const Version = "v1.0.0-beta"

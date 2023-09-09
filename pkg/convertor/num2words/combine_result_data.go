@@ -6,7 +6,7 @@ import (
 
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/currency"
-	functions2 "github.com/ThCompiler/go_game_constractor/pkg/convertor/num2words/functions"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor/num2words/functions"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/num2words/objects"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words/declension"
@@ -33,11 +33,11 @@ func combineResultData(number objects.Number, appliedOptions Options) string {
 	}
 
 	// Округлить число до заданной точности
-	modifiedNumber = functions2.RoundNumber(number, appliedOptions.roundNumber)
+	modifiedNumber = functions.RoundNumber(number, appliedOptions.roundNumber)
 	// Если указана валюта
 	if appliedOptions.currency != "" && appliedOptions.currency != currency.NUMBER {
 		// Округлить число до 2 знаков после запятой
-		modifiedNumber = functions2.RoundNumber(modifiedNumber, twoSignAfterRound)
+		modifiedNumber = functions.RoundNumber(modifiedNumber, twoSignAfterRound)
 	}
 
 	// Если нужно отображать целую часть числа
@@ -56,7 +56,7 @@ func combineResultData(number objects.Number, appliedOptions Options) string {
 		convertedNumber.FirstPart + " " + convertedNumber.FirstPartName + " " +
 		convertedNumber.SecondPart + " " + convertedNumber.SecondPartName
 
-	convertedNumberResult = strings.TrimSpace(functions2.ReplaceInString(convertedNumberResult, `\s+`, ` `))
+	convertedNumberResult = strings.TrimSpace(functions.ReplaceInString(convertedNumberResult, `\s+`, ` `))
 
 	// Сделать первую букву заглавной
 	r := []rune(convertedNumberResult)
@@ -70,8 +70,8 @@ func combineIntegerPart(convertedNumber objects.ResultNumberT, integerPart strin
 	// По умолчанию число не конвертировано в слова
 	convertedNumber.FirstPart = integerPart
 	// Получить результат конвертирования числа
-	convertedIntegerObject := functions2.ConvertEachScaleToWords(
-		functions2.NumberToScales(integerPart),
+	convertedIntegerObject := functions.ConvertEachScaleToWords(
+		functions.SplitNumberIntoThrees(integerPart),
 		appliedOptions.getCurrencyObject().CurrencyNounGender.Integer,
 		appliedOptions.declension,
 	)
@@ -86,8 +86,8 @@ func combineIntegerPart(convertedNumber objects.ResultNumberT, integerPart strin
 			// Если разделитель - дробная черта
 			// Род числа всегда женский ('одна', 'две')
 			// Применить конвертированное число
-			convertedNumber.FirstPart = functions2.ConvertEachScaleToWords(
-				functions2.NumberToScales(integerPart),
+			convertedNumber.FirstPart = functions.ConvertEachScaleToWords(
+				functions.SplitNumberIntoThrees(integerPart),
 				genders.FEMALE,
 				appliedOptions.declension,
 			).Result
@@ -97,7 +97,7 @@ func combineIntegerPart(convertedNumber objects.ResultNumberT, integerPart strin
 	if appliedOptions.showCurrency.Integer {
 		// Если разделитель - не дробная черта
 		if delimiter != constants.FractionalNumber {
-			currencyWord := functions2.GetCurrencyWord(
+			currencyWord := functions.GetCurrencyWord(
 				appliedOptions.getCurrencyObject(),
 				constants.DecimalNumber,
 				convertedIntegerObject.UnitNameForm,
@@ -118,8 +118,8 @@ func combineFractionalPart(convertedNumber objects.ResultNumberT, integerPart, f
 	// По умолчанию число не конвертировано в слова
 	convertedNumber.SecondPart = fractionalPart
 	// Получить результат конвертирования числа
-	convertedFractionalObject := functions2.ConvertEachScaleToWords(
-		functions2.NumberToScales(fractionalPart),
+	convertedFractionalObject := functions.ConvertEachScaleToWords(
+		functions.SplitNumberIntoThrees(fractionalPart),
 		appliedOptions.getCurrencyObject().CurrencyNounGender.FractionalPart,
 		appliedOptions.declension,
 	)
@@ -152,14 +152,14 @@ func convertNumberToWord(convertedNumber objects.ResultNumberT, integerPart, fra
 	}
 
 	// Если разделитель - дробная черта
-	convertedIntegerObject := functions2.ConvertEachScaleToWords(
-		functions2.NumberToScales(integerPart),
+	convertedIntegerObject := functions.ConvertEachScaleToWords(
+		functions.SplitNumberIntoThrees(integerPart),
 		appliedOptions.getCurrencyObject().CurrencyNounGender.Integer,
 		appliedOptions.declension,
 	)
 
-	convertedNumber.SecondPart = functions2.ConvertEachScaleToWordsSlash(
-		functions2.NumberToScales(fractionalPart),
+	convertedNumber.SecondPart = functions.ConvertEachScaleToWordsSlash(
+		functions.SplitNumberIntoThrees(fractionalPart),
 		convertedIntegerObject.UnitNameForm,
 		appliedOptions.declension,
 	)
@@ -202,7 +202,7 @@ func convertNumberToNumberString(convertedNumber objects.ResultNumberT,
 		// Если в дробной части есть цифры
 		if len(fractionalPart) > 0 {
 			// Удалить лишние нули перед числом
-			fractionalPart = functions2.ClearFromString(fractionalPart, `^0+`)
+			fractionalPart = functions.RemoveFromString(fractionalPart, `^0+`)
 			// Если после удаления лишних нулей не осталось цифр, то добавить один "0"
 			if fractionalPart == "" && appliedOptions.roundNumber != 0 {
 				fractionalPart = "0"
@@ -218,7 +218,7 @@ func convertNumberToNumberString(convertedNumber objects.ResultNumberT,
 func setNotNumberCurrency(convertedNumber objects.ResultNumberT, fractionalObject objects.ConvertedScalesToWords,
 	appliedOptions Options,
 ) objects.ResultNumberT {
-	currencyWord := functions2.GetCurrencyWord(
+	currencyWord := functions.GetCurrencyWord(
 		appliedOptions.getCurrencyObject(),
 		constants.FractionalNumber,
 		fractionalObject.UnitNameForm,
@@ -254,7 +254,7 @@ func setNumberCurrency(convertedNumber objects.ResultNumberT, fractionalPart str
 			),
 		)
 
-		convertedNumber.SecondPartName = functions2.GetFractionalUnitCurrencyNumber(
+		convertedNumber.SecondPartName = functions.GetFractionalUnitCurrencyNumber(
 			len(fractionalPart)-1,
 			digitToConvert,
 			appliedOptions.declension,

@@ -3,7 +3,7 @@ package constants
 type NumberType string
 
 const (
-	MaxIntegerPartLength = 306
+	MaxNumberPartLength = 306
 
 	DecimalNumber    = NumberType(",")
 	FractionalNumber = NumberType("/")

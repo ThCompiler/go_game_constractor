@@ -10,11 +10,11 @@ import (
 
 type ClearStringFromPunctuationSuite struct {
 	ts.TestCasesSuite
-	RunFunc func(args ...interface{}) []interface{}
+	ActFunc func(args ...interface{}) []interface{}
 }
 
 func (s *ClearStringFromPunctuationSuite) SetupTest() {
-	s.RunFunc = func(args ...interface{}) []interface{} {
+	s.ActFunc = func(args ...interface{}) []interface{} {
 		res := ClearStringFromPunctuation(args[0].(string))
 		return []interface{}{res}
 	}
@@ -22,7 +22,7 @@ func (s *ClearStringFromPunctuationSuite) SetupTest() {
 
 func (s *ClearStringFromPunctuationSuite) TestStrWithPunctuation() {
 	s.RunTest(
-		s.RunFunc,
+		s.ActFunc,
 		ts.TestCase{
 			Name:     "All punctuation characters",
 			Args:     ts.TTA(`!\"#$%&'()*+,-./:;<=>?@[\\]^_` + "`" + `{|}~`),
@@ -54,7 +54,7 @@ func (s *ClearStringFromPunctuationSuite) TestStrWithPunctuation() {
 
 func (s *ClearStringFromPunctuationSuite) TestStrWithoutPunctuation() {
 	s.RunTest(
-		s.RunFunc,
+		s.ActFunc,
 		ts.TestCase{
 			Name:     "Single word",
 			Args:     ts.TTA(`text`),

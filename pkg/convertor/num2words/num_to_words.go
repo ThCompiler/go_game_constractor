@@ -1,23 +1,53 @@
 package convertor
 
 import (
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor/constants"
 	"strconv"
 
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/num2words/functions"
 )
 
+type ConvertableToString interface {
+	ToString() string
+}
+
+type NumberToConvert interface {
+	ConvertableToString
+	string |
+		int | int8 | int16 | int32 | int64 |
+		uint | uint8 | uint16 | uint32 | uint64 |
+		float32 | float64
+}
+
 // Convert convertor number into the words representation.
-func Convert(number interface{}, options Options) (string, error) {
+func Convert[N NumberToConvert](number N, options Options) (string, error) {
 	numberString := convertNumberToString(number)
 	if numberString == "" {
 		return "", nil
 	}
 
 	// Обработать введенное число
-	numberArray := functions.SplitNumberToArray(numberString)
+	extractedNumber, err := functions.ExtractNumber(numberString)
+	if err != nil {
+		return "", err
+	}
+
+	if len(extractedNumber.FirstPart) > constants.MaxNumberPartLength {
+		extractedNumber.FirstPart =
+			extractedNumber.FirstPart[(len(extractedNumber.FirstPart) - constants.MaxNumberPartLength):]
+	}
+
+	if len(extractedNumber.SecondPart) > constants.MaxNumberPartLength {
+		if extractedNumber.Divider == constants.DecimalNumber {
+			extractedNumber.SecondPart = extractedNumber.SecondPart[0:constants.MaxNumberPartLength]
+		} else {
+			extractedNumber.SecondPart =
+				extractedNumber.SecondPart[(len(extractedNumber.SecondPart) - constants.MaxNumberPartLength):]
+		}
+	}
 
 	// Собрать конечный словесный результат
-	convertedNumberString := combineResultData(numberArray, options)
+	convertedNumberString := combineResultData(extractedNumber, options)
 
 	return convertedNumberString, nil
 }
@@ -50,6 +80,8 @@ func convertNumberToString(number interface{}) string {
 		return strconv.FormatFloat(float64(convertNumber), 'f', -1, 32)
 	case float64:
 		return strconv.FormatFloat(convertNumber, 'f', -1, 64)
+	case ConvertableToString:
+		return convertNumber.ToString()
 	default:
 		return ""
 	}

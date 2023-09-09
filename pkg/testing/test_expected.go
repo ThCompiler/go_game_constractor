@@ -51,6 +51,20 @@ func TTVE(expedites ...interface{}) TestExpected {
 	return ToTestValuesExpected(expedites...)
 }
 
+func ToTestValuesExpectedWithNilError(expedites ...interface{}) TestExpected {
+	return TestExpected{
+		PanicError: nil,
+		Error: &TestErrorExpected{
+			Error: nil,
+		},
+		ExpectedReturns: expedites,
+	}
+}
+
+func TTVEWNE(expedites ...interface{}) TestExpected {
+	return ToTestValuesExpectedWithNilError(expedites...)
+}
+
 func ToTestErrorExpected(err error) TestExpected {
 	return TestExpected{
 		PanicError: nil,

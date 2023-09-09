@@ -10,11 +10,11 @@ import (
 
 type StringFormatSuite struct {
 	ts.TestCasesSuite
-	RunFunc func(args ...interface{}) []interface{}
+	ActFunc func(args ...interface{}) []interface{}
 }
 
 func (s *StringFormatSuite) SetupTest() {
-	s.RunFunc = func(args ...interface{}) []interface{} {
+	s.ActFunc = func(args ...interface{}) []interface{} {
 		res := StringFormat(args[0].(string), args[1:]...)
 		return []interface{}{res}
 	}
@@ -22,7 +22,7 @@ func (s *StringFormatSuite) SetupTest() {
 
 func (s *StringFormatSuite) TestCorrectNoFields() {
 	s.RunTest(
-		s.RunFunc,
+		s.ActFunc,
 		ts.TestCase{
 			Name:     "No Arguments",
 			Args:     ts.TTA("Hello world"),
@@ -38,7 +38,7 @@ func (s *StringFormatSuite) TestCorrectNoFields() {
 
 func (s *StringFormatSuite) TestCorrectWithFields() {
 	s.RunTest(
-		s.RunFunc,
+		s.ActFunc,
 		ts.TestCase{
 			Name:     "With two field in order 'greeting' and 'name'",
 			Args:     ts.TTA("{greeting}. {name}", "greeting", "Hello", "name", "ThCompiler"),
@@ -59,7 +59,7 @@ func (s *StringFormatSuite) TestCorrectWithFields() {
 
 func (s *StringFormatSuite) TestInCorrect() {
 	s.RunTest(
-		s.RunFunc,
+		s.ActFunc,
 		ts.TestCase{
 			Name:     "Without value of field",
 			Args:     ts.TTA("Hello. {name}", "name"),

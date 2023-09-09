@@ -28,8 +28,8 @@ func ConvertEachScaleToWordsSlash(
 	updatedNumberScalesArrayLen := len(updatedNumberScalesArray)
 
 	/* Определить индекс класса, который является последним.
-	   После него могут быть только классы с "000".
-	   0 - единицы, 1 - тысячи, 2 - миллионы и т.д. */
+	После него могут быть только классы с "000".
+	0 - единицы, 1 - тысячи, 2 - миллионы и т.д. */
 	lastScaleWihNumber := indexOfLastNotNullScalesByEnd(updatedNumberScalesArray)
 	// Индекс последнего класса в массиве.
 	lastScaleWihNumberIndex := updatedNumberScalesArrayLen - lastScaleWihNumber - 1
@@ -43,7 +43,7 @@ func ConvertEachScaleToWordsSlash(
 	}
 
 	/* Если есть не пустые классы до последнего не пустого класса,
-	   то конвертировать как обычное число */
+	то конвертировать как обычное число */
 	if lastScaleWihNumberIndex > 0 {
 		// Получить массив классов, в котором последний класс будет пустым.
 		numberScalesArrForCommonConvert := make([]objects.RuneDigitTriplet, len(updatedNumberScalesArray))
@@ -123,8 +123,8 @@ func convertLastScaleToWordsSlash(scaleToConvert objects.NumericDigitTriplet,
 	res = ""
 
 	/* Определить какой разряд в текущем классе последний
-	   (Любая последняя цифра, кроме нуля)
-	   0 - единицы, 1 - десятки, 2 - сотни */
+	(Любая последняя цифра, кроме нуля)
+	0 - единицы, 1 - десятки, 2 - сотни */
 	scaleForCommonConvert := scaleToConvert
 
 	digitToConvert := scaleToConvert.Hundreds // Цифра для конвертирования
@@ -146,8 +146,8 @@ func convertLastScaleToWordsSlash(scaleToConvert objects.NumericDigitTriplet,
 	}
 
 	/* Получить класс без последнего разряда для конвертирования как обычного числа
-	   и если после этого в разряде десяток остается "1", то эту "1" тоже убрать,
-	   чтобы не отконвертировалось как 10-19. */
+	и если после этого в разряде десяток остается "1", то эту "1" тоже убрать,
+	чтобы не отконвертировалось как 10-19. */
 	if scaleForCommonConvert.Dozens == 1 {
 		scaleForCommonConvert.Dozens = 0
 	}

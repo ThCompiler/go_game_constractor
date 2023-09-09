@@ -9,7 +9,7 @@ import (
 
 const countPart = 3
 
-func NumberToScales(number string) []objects.RuneDigitTriplet {
+func SplitNumberIntoThrees(number string) []objects.RuneDigitTriplet {
 	// Сделать количество цифр числа кратным 3
 	numberLength := len(number)
 	numberScales := int(math.Ceil(float64(numberLength) / countPart))

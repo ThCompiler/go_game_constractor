@@ -14,32 +14,34 @@ const (
 	four = 4
 )
 
-func roundDigitInLoop(increaseDigit bool, currentDigit int8, numberPartToRound []rune, i int) (bool, []rune, bool) {
+func roundDigit(increaseDigit bool, numberToRound []rune, i int) (bool, []rune) {
+	currentDigit := stringutilits.ToDigit(numberToRound[i])
 	// Если нужно было увеличивать цифру
 	if increaseDigit {
 		if currentDigit != nine { // Если любая другая цифра
-			numberPartToRound[i]++
+			numberToRound[i]++
 
-			return increaseDigit, numberPartToRound, false
+			return false, numberToRound
 		}
 		// Если текущая цифра 9, то увеличить следующую
-		numberPartToRound[i] = '0'
+		numberToRound[i] = '0'
 		// Если это уже самая первая цифра слева, то добавить "1" в начало
 		if i == 0 {
-			numberPartToRound = append([]rune{'1'}, numberPartToRound...)
+			numberToRound = append([]rune{'1'}, numberToRound...)
 		}
+
+		return true, numberToRound
 	}
 
 	// Если не нужно было увеличивать цифру
 	// Если текущая цифра <= 4, то завершить цикл
 	if currentDigit <= four {
-		return increaseDigit, numberPartToRound, false
+		return false, numberToRound
 	}
-	/* Если текущая цифра >= 5,
-	   то увеличить следующую цифру (соседнюю слева) */
-	increaseDigit = true
 
-	return increaseDigit, numberPartToRound, true
+	/* Если текущая цифра >= 5,
+	то увеличить следующую цифру (соседнюю слева) */
+	return true, numberToRound
 }
 
 func RoundNumber(number objects.Number, precision int64) objects.Number {
@@ -50,27 +52,32 @@ func RoundNumber(number objects.Number, precision int64) objects.Number {
 
 	integerPart := number.FirstPart
 	// Обрезать дробную часть
-	fractionalPart := number.SecondPart[0 : precision+1]
-	numberPartToRound := []rune(integerPart + `.` + fractionalPart)
+	decimalPart := number.SecondPart[0 : precision+1]
+	numberToRound := []rune(integerPart + string(constants.DecimalNumber) + decimalPart)
 	increaseDigit := false
-	continueLoop := true
 
 	// Цикл от последней цифры к первой (справа налево)
-	for i := len(numberPartToRound) - 1; i >= 0 && continueLoop; i-- {
+	for i := len(numberToRound) - 1; i >= 0; i-- {
 		// Если текущий символ - это цифра (не знак разделителя)
-		if unicode.IsDigit(numberPartToRound[i]) {
-			currentDigit := stringutilits.ToDigit(numberPartToRound[i])
-			increaseDigit, numberPartToRound, continueLoop = roundDigitInLoop(increaseDigit, currentDigit,
-				numberPartToRound, i)
+		if !unicode.IsDigit(numberToRound[i]) {
+			continue
+		}
+
+		if increaseDigit, numberToRound = roundDigit(increaseDigit, numberToRound, i); !increaseDigit {
+			break
 		}
 	}
 
-	result := string(numberPartToRound[0 : len(numberPartToRound)-1])
+	result := string(numberToRound[0 : len(numberToRound)-1])
 
-	number.FirstPart, number.SecondPart, _ = strings.Cut(result, ".")
+	if increaseDigit {
+		result = "1" + result
+	}
+
+	number.FirstPart, number.SecondPart, _ = strings.Cut(result, string(constants.DecimalNumber))
 	// Убрать лишние нули из дробной части справа
-	number.SecondPart = ClearFromString(number.SecondPart, `^0+/`)
-	if number.SecondPart == "" && precision != 0 {
+	number.SecondPart = RemoveFromString(number.SecondPart, ZerosInEndRegex)
+	if number.SecondPart == "" {
 		number.SecondPart = "0"
 	}
 

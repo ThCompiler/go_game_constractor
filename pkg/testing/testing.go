@@ -11,30 +11,33 @@ import (
 
 type MockTestFunction func(ctrl *gomock.Controller) []interface{}
 
-type TestFunction func(args ...interface{}) []interface{}
+type ArrangeFunction func(args ...interface{}) []interface{}
+
+type ActFunction func(args ...interface{}) []interface{}
 
 type TestCase struct {
-	Name      string
-	Args      []interface{}
-	Expected  TestExpected
-	InitMocks MockTestFunction
+	Name        string
+	Args        []interface{}
+	Expected    TestExpected
+	InitMocks   MockTestFunction
+	ArrangeCase ArrangeFunction
 }
 
 type TestCasesSuite struct {
 	suite.Suite
 }
 
-func (s *TestCasesSuite) RunTest(fun TestFunction, cases ...TestCase) {
+func (s *TestCasesSuite) RunTest(fun ActFunction, cases ...TestCase) {
 	RunTest(s.T(), fun, cases...)
 }
 
-func checkExpected(t *testing.T, res []interface{}, expected TestExpected, caseName string) {
+func assertCase(t *testing.T, res []interface{}, expected TestExpected, caseName string) {
 	t.Helper()
 
 	if expected.HaveError() {
-		checkWithError(t, &res, expected, caseName)
+		assertWithError(t, &res, expected, caseName)
 	} else {
-		require.Equalf(t, len(res), len(expected.ExpectedReturns),
+		require.Equalf(t, len(expected.ExpectedReturns), len(res),
 			"Testcase with name: %s, different len of expected and gotten return values", caseName)
 	}
 
@@ -43,7 +46,7 @@ func checkExpected(t *testing.T, res []interface{}, expected TestExpected, caseN
 	}
 }
 
-func checkWithError(t *testing.T, res *[]interface{}, expected TestExpected, caseName string) {
+func assertWithError(t *testing.T, res *[]interface{}, expected TestExpected, caseName string) {
 	t.Helper()
 
 	size := len(*res)
@@ -58,29 +61,29 @@ func checkWithError(t *testing.T, res *[]interface{}, expected TestExpected, cas
 	if expected.MustErrorExpected().CheckError {
 		assert.Error(t, gottenError, "Testcase with name: %s", caseName)
 	} else {
-		checkErrorCorrect(t, gottenError, expected, caseName)
+		checkForCorrectnessError(t, gottenError, expected, caseName)
 	}
 
 	*res = (*res)[:size-1]
 }
 
-func checkErrorCorrect(t *testing.T, gottenError error, expected TestExpected, caseName string) {
+func checkForCorrectnessError(t *testing.T, gottenError error, expected TestExpected, caseName string) {
 	t.Helper()
 
 	if expected.MustErrorExpected().Error == nil {
 		assert.NoError(t, gottenError,
 			"Testcase with name: %s", caseName)
 	} else {
-		assert.EqualError(t, gottenError, expected.MustErrorExpected().Error.Error(),
+		assert.ErrorIs(t, gottenError, expected.MustErrorExpected().Error,
 			"Testcase with name: %s", caseName)
 	}
 }
 
-func checkPanicErrorCorrect(t *testing.T, msg any, expected TestExpected, caseName string) {
+func checkForCorrectnessPanicError(t *testing.T, msg any, expected TestExpected, caseName string) {
 	t.Helper()
 
 	if expected.HavePanicError() {
-		assert.EqualValuesf(t, msg, expected.MustPanicErrorExpected().Msg, "Testcase with name: %s", caseName)
+		assert.EqualValuesf(t, expected.MustPanicErrorExpected().Msg, msg, "Testcase with name: %s", caseName)
 
 		return
 	}
@@ -92,14 +95,14 @@ func checkPanicErrorCorrect(t *testing.T, msg any, expected TestExpected, caseNa
 	assert.Failf(t, "Panic error testcase: ", "%s %v", caseName, msg)
 }
 
-func runTestCase(t *testing.T, test TestCase, fun TestFunction, ctrl *gomock.Controller) {
+func runTestCase(t *testing.T, test TestCase, fun ActFunction, ctrl *gomock.Controller) {
 	t.Helper()
 
 	defer func(t *testing.T, test TestCase) {
 		t.Helper()
 
 		if r := recover(); r != nil {
-			checkPanicErrorCorrect(t, r, test.Expected, test.Name)
+			checkForCorrectnessPanicError(t, r, test.Expected, test.Name)
 		}
 	}(t, test)
 
@@ -110,12 +113,16 @@ func runTestCase(t *testing.T, test TestCase, fun TestFunction, ctrl *gomock.Con
 		args = append(mocks, args...)
 	}
 
+	if test.ArrangeCase != nil {
+		args = test.ArrangeCase(args)
+	}
+
 	res := fun(args...)
 
-	checkExpected(t, res, test.Expected, test.Name)
+	assertCase(t, res, test.Expected, test.Name)
 }
 
-func RunTest(t *testing.T, fun TestFunction, cases ...TestCase) {
+func RunTest(t *testing.T, fun ActFunction, cases ...TestCase) {
 	t.Helper()
 
 	ctrl := gomock.NewController(t)
