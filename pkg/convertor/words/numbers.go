@@ -34,7 +34,7 @@ type wordsConstantsForNumbers struct {
 	UnitScalesNames         UnitScalesNames         `yaml:"unitScalesNames"`
 	SlashNumberUnitPrefixes SlashNumberUnitPrefixes `yaml:"slashNumberUnitPrefixes"`
 	DigitWords              DigitWords              `yaml:"digitWords"`
-	CurrenciesStrings       CurrencyWords           `yaml:"currenciesStrings"`
+	CurrencyStrings         CurrencyWords           `yaml:"currencyStrings"`
 	FractionalUnit          FractionalUnit          `yaml:"fractionalUnit"`
 	OrdinalNumbers          OrdinalNumbers          `yaml:"ordinalNumbers"`
 	Sign                    Sign                    `yaml:"sign"`
@@ -99,7 +99,7 @@ func LoadWordsConstantsFromFile(lang languages.Language, resourcesDirPath string
 	}
 
 	// Currencies strings
-	err = cleanenv.ReadConfig(filepath.Join(dir, "currencies_strings.yml"), &WordConstants.N2w.CurrenciesStrings)
+	err = cleanenv.ReadConfig(filepath.Join(dir, "currency_strings.yml"), &WordConstants.N2w.CurrencyStrings)
 	if err != nil {
 		return fmt.Errorf("error load %s currencies strings: %w", lang, err)
 	}
@@ -161,8 +161,8 @@ func LoadWordsConstantsFromResources(lang languages.Language) error {
 	}
 
 	// Currencies strings
-	err = cleanenv.ReadConfigFromReader(bytes.NewReader(res.CurrenciesStrings), res.Ext,
-		&WordConstants.N2w.CurrenciesStrings)
+	err = cleanenv.ReadConfigFromReader(bytes.NewReader(res.CurrencyStrings), res.Ext,
+		&WordConstants.N2w.CurrencyStrings)
 	if err != nil {
 		return fmt.Errorf("error load %s currencies strings: %w", lang, err)
 	}

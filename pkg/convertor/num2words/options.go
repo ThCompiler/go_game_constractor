@@ -91,7 +91,7 @@ func (o *Options) getCurrencyObject() currency.CustomCurrency {
 		return *o.currencyInfo
 	}
 
-	return words.WordConstants.N2w.CurrenciesStrings.Currencies[o.currency]
+	return words.WordConstants.N2w.CurrencyStrings.Currencies[o.currency]
 }
 
 type NumberPart struct {

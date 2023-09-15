@@ -12,9 +12,9 @@ func GetCurrencyWord(
 	scaleNameForm objects.ScaleForm, lastScaleIsZero bool,
 	curc currency.Currency, decl declension.Declension,
 ) string {
-	declensionsObject := currencyObject.FractionalPartNameDeclensions
-	if numberPart == constants.DecimalNumber {
-		declensionsObject = currencyObject.CurrencyNameDeclensions
+	declensionOfObject := currencyObject.DecimalCurrencyNameDeclensions
+	if numberPart == constants.FractionalNumber {
+		declensionOfObject = currencyObject.FractionalPartNameDeclensions
 	}
 
 	scaleForm := 1
@@ -37,7 +37,7 @@ func GetCurrencyWord(
 		currentDeclension = declension.GENITIVE
 	}
 
-	return declensionsObject[currentDeclension][scaleForm]
+	return declensionOfObject[currentDeclension][scaleForm]
 }
 
 func getScaleForm(curc currency.Currency, scaleNameForm objects.ScaleForm) int {

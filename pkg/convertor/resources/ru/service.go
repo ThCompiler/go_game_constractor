@@ -7,8 +7,8 @@ import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/entity"
 )
 
-//go:embed currencies_strings.yml
-var currenciesStrings []byte
+//go:embed currency_strings.yml
+var currencyStrings []byte
 
 //go:embed digit_words.yml
 var digitWords []byte
@@ -30,7 +30,7 @@ var unitScalesNames []byte
 
 func GerResources() entity.Resources {
 	return entity.Resources{
-		CurrenciesStrings:       currenciesStrings,
+		CurrencyStrings:         currencyStrings,
 		DigitWords:              digitWords,
 		FractionalUnit:          fractionalUnit,
 		OrdinalNumbers:          ordinalNumbers,

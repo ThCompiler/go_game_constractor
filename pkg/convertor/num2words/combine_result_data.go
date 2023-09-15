@@ -187,7 +187,7 @@ func addCurrencyToFractionalPart(convertedNumber objects.ResultNumberT, fraction
 	if delimiter == constants.FractionalNumber {
 		// Если указана валюта
 		if appliedOptions.currency != currency.NUMBER {
-			convertedNumber.SecondPartName = appliedOptions.getCurrencyObject().CurrencyNameDeclensions[declension.GENITIVE][0]
+			convertedNumber.SecondPartName = appliedOptions.getCurrencyObject().DecimalCurrencyNameDeclensions[declension.GENITIVE][0]
 		}
 	}
 

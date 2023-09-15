@@ -1,7 +1,7 @@
 currencies:
   number:
     currencyNameCases: ['целая', 'целых', 'целых']
-    currencyNameDeclensions:
+    decimalCurrencyNameDeclensions:
       nominative: ['целая', '']
       genitive: ['целой', 'целых']
       dative: ['целой', 'целым']
@@ -21,7 +21,7 @@ currencies:
       fractionalPart: 'female'
   rub:
     currencyNameCases: ['рубль', 'рубля', 'рублей']
-    currencyNameDeclensions:
+    decimalCurrencyNameDeclensions:
       nominative: ['рубль', '']
       genitive: ['рубля', 'рублей']
       dative: ['рублю', 'рублям']
@@ -41,7 +41,7 @@ currencies:
       fractionalPart: 'female'
   usd:
     currencyNameCases: ['доллар', 'доллара', 'долларов']
-    currencyNameDeclensions:
+    decimalCurrencyNameDeclensions:
       nominative: ['доллар', '']
       genitive: ['доллара', 'долларов']
       dative: ['доллару', 'долларам']
@@ -61,7 +61,7 @@ currencies:
       fractionalPart: 'male'
   eur:
     currencyNameCases: ['евро', 'евро', 'евро']
-    currencyNameDeclensions:
+    decimalCurrencyNameDeclensions:
       nominative: ['евро', '']
       genitive: ['евро', 'евро']
       dative: ['евро', 'евро']

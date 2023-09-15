@@ -44,7 +44,7 @@ type CustomCurrency struct {
 	 * Integer currency name forms\
 	 * for declensions
 	 */
-	CurrencyNameDeclensions Declensions `yaml:"currencyNameDeclensions"`
+	DecimalCurrencyNameDeclensions Declensions `yaml:"decimalCurrencyNameDeclensions"`
 
 	/**
 	 * Fractional number currency name forms\
