@@ -28,7 +28,7 @@ var slashNumberUnitPrefixes []byte
 //go:embed unit_scales_names.yml
 var unitScalesNames []byte
 
-func GerResources() entity.Resources {
+func GetResources() entity.Resources {
 	return entity.Resources{
 		CurrencyStrings:         currencyStrings,
 		DigitWords:              digitWords,

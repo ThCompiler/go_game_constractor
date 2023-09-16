@@ -178,7 +178,6 @@ func addCurrencyToFractionalPart(convertedNumber objects.ResultNumberT, fraction
 
 	// Если валюта указана как "number"
 	if appliedOptions.currency == currency.NUMBER {
-		// Если разделитель - не дробная черта
 		convertedNumber = setNumberCurrency(convertedNumber, fractionalPart, fractionalObject,
 			appliedOptions, delimiter)
 	}
@@ -187,7 +186,7 @@ func addCurrencyToFractionalPart(convertedNumber objects.ResultNumberT, fraction
 	if delimiter == constants.FRACTIONAL_NUMBER {
 		// Если указана валюта
 		if appliedOptions.currency != currency.NUMBER {
-			convertedNumber.SecondPartName = appliedOptions.getCurrencyObject().DecimalCurrencyNameDeclensions[declension.GENITIVE][0]
+			convertedNumber.SecondPartName = appliedOptions.getCurrencyObject().IntegerPartNameDeclensions[declension.GENITIVE][0]
 		}
 	}
 
@@ -239,7 +238,7 @@ func setNumberCurrency(convertedNumber objects.ResultNumberT, fractionalPart str
 	fractionalObject objects.ConvertedScalesToWords, appliedOptions Options,
 	delimiter constants.NumberType,
 ) objects.ResultNumberT {
-	// Если разделитель - не дробная черта
+	// Если разделитель дробная черта
 	if delimiter == constants.FRACTIONAL_NUMBER {
 		return convertedNumber
 	}

@@ -37,7 +37,7 @@ func GetCurrencyWord(
 	if numberType == constants.FRACTIONAL_NUMBER {
 		return currencyObject.FractionalPartNameDeclensions[currentDeclension][wordForm]
 	}
-	return currencyObject.DecimalCurrencyNameDeclensions[currentDeclension][wordForm]
+	return currencyObject.IntegerPartNameDeclensions[currentDeclension][wordForm]
 }
 
 func getWordForm(isNumber bool, numberForm objects.NumberForm) objects.WordForm {

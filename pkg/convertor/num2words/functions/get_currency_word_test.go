@@ -19,7 +19,7 @@ type GetCurrencyWordSuite struct {
 
 func (s *GetCurrencyWordSuite) SetupTest() {
 	s.currency = currency.CustomCurrency{
-		DecimalCurrencyNameDeclensions: currency.Declensions{
+		IntegerPartNameDeclensions: currency.Declensions{
 			declension.NOMINATIVE:    [2]string{"рубль", ""},
 			declension.GENITIVE:      [2]string{"рубля", "рублей"},
 			declension.DATIVE:        [2]string{"рублю", "рублям"},

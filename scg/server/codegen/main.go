@@ -23,7 +23,7 @@ func generateMain(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) *codegen.
 	imports := []*codegen.ImportSpec{
 		{Path: path.Join("log")},
 		codegen.SCGImport(path.Join("pkg", "convertor", "words")),
-		codegen.SCGImport(path.Join("pkg", "convertor", "words", "languages")),
+		codegen.SCGImport(path.Join("pkg", "convertor", "words", "resources")),
 		{Path: path.Join(rootPkg, "config")},
 		{Path: path.Join(rootPkg, "internal", strings.ToLower(codegen.ToTitle(scriptInfo.Name)))},
 	}
@@ -55,7 +55,7 @@ func main() {
 		log.Fatalf("Config error: %s", err)
 	}
 
-	_ = words.LoadWordsConstants(languages.Russia, cfg.App.ResourcesDir)
+	_ = words.LoadWordsConstants(resources.Russia, cfg.App.ResourcesDir)
 
 	// Run
 	{{ ToLower ( ToTitle .Name ) }}.Run(cfg)

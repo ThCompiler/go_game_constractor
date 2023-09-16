@@ -7,7 +7,7 @@ import (
 )
 
 var supportResources = map[languages.Language]entity.Resources{
-	languages.Russia: ru.GerResources(),
+	languages.Russia: ru.GetResources(),
 }
 
 func IsKnowLanguages(lang languages.Language) bool {

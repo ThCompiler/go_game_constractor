@@ -57,7 +57,7 @@ func GetFractionalUnitCurrencyNumber(scaleIndex int, digitToConvert objects.Digi
 	}
 
 	// Выбрать правильную форму слова
-	numberDecl, numberScaleForm := selectDeclensionsParamsByDeclension(decl, unitNameForm != 0)
+	numberDecl, numberScaleForm := correctDeclensionByNumberForm(decl, unitNameForm != 0)
 	res = unitDeclensionsObject[numberDecl][numberScaleForm]
 
 	// Если цифра для конвертирования === 0
@@ -67,4 +67,20 @@ func GetFractionalUnitCurrencyNumber(scaleIndex int, digitToConvert objects.Digi
 	}
 
 	return res
+}
+
+func correctDeclensionByNumberForm(decl declension.Declension, isPlural bool) (resDecl declension.Declension, scaleForm objects.WordForm) {
+	resDecl = decl
+	scaleForm = objects.SINGULAR_WORD
+
+	if isPlural {
+		scaleForm = objects.PLURAL_WORD
+	}
+
+	// Если падеж "именительный" или "винительный" и множественное число
+	if isPlural && (decl == declension.NOMINATIVE || decl == declension.ACCUSATIVE) {
+		resDecl = declension.GENITIVE
+	}
+
+	return
 }

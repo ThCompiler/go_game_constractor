@@ -21,7 +21,7 @@ func ConvertEachScaleToWordsSlash(
 	convertedResult := ""
 
 	// Получить последний разряд (в виде текста) в правильном падеже
-	numberDecl, numberScaleForm := selectDeclensionsParamsByDeclension(decl, scaleForm != 0)
+	numberDecl, numberScaleForm := correctDeclensionByNumberForm(decl, scaleForm != 0)
 
 	// Удалить лишние нули в начале числа
 	updatedNumberScalesArray := removeEmptyScalesFromBeginning(numberScalesArray)
@@ -197,23 +197,4 @@ func indexOfLastNotNullScalesByEnd(numberTripletsArray []objects.RuneDigitTriple
 	}
 
 	return res
-}
-
-func selectDeclensionsParamsByDeclension(decl declension.Declension,
-	isPlural bool,
-) (resDecl declension.Declension, scaleForm objects.WordForm) {
-	resDecl = decl
-	scaleForm = 0
-
-	if isPlural {
-		scaleForm = 1
-	}
-
-	// Если падеж "именительный" или "винительный" и множественное число
-	if isPlural && (decl == declension.NOMINATIVE || decl == declension.ACCUSATIVE) {
-		resDecl = declension.GENITIVE
-		scaleForm = 1
-	}
-
-	return
 }
