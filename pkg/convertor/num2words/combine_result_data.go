@@ -72,14 +72,14 @@ func combineIntegerPart(convertedNumber objects.ResultNumberT, integerPart strin
 	// Получить результат конвертирования числа
 	convertedIntegerObject := functions.ConvertEachScaleToWords(
 		functions.SplitNumberIntoThrees(integerPart),
-		appliedOptions.getCurrencyObject().CurrencyNounGender.Integer,
+		appliedOptions.getCurrencyObject().CurrencyNounGender.IntegerPart,
 		appliedOptions.declension,
 	)
 
 	// Если нужно конвертировать число в слова
 	if appliedOptions.convertNumberToWords.Integer {
 		// Если разделитель - не дробная черта
-		if delimiter != constants.FractionalNumber {
+		if delimiter != constants.FRACTIONAL_NUMBER {
 			// Применить конвертированное число
 			convertedNumber.FirstPart = convertedIntegerObject.Result
 		} else {
@@ -96,13 +96,13 @@ func combineIntegerPart(convertedNumber objects.ResultNumberT, integerPart strin
 	// Если нужно отображать валюту целой части числа
 	if appliedOptions.showCurrency.Integer {
 		// Если разделитель - не дробная черта
-		if delimiter != constants.FractionalNumber {
+		if delimiter != constants.FRACTIONAL_NUMBER {
 			currencyWord := functions.GetCurrencyWord(
 				appliedOptions.getCurrencyObject(),
-				constants.DecimalNumber,
+				constants.DECIMAL_NUMBER,
 				convertedIntegerObject.UnitNameForm,
 				convertedIntegerObject.LastScaleIsZero,
-				appliedOptions.currency,
+				appliedOptions.currency == currency.NUMBER,
 				appliedOptions.declension,
 			)
 			convertedNumber.FirstPartName = currencyWord
@@ -145,7 +145,7 @@ func convertNumberToWord(convertedNumber objects.ResultNumberT, integerPart, fra
 ) objects.ResultNumberT {
 	// Если разделитель - не дробная черта
 	// Применить конвертированное число
-	if delimiter != constants.FractionalNumber {
+	if delimiter != constants.FRACTIONAL_NUMBER {
 		convertedNumber.SecondPart = defaultPart.Result
 
 		return convertedNumber
@@ -154,7 +154,7 @@ func convertNumberToWord(convertedNumber objects.ResultNumberT, integerPart, fra
 	// Если разделитель - дробная черта
 	convertedIntegerObject := functions.ConvertEachScaleToWords(
 		functions.SplitNumberIntoThrees(integerPart),
-		appliedOptions.getCurrencyObject().CurrencyNounGender.Integer,
+		appliedOptions.getCurrencyObject().CurrencyNounGender.IntegerPart,
 		appliedOptions.declension,
 	)
 
@@ -184,7 +184,7 @@ func addCurrencyToFractionalPart(convertedNumber objects.ResultNumberT, fraction
 	}
 
 	// Если разделитель - дробная черта
-	if delimiter == constants.FractionalNumber {
+	if delimiter == constants.FRACTIONAL_NUMBER {
 		// Если указана валюта
 		if appliedOptions.currency != currency.NUMBER {
 			convertedNumber.SecondPartName = appliedOptions.getCurrencyObject().DecimalCurrencyNameDeclensions[declension.GENITIVE][0]
@@ -220,10 +220,10 @@ func setNotNumberCurrency(convertedNumber objects.ResultNumberT, fractionalObjec
 ) objects.ResultNumberT {
 	currencyWord := functions.GetCurrencyWord(
 		appliedOptions.getCurrencyObject(),
-		constants.FractionalNumber,
+		constants.FRACTIONAL_NUMBER,
 		fractionalObject.UnitNameForm,
 		fractionalObject.LastScaleIsZero,
-		appliedOptions.currency,
+		appliedOptions.currency == currency.NUMBER,
 		appliedOptions.declension,
 	)
 	// Если определено число дробной части
@@ -240,7 +240,7 @@ func setNumberCurrency(convertedNumber objects.ResultNumberT, fractionalPart str
 	delimiter constants.NumberType,
 ) objects.ResultNumberT {
 	// Если разделитель - не дробная черта
-	if delimiter == constants.FractionalNumber {
+	if delimiter == constants.FRACTIONAL_NUMBER {
 		return convertedNumber
 	}
 

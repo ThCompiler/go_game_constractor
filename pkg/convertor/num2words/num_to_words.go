@@ -38,7 +38,7 @@ func Convert[N NumberToConvert](number N, options Options) (string, error) {
 	}
 
 	if len(extractedNumber.SecondPart) > constants.MaxNumberPartLength {
-		if extractedNumber.Divider == constants.DecimalNumber {
+		if extractedNumber.Divider == constants.DECIMAL_NUMBER {
 			extractedNumber.SecondPart = extractedNumber.SecondPart[0:constants.MaxNumberPartLength]
 		} else {
 			extractedNumber.SecondPart =

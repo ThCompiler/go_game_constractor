@@ -10,34 +10,26 @@ import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words/genders"
 )
 
-const (
-	ThirdWordForm  = 2
-	SecondWordForm = 1
-	FirstWordForm  = 0
-)
-
-const defaultForm = ThirdWordForm
-
 func ConvertEachScaleToWords(
-	numberScalesArray []objects.RuneDigitTriplet,
+	numberByTriplets []objects.RuneDigitTriplet,
 	currencyNounGender genders.Gender,
 	declension declension.Declension,
 ) objects.ConvertedScalesToWords {
-	numberScalesArrayLen := len(numberScalesArray)
+	numberScalesArrayLen := len(numberByTriplets)
 
 	convertedResult := ""
 	// Форма падежа для названия класса единиц или валюты после (0 | 1 | 2).
-	scaleNameForm := objects.ScaleForm(defaultForm)
+	scaleNameForm := objects.THIRD_FORM
 	scaleIsZero := false // Равняется ли целый класс "000".
 
 	// Для каждого класса числа
-	for arrIndex, numberScale := range numberScalesArray {
-		scaleNameForm = defaultForm // Падеж названия единиц измерения по умолчанию ("рублей")
+	for arrIndex, numberTriplet := range numberByTriplets {
+		scaleNameForm = objects.THIRD_FORM // Падеж названия единиц измерения по умолчанию ("рублей")
 		scaleIsZero = false
 		// Определить порядковый номер текущего класса числа
 		currentNumberScale := numberScalesArrayLen - arrIndex
 
-		digits := numberScale.ToNumeric()
+		digits := numberTriplet.ToNumeric()
 		stringDigits := objects.StringDigitTriplet{Units: "", Dozens: "", Hundreds: ""}
 
 		// Если класс числа пустой (000)
@@ -51,7 +43,7 @@ func ConvertEachScaleToWords(
 					declension,
 					genders.MALE,
 				)
-				scaleNameForm = defaultForm
+				scaleNameForm = objects.THIRD_FORM
 				// Выйти из цикла
 				break
 			}
@@ -149,54 +141,54 @@ func convertDigitToWord(digit objects.Digit, digitWords words2.DeclensionNumbers
 }
 
 // Определить форму названия единиц измерения (рубль/рубля/рублей)
-func getDigitForm(digit objects.Digit) objects.ScaleForm {
+func getDigitForm(digit objects.Digit) objects.NumberForm {
 	// Если цифра в разряде единиц от 1 до 4
 	if digit >= 1 && digit <= 4 {
 		// Если цифра в разряде единиц "1"
 		if digit == 1 {
 			// Получиться "рубль"
-			return FirstWordForm
+			return objects.FIRST_FORM
 		}
 		// Получиться "рубля"
-		return SecondWordForm
+		return objects.SECOND_FORM
 	}
 
-	return ThirdWordForm
+	return objects.THIRD_FORM
 }
 
-func getNumberFormScaleName(scale int, scaleNameForm objects.ScaleForm, decl declension.Declension) string {
-	if scale == FirstWordForm {
+func getNumberFormScaleName(numberTriplet int, numberForm objects.NumberForm, decl declension.Declension) string {
+	if numberTriplet == 1 {
 		// Класс единиц
 		// Для них название не отображается.
 		return ""
 	}
 
 	scaleDeclension := decl
-	scaleForm := SecondWordForm
+	scaleForm := objects.SECOND_FORM
 
-	if scaleNameForm == FirstWordForm {
-		scaleForm = FirstWordForm
+	if numberForm == objects.FIRST_FORM {
+		scaleForm = objects.FIRST_FORM
 	}
 
 	// Если падеж "именительный" или "винительный" и множественное число
-	if (decl == declension.NOMINATIVE || decl == declension.ACCUSATIVE) && scaleNameForm >= SecondWordForm {
+	if (decl == declension.NOMINATIVE || decl == declension.ACCUSATIVE) && numberForm >= objects.SECOND_FORM {
 		// Для множественного числа именительного падежа используется родительный падеж.
 		scaleDeclension = declension.GENITIVE
-		scaleForm = SecondWordForm
+		scaleForm = objects.SECOND_FORM
 
-		if scaleNameForm == SecondWordForm {
-			scaleForm = FirstWordForm
+		if numberForm == objects.SECOND_FORM {
+			scaleForm = objects.FIRST_FORM
 		}
 	}
 
-	if scale == SecondWordForm {
+	if numberTriplet == 2 {
 		// Класс тысяч
 		return words2.WordConstants.N2w.UnitScalesNames.Thousands[scaleDeclension][scaleForm]
 	}
 
 	// Остальные классы
 	ending := words2.WordConstants.N2w.UnitScalesNames.OtherEnding[scaleDeclension][scaleForm]
-	base := words2.WordConstants.N2w.UnitScalesNames.OtherBeginning[scale-2]
+	base := words2.WordConstants.N2w.UnitScalesNames.OtherBeginning[numberTriplet-2]
 
 	return base + ending
 }

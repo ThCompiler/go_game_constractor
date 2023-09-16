@@ -7,7 +7,7 @@ import (
 
 const indexShift = 2
 
-type declensionUnitName map[declension.Declension][constants.CountScaleNumberNameForms]string
+type declensionUnitName map[declension.Declension][constants.CountWordForms]string
 
 type UnitScalesNames struct {
 	Thousands      declensionUnitName `yaml:"thousands"`

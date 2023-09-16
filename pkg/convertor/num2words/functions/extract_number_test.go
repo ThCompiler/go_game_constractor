@@ -290,7 +290,7 @@ func (s *ExtractNumberSuite) TestEmptyNumber() {
 	res, err := ExtractNumber("")
 	assert.NoError(s.T(), err)
 	assert.Equal(s.T(), objects.Number{
-		Divider:    constants.DecimalNumber,
+		Divider:    constants.DECIMAL_NUMBER,
 		FirstPart:  "0",
 		SecondPart: "0",
 		Sign:       "+",
@@ -304,7 +304,7 @@ func (s *ExtractNumberSuite) TestBaseNumber() {
 			Name: "Only number",
 			Args: ts.TTA(`12`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "12",
 				SecondPart: "0",
 				Sign:       "+",
@@ -314,7 +314,7 @@ func (s *ExtractNumberSuite) TestBaseNumber() {
 			Name: "Number with minus",
 			Args: ts.TTA(`-12`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "12",
 				SecondPart: "0",
 				Sign:       "-",
@@ -324,7 +324,7 @@ func (s *ExtractNumberSuite) TestBaseNumber() {
 			Name: "Number with plus",
 			Args: ts.TTA(`+12`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "12",
 				SecondPart: "0",
 				Sign:       "+",
@@ -334,7 +334,7 @@ func (s *ExtractNumberSuite) TestBaseNumber() {
 			Name: "Number with spaces",
 			Args: ts.TTA(` 1 2 `),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "12",
 				SecondPart: "0",
 				Sign:       "+",
@@ -344,7 +344,7 @@ func (s *ExtractNumberSuite) TestBaseNumber() {
 			Name: "Zero",
 			Args: ts.TTA(`0`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "0",
 				SecondPart: "0",
 				Sign:       "+",
@@ -354,7 +354,7 @@ func (s *ExtractNumberSuite) TestBaseNumber() {
 			Name: "Number with zeros in beginning of number",
 			Args: ts.TTA(`00012`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "12",
 				SecondPart: "0",
 				Sign:       "+",
@@ -370,7 +370,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithPoint() {
 			Name: "Only number",
 			Args: ts.TTA(`1.2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "2",
 				Sign:       "+",
@@ -380,7 +380,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithPoint() {
 			Name: "Number with minus",
 			Args: ts.TTA(`-1.2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "2",
 				Sign:       "-",
@@ -390,7 +390,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithPoint() {
 			Name: "Number with plus",
 			Args: ts.TTA(`+1.2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "2",
 				Sign:       "+",
@@ -400,7 +400,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithPoint() {
 			Name: "Number with spaces",
 			Args: ts.TTA(` 1 . 2 `),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "2",
 				Sign:       "+",
@@ -410,7 +410,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithPoint() {
 			Name: "Zero",
 			Args: ts.TTA(`0.0`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "0",
 				SecondPart: "0",
 				Sign:       "+",
@@ -420,7 +420,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithPoint() {
 			Name: "Number with zeros in integer part of number",
 			Args: ts.TTA(`00012000.2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "12000",
 				SecondPart: "2",
 				Sign:       "+",
@@ -430,7 +430,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithPoint() {
 			Name: "Number with zeros in decimal part of number",
 			Args: ts.TTA(`12.00020000`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "12",
 				SecondPart: "0002",
 				Sign:       "+",
@@ -440,7 +440,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithPoint() {
 			Name: "Number without decimal part",
 			Args: ts.TTA(`12.`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "12",
 				SecondPart: "0",
 				Sign:       "+",
@@ -450,7 +450,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithPoint() {
 			Name: "Number without integer part",
 			Args: ts.TTA(`.2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "0",
 				SecondPart: "2",
 				Sign:       "+",
@@ -460,7 +460,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithPoint() {
 			Name: "Number without integer and decimal part",
 			Args: ts.TTA(`.`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "0",
 				SecondPart: "0",
 				Sign:       "+",
@@ -476,7 +476,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithComma() {
 			Name: "Only number",
 			Args: ts.TTA(`1,2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "2",
 				Sign:       "+",
@@ -486,7 +486,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithComma() {
 			Name: "Number with minus",
 			Args: ts.TTA(`-1,2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "2",
 				Sign:       "-",
@@ -496,7 +496,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithComma() {
 			Name: "Number with plus",
 			Args: ts.TTA(`+1,2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "2",
 				Sign:       "+",
@@ -506,7 +506,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithComma() {
 			Name: "Number with spaces",
 			Args: ts.TTA(` 1 , 2 `),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "2",
 				Sign:       "+",
@@ -516,7 +516,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithComma() {
 			Name: "Zero",
 			Args: ts.TTA(`0,0`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "0",
 				SecondPart: "0",
 				Sign:       "+",
@@ -526,7 +526,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithComma() {
 			Name: "Number with zeros in integer part of number",
 			Args: ts.TTA(`00012000,2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "12000",
 				SecondPart: "2",
 				Sign:       "+",
@@ -536,7 +536,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithComma() {
 			Name: "Number with zeros in decimal part of number",
 			Args: ts.TTA(`12,00020000`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "12",
 				SecondPart: "0002",
 				Sign:       "+",
@@ -546,7 +546,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithComma() {
 			Name: "Number without decimal part",
 			Args: ts.TTA(`12,`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "12",
 				SecondPart: "0",
 				Sign:       "+",
@@ -556,7 +556,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithComma() {
 			Name: "Number without integer part",
 			Args: ts.TTA(`,2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "0",
 				SecondPart: "2",
 				Sign:       "+",
@@ -566,7 +566,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithComma() {
 			Name: "Number without integer and decimal part",
 			Args: ts.TTA(`,`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "0",
 				SecondPart: "0",
 				Sign:       "+",
@@ -582,7 +582,7 @@ func (s *ExtractNumberSuite) TestFractionalNumber() {
 			Name: "Only number",
 			Args: ts.TTA(`1/2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.FractionalNumber,
+				Divider:    constants.FRACTIONAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "2",
 				Sign:       "+",
@@ -592,7 +592,7 @@ func (s *ExtractNumberSuite) TestFractionalNumber() {
 			Name: "Number with minus",
 			Args: ts.TTA(`-1/2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.FractionalNumber,
+				Divider:    constants.FRACTIONAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "2",
 				Sign:       "-",
@@ -602,7 +602,7 @@ func (s *ExtractNumberSuite) TestFractionalNumber() {
 			Name: "Number with plus",
 			Args: ts.TTA(`+1/2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.FractionalNumber,
+				Divider:    constants.FRACTIONAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "2",
 				Sign:       "+",
@@ -612,7 +612,7 @@ func (s *ExtractNumberSuite) TestFractionalNumber() {
 			Name: "Number with spaces",
 			Args: ts.TTA(` 1 / 2 `),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.FractionalNumber,
+				Divider:    constants.FRACTIONAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "2",
 				Sign:       "+",
@@ -622,7 +622,7 @@ func (s *ExtractNumberSuite) TestFractionalNumber() {
 			Name: "Zero",
 			Args: ts.TTA(`0/0`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.FractionalNumber,
+				Divider:    constants.FRACTIONAL_NUMBER,
 				FirstPart:  "0",
 				SecondPart: "0",
 				Sign:       "+",
@@ -632,7 +632,7 @@ func (s *ExtractNumberSuite) TestFractionalNumber() {
 			Name: "Number with zeros in numerator",
 			Args: ts.TTA(`00012000/2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.FractionalNumber,
+				Divider:    constants.FRACTIONAL_NUMBER,
 				FirstPart:  "12000",
 				SecondPart: "2",
 				Sign:       "+",
@@ -642,7 +642,7 @@ func (s *ExtractNumberSuite) TestFractionalNumber() {
 			Name: "Number with zeros in denominator",
 			Args: ts.TTA(`12/00020000`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.FractionalNumber,
+				Divider:    constants.FRACTIONAL_NUMBER,
 				FirstPart:  "12",
 				SecondPart: "20000",
 				Sign:       "+",
@@ -652,7 +652,7 @@ func (s *ExtractNumberSuite) TestFractionalNumber() {
 			Name: "Number without denominator",
 			Args: ts.TTA(`2/`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.FractionalNumber,
+				Divider:    constants.FRACTIONAL_NUMBER,
 				FirstPart:  "2",
 				SecondPart: "0",
 				Sign:       "+",
@@ -662,7 +662,7 @@ func (s *ExtractNumberSuite) TestFractionalNumber() {
 			Name: "Number without numerator",
 			Args: ts.TTA(`/2`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.FractionalNumber,
+				Divider:    constants.FRACTIONAL_NUMBER,
 				FirstPart:  "0",
 				SecondPart: "2",
 				Sign:       "+",
@@ -672,7 +672,7 @@ func (s *ExtractNumberSuite) TestFractionalNumber() {
 			Name: "Number without numerator and denominator",
 			Args: ts.TTA(`/`),
 			Expected: ts.TTVEWNE(objects.Number{
-				Divider:    constants.FractionalNumber,
+				Divider:    constants.FRACTIONAL_NUMBER,
 				FirstPart:  "0",
 				SecondPart: "0",
 				Sign:       "+",

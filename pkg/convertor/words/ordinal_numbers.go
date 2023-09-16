@@ -6,7 +6,7 @@ import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words/genders"
 )
 
-type declensionOrdinalNumbersT map[declension.Declension][constants.CountScaleNumberNameForms]string
+type declensionOrdinalNumbersT map[declension.Declension][constants.CountWordForms]string
 
 type genderOrdinalNumbersT map[genders.Gender]declensionOrdinalNumbersT
 

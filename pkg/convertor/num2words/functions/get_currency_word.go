@@ -8,47 +8,46 @@ import (
 )
 
 func GetCurrencyWord(
-	currencyObject currency.CustomCurrency, numberPart constants.NumberType,
-	scaleNameForm objects.ScaleForm, lastScaleIsZero bool,
-	curc currency.Currency, decl declension.Declension,
+	currencyObject currency.CustomCurrency, numberType constants.NumberType,
+	numberForm objects.NumberForm, lowestTripletIsZero bool,
+	isNumber bool, currentDeclension declension.Declension,
 ) string {
-	declensionOfObject := currencyObject.DecimalCurrencyNameDeclensions
-	if numberPart == constants.FractionalNumber {
-		declensionOfObject = currencyObject.FractionalPartNameDeclensions
+	// Если не "именительный" и не "винительный" падеж,
+	// то всё что не один это множественное число
+	wordForm := objects.SINGULAR_WORD
+	if numberForm != objects.FIRST_FORM {
+		wordForm = objects.PLURAL_WORD
 	}
-
-	scaleForm := 1
-	if scaleNameForm == 0 {
-		scaleForm = 0
-	}
-
-	currentDeclension := decl
 
 	// Если падеж "именительный" или "винительный" и множественное число
-	if (decl == declension.NOMINATIVE || decl == declension.ACCUSATIVE) && scaleNameForm >= 1 {
-		scaleForm = getScaleForm(curc, scaleNameForm)
+	if (currentDeclension == declension.NOMINATIVE ||
+		currentDeclension == declension.ACCUSATIVE) && numberForm != objects.FIRST_FORM {
+		wordForm = getWordForm(isNumber, numberForm)
 		// Использовать родительный падеж.
 		currentDeclension = declension.GENITIVE
 	}
+
 	// Если последний класс числа равен "000"
-	if lastScaleIsZero {
-		scaleForm = 1
+	if lowestTripletIsZero {
+		wordForm = objects.PLURAL_WORD
 		// Всегда родительный падеж и множественное число
 		currentDeclension = declension.GENITIVE
 	}
 
-	return declensionOfObject[currentDeclension][scaleForm]
+	if numberType == constants.FRACTIONAL_NUMBER {
+		return currencyObject.FractionalPartNameDeclensions[currentDeclension][wordForm]
+	}
+	return currencyObject.DecimalCurrencyNameDeclensions[currentDeclension][wordForm]
 }
 
-func getScaleForm(curc currency.Currency, scaleNameForm objects.ScaleForm) int {
-	// Если валюта указана как "number"
-	if curc == currency.NUMBER {
-		return 1
+func getWordForm(isNumber bool, numberForm objects.NumberForm) objects.WordForm {
+	if isNumber {
+		return objects.PLURAL_WORD
 	}
 
-	if scaleNameForm == 1 {
-		return 0
+	if numberForm == objects.SECOND_FORM {
+		return objects.SINGULAR_WORD
 	}
 
-	return 1
+	return objects.PLURAL_WORD
 }

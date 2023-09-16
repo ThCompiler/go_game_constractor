@@ -41,7 +41,7 @@ func ValidateNumber(number string) error {
 
 func ExtractNumber(Number string) (objects.Number, error) {
 	number := objects.Number{
-		Divider: constants.DecimalNumber,
+		Divider: constants.DECIMAL_NUMBER,
 		Sign:    "+",
 	}
 
@@ -68,11 +68,11 @@ func ExtractNumber(Number string) (objects.Number, error) {
 	found := false //nolint:ifshort // it's not possibale to initialize found in if statement
 	// Добавить разделитель числа в массив и разделить число
 	if leftPart, rightPart, found = strings.Cut(Number, ","); found {
-		number.Divider = constants.DecimalNumber
+		number.Divider = constants.DECIMAL_NUMBER
 	} else if leftPart, rightPart, found = strings.Cut(Number, "."); found {
-		number.Divider = constants.DecimalNumber
+		number.Divider = constants.DECIMAL_NUMBER
 	} else if leftPart, rightPart, found = strings.Cut(Number, "/"); found {
-		number.Divider = constants.FractionalNumber
+		number.Divider = constants.FRACTIONAL_NUMBER
 	}
 
 	// Убрать лишние нули из целой части
@@ -80,7 +80,7 @@ func ExtractNumber(Number string) (objects.Number, error) {
 
 	number.SecondPart = rightPart
 	// Убрать лишние нули из дробной части
-	if number.Divider == constants.FractionalNumber {
+	if number.Divider == constants.FRACTIONAL_NUMBER {
 		number.SecondPart = RemoveFromString(rightPart, ZerosInBeginRegex)
 	} else {
 		number.SecondPart = RemoveFromString(rightPart, ZerosInEndRegex)

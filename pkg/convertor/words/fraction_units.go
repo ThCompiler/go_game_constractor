@@ -5,7 +5,7 @@ import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words/declension"
 )
 
-type DeclensionFractionalUnits map[declension.Declension][constants.CountScaleNumberNameForms]string
+type DeclensionFractionalUnits map[declension.Declension][constants.CountWordForms]string
 
 type fractionalUnitsDeclensionsT struct {
 	Tens     DeclensionFractionalUnits `yaml:"tens"`

@@ -11,7 +11,7 @@ import (
 
 func ConvertEachScaleToWordsSlash(
 	numberScalesArray []objects.RuneDigitTriplet,
-	scaleForm objects.ScaleForm,
+	scaleForm objects.NumberForm,
 	decl declension.Declension,
 ) string {
 	if len(numberScalesArray) < 1 {
@@ -80,7 +80,7 @@ func ConvertEachScaleToWordsSlash(
 }
 
 func convertOtherScaleToWordsSlash(scaleToConvert objects.NumericDigitTriplet, scaleNumber int, isAloneScale bool,
-	numberDeclension declension.Declension, numberScaleForm objects.ScaleForm,
+	numberDeclension declension.Declension, numberScaleForm objects.WordForm,
 ) string {
 	// Собрать валюту в виде "двадцатипятитысячная".
 	// Получить текущий класс для конвертирования.
@@ -118,7 +118,7 @@ func convertOtherScaleToWordsSlash(scaleToConvert objects.NumericDigitTriplet, s
 }
 
 func convertLastScaleToWordsSlash(scaleToConvert objects.NumericDigitTriplet,
-	numberDeclension declension.Declension, numberScaleForm objects.ScaleForm,
+	numberDeclension declension.Declension, numberScaleForm objects.WordForm,
 ) (res string) {
 	res = ""
 
@@ -201,7 +201,7 @@ func indexOfLastNotNullScalesByEnd(numberTripletsArray []objects.RuneDigitTriple
 
 func selectDeclensionsParamsByDeclension(decl declension.Declension,
 	isPlural bool,
-) (resDecl declension.Declension, scaleForm objects.ScaleForm) {
+) (resDecl declension.Declension, scaleForm objects.WordForm) {
 	resDecl = decl
 	scaleForm = 0
 

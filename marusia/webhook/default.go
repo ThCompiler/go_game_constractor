@@ -20,7 +20,11 @@ func NewDefaultMarusiaWebhook(l logger.Interface, runnerHub runner.ScriptRunner,
 		err = nil
 
 		if r.Request.Command == marusia.OnStart || r.Session.New {
-			runnerHub.AttachDirector(r.Session.SessionID, sd.NewScriptDirector(sdc))
+			dir, err := sd.NewScriptDirector(sdc)
+			if err != nil {
+				return marusia.Response{}, err
+			}
+			runnerHub.AttachDirector(r.Session.SessionID, dir)
 		}
 
 		ans := runnerHub.RunScene(ToHubRequest(r))

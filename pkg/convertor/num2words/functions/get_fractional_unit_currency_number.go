@@ -12,7 +12,7 @@ import (
 const two = 2.0
 
 func GetFractionalUnitCurrencyNumber(scaleIndex int, digitToConvert objects.Digit,
-	decl declension.Declension, unitNameForm objects.ScaleForm,
+	decl declension.Declension, unitNameForm objects.NumberForm,
 ) string {
 	if scaleIndex < 0 {
 		scaleIndex = 0
@@ -48,7 +48,7 @@ func GetFractionalUnitCurrencyNumber(scaleIndex int, digitToConvert objects.Digi
 		unitDeclensionsObject = words.DeclensionFractionalUnits{}
 
 		for key, value := range words.WordConstants.N2w.FractionalUnit.FractionalUnitEndings {
-			newWords := [constants.CountScaleNumberNameForms]string{}
+			newWords := [constants.CountWordForms]string{}
 			for i, val := range value {
 				newWords[i] = unitNamePrefix + unitNameBegin + val
 			}

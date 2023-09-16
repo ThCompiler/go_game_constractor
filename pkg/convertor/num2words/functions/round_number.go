@@ -45,7 +45,7 @@ func roundDigit(increaseDigit bool, numberToRound []rune, i int) (bool, []rune) 
 }
 
 func RoundNumber(number objects.Number, precision int64) objects.Number {
-	if number.Divider == constants.FractionalNumber ||
+	if number.Divider == constants.FRACTIONAL_NUMBER ||
 		int64(len(number.SecondPart)) <= precision || precision < 0 {
 		return number
 	}
@@ -53,7 +53,7 @@ func RoundNumber(number objects.Number, precision int64) objects.Number {
 	integerPart := number.FirstPart
 	// Обрезать дробную часть
 	decimalPart := number.SecondPart[0 : precision+1]
-	numberToRound := []rune(integerPart + string(constants.DecimalNumber) + decimalPart)
+	numberToRound := []rune(integerPart + string(constants.DECIMAL_NUMBER) + decimalPart)
 	increaseDigit := false
 
 	// Цикл от последней цифры к первой (справа налево)
@@ -74,7 +74,7 @@ func RoundNumber(number objects.Number, precision int64) objects.Number {
 		result = "1" + result
 	}
 
-	number.FirstPart, number.SecondPart, _ = strings.Cut(result, string(constants.DecimalNumber))
+	number.FirstPart, number.SecondPart, _ = strings.Cut(result, string(constants.DECIMAL_NUMBER))
 	// Убрать лишние нули из дробной части справа
 	number.SecondPart = RemoveFromString(number.SecondPart, ZerosInEndRegex)
 	if number.SecondPart == "" {

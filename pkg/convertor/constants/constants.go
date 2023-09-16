@@ -3,14 +3,16 @@ package constants
 type NumberType string
 
 const (
+	DECIMAL_NUMBER    = NumberType(",")
+	FRACTIONAL_NUMBER = NumberType("/")
+)
+
+const (
 	MaxNumberPartLength = 306
 
-	DecimalNumber    = NumberType(",")
-	FractionalNumber = NumberType("/")
-
-	CountDigits               = 10
-	CountScaleNumberNameForms = 2
-	CountNumberNameForms      = 3
+	CountDigits          = 10
+	CountWordForms       = 2
+	CountNumberNameForms = 3
 
 	UnitsScale    = 1
 	ThousandScale = 2

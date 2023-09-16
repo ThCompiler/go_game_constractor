@@ -113,44 +113,44 @@ func (s *RoundNumberSuite) TestWithoutRound() {
 		s.ActFunc,
 		ts.TestCase{
 			Name:     "Number is fractional",
-			Args:     ts.TTA(objects.Number{Divider: constants.FractionalNumber}, int64(0)),
-			Expected: ts.TTVE(objects.Number{Divider: constants.FractionalNumber}),
+			Args:     ts.TTA(objects.Number{Divider: constants.FRACTIONAL_NUMBER}, int64(0)),
+			Expected: ts.TTVE(objects.Number{Divider: constants.FRACTIONAL_NUMBER}),
 		},
 		ts.TestCase{
 			Name:     "Precision is negative",
-			Args:     ts.TTA(objects.Number{Divider: constants.DecimalNumber}, int64(-1)),
-			Expected: ts.TTVE(objects.Number{Divider: constants.DecimalNumber}),
+			Args:     ts.TTA(objects.Number{Divider: constants.DECIMAL_NUMBER}, int64(-1)),
+			Expected: ts.TTVE(objects.Number{Divider: constants.DECIMAL_NUMBER}),
 		},
 		ts.TestCase{
 			Name: "Precision more then count numbers",
 			Args: ts.TTA(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				SecondPart: "202",
 			}, int64(5)),
 			Expected: ts.TTVE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				SecondPart: "202",
 			}),
 		},
 		ts.TestCase{
 			Name: "Precision equal count numbers",
 			Args: ts.TTA(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				SecondPart: "202",
 			}, int64(3)),
 			Expected: ts.TTVE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				SecondPart: "202",
 			}),
 		},
 		ts.TestCase{
 			Name: "Precision is zero and equal count numbers",
 			Args: ts.TTA(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				SecondPart: "",
 			}, int64(0)),
 			Expected: ts.TTVE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				SecondPart: "",
 			}),
 		},
@@ -163,34 +163,34 @@ func (s *RoundNumberSuite) TestWithRound() {
 		ts.TestCase{
 			Name: "Digit for round is less than five",
 			Args: ts.TTA(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				SecondPart: "202",
 			}, int64(2)),
 			Expected: ts.TTVE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				SecondPart: "2",
 			}),
 		},
 		ts.TestCase{
 			Name: "Digit for round is not less than five",
 			Args: ts.TTA(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				SecondPart: "206",
 			}, int64(2)),
 			Expected: ts.TTVE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				SecondPart: "21",
 			}),
 		},
 		ts.TestCase{
 			Name: "All digits is nine in decimal part",
 			Args: ts.TTA(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "99999",
 			}, int64(3)),
 			Expected: ts.TTVE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "2",
 				SecondPart: "0",
 			}),
@@ -198,12 +198,12 @@ func (s *RoundNumberSuite) TestWithRound() {
 		ts.TestCase{
 			Name: "All digits is nine in decimal and integer part",
 			Args: ts.TTA(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "2999",
 				SecondPart: "99999",
 			}, int64(3)),
 			Expected: ts.TTVE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "3000",
 				SecondPart: "0",
 			}),
@@ -211,11 +211,11 @@ func (s *RoundNumberSuite) TestWithRound() {
 		ts.TestCase{
 			Name: "All digits is nine in decimal part without integer part",
 			Args: ts.TTA(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				SecondPart: "99999",
 			}, int64(3)),
 			Expected: ts.TTVE(objects.Number{
-				Divider:    constants.DecimalNumber,
+				Divider:    constants.DECIMAL_NUMBER,
 				FirstPart:  "1",
 				SecondPart: "0",
 			}),

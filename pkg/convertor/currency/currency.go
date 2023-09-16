@@ -16,14 +16,14 @@ const (
 	CUSTOM = Currency(`custom`)
 )
 
-type Declensions map[declension.Declension][constants.CountScaleNumberNameForms]string
+type Declensions map[declension.Declension][constants.CountWordForms]string
 
 type NounGender struct {
 	/**
 	 * 0 => 'один', 1 => 'одна', 2 => 'одно'\
 	 * Default: `0`
 	 */
-	Integer genders.Gender `yaml:"integer"`
+	IntegerPart genders.Gender `yaml:"integerPart"`
 
 	/**
 	 * 0 => 'один', 1 => 'одна', 2 => 'одно'\
@@ -34,24 +34,10 @@ type NounGender struct {
 
 type CustomCurrency struct {
 	/**
-	 * Integer currency name forms\
-	 * for digits [1, 2-4, 5-9]\
-	 * e.g. ['рубль', 'рубля', 'рублей']
-	 */
-	CurrencyNameCases [constants.CountNumberNameForms]string `yaml:"currencyNameCases"`
-
-	/**
-	 * Integer currency name forms\
+	 * IntegerPart currency name forms\
 	 * for declensions
 	 */
 	DecimalCurrencyNameDeclensions Declensions `yaml:"decimalCurrencyNameDeclensions"`
-
-	/**
-	 * Fractional number currency name forms\
-	 * for digits [1, 2-4, 5-9]\
-	 * e.g. ['копейка', 'копейки', 'копеек']
-	 */
-	FractionalPartNameCases [constants.CountNumberNameForms]string `yaml:"fractionalPartNameCases"`
 
 	/**
 	 * Fractional number currency name forms\
