@@ -1,8 +1,8 @@
 package functions
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor/constants"
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor/num2words/objects"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/constants"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/objects"
 	ts "github.com/ThCompiler/go_game_constractor/pkg/testing"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"

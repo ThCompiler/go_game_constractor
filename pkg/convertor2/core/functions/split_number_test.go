@@ -1,7 +1,7 @@
 package functions
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor/num2words/objects"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/objects"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -20,7 +20,7 @@ func (s *SplitNumberIntoThreesSuite) TestNumberWithOneDigit() {
 	res := SplitNumberIntoThrees("1")
 	assert.EqualValues(s.T(),
 		[]objects.RuneDigitTriplet{
-			objects.RuneDigitTriplet{
+			{
 				Units:    '1',
 				Dozens:   '0',
 				Hundreds: '0',
@@ -34,7 +34,7 @@ func (s *SplitNumberIntoThreesSuite) TestNumberWithTwoDigit() {
 	res := SplitNumberIntoThrees("12")
 	assert.EqualValues(s.T(),
 		[]objects.RuneDigitTriplet{
-			objects.RuneDigitTriplet{
+			{
 				Units:    '2',
 				Dozens:   '1',
 				Hundreds: '0',
@@ -47,7 +47,7 @@ func (s *SplitNumberIntoThreesSuite) TestNumberWithThreeDigit() {
 	res := SplitNumberIntoThrees("123")
 	assert.EqualValues(s.T(),
 		[]objects.RuneDigitTriplet{
-			objects.RuneDigitTriplet{
+			{
 				Units:    '3',
 				Dozens:   '2',
 				Hundreds: '1',
@@ -61,12 +61,12 @@ func (s *SplitNumberIntoThreesSuite) TestNumberWithTripletAndTwoDigit() {
 	res := SplitNumberIntoThrees("1234")
 	assert.EqualValues(s.T(),
 		[]objects.RuneDigitTriplet{
-			objects.RuneDigitTriplet{
+			{
 				Units:    '1',
 				Dozens:   '0',
 				Hundreds: '0',
 			},
-			objects.RuneDigitTriplet{
+			{
 				Units:    '4',
 				Dozens:   '3',
 				Hundreds: '2',
