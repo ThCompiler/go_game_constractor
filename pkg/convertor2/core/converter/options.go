@@ -1,7 +1,7 @@
 package convertor
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/currency"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/words"
 )
 
@@ -20,7 +20,7 @@ type Options struct {
 	* `Object` Custom currency. 124 юаня 42 фыня\
 	* Default: `'rub'`
 	 */
-	currencyName currency.Name
+	currencyName words.CurrencyName
 
 	/**
 	 * Select declension\
@@ -70,7 +70,7 @@ type Options struct {
 func NewOptionsWithCurrency(language words.Language, declension words.Declension,
 	roundNumber int64, convertMinusSignToWord bool,
 	showNumberParts, convertNumberToWords, showCurrency NumberPart,
-	currencyName currency.Name,
+	currencyName words.CurrencyName,
 ) Options {
 	return Options{
 		language:               language,
@@ -96,7 +96,7 @@ func NewOptionsWithoutCurrency(language words.Language, declension words.Declens
 		showCurrency:           showCurrency,
 		showNumberParts:        showNumberParts,
 		convertNumberToWords:   convertNumberToWords,
-		currencyName:           currency.NUMBER,
+		currencyName:           constants.NUMBER,
 	}
 }
 

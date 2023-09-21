@@ -2,7 +2,6 @@ package convertor
 
 import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/constants"
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/currency"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/functions"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/objects"
 	"strconv"
@@ -107,9 +106,9 @@ func ConvertByNumber(number objects.Number, appliedOptions Options) string {
 	}
 
 	// Если указана валюта
-	if appliedOptions.currencyName != currency.NUMBER {
+	if appliedOptions.currencyName != constants.NUMBER {
 		// Округлить число до 2 знаков после запятой
-		modifiedNumber = functions.RoundNumber(modifiedNumber, currency.TwoSignAfterRound)
+		modifiedNumber = functions.RoundNumber(modifiedNumber, constants.TwoSignAfterRoundForCurrency)
 	} else {
 		// Округлить число до заданной точности
 		modifiedNumber = functions.RoundNumber(number, appliedOptions.roundNumber)

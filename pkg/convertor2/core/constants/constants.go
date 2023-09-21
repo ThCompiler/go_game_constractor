@@ -1,5 +1,7 @@
 package constants
 
+import "github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/words"
+
 type NumberType string
 
 const (
@@ -8,7 +10,13 @@ const (
 )
 
 const (
+	NUMBER = words.CurrencyName("number")
+)
+
+const (
 	MaxNumberPartLength = 306
+
+	TwoSignAfterRoundForCurrency = 2
 
 	CountDigits          = 10
 	CountWordForms       = 2

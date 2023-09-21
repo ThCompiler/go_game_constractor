@@ -2,18 +2,18 @@ package words
 
 import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/constants"
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/currency"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/objects"
 )
 
 type Gender string
 type Declension string
 type LanguageName string
+type CurrencyName string
 
 type NumberInfo struct {
 	Declension   Declension
 	Delimiter    constants.NumberType
-	CurrencyName currency.Name
+	CurrencyName CurrencyName
 }
 
 type Language interface {

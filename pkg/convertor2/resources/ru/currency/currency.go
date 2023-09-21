@@ -5,16 +5,12 @@ import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/words"
 )
 
-type Name string
-
 const TwoSignAfterRound = 2
 
 const (
-	RUB    = Name(`rub`)
-	NUMBER = Name(`number`)
-	USD    = Name(`usd`)
-	EUR    = Name(`eur`)
-	CUSTOM = Name(`custom`)
+	RUB = words.CurrencyName(`rub`)
+	USD = words.CurrencyName(`usd`)
+	EUR = words.CurrencyName(`eur`)
 )
 
 type Declensions map[words.Declension][constants.CountWordForms]string

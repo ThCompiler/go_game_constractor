@@ -2,7 +2,6 @@ package convertor
 
 import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/constants"
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/currency"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/functions"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/objects"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/words"
@@ -85,7 +84,7 @@ func (c *Converter) ConvertFractionalPart(convertedNumber objects.ResultNumberT,
 func (c *Converter) addCurrencyToFractionalPart(convertedNumber objects.ResultNumberT, fractionalPart string,
 	numberAsTriplets []objects.RuneDigitTriplet, delimiter constants.NumberType) objects.ResultNumberT {
 	// Если валюта - не 'number'
-	if c.options.currencyName != currency.NUMBER {
+	if c.options.currencyName != constants.NUMBER {
 		// Если разделитель - дробная черта
 		if delimiter == constants.FRACTIONAL_NUMBER {
 			convertedNumber.SecondPartName = c.options.language.GetCurrencyForFractionalNumber()
@@ -123,7 +122,7 @@ func (c *Converter) convertNumberToNumberString(convertedNumber objects.ResultNu
 	fractionalPart string,
 ) objects.ResultNumberT {
 	// Если валюта "number"
-	if c.options.currencyName == currency.NUMBER {
+	if c.options.currencyName == constants.NUMBER {
 		// Если в дробной части есть цифры
 		if len(fractionalPart) > 0 {
 			// Удалить лишние нули перед числом

@@ -1,0 +1,27 @@
+fractionalUnitsDeclensions:
+  tens:
+    nominative: ['десятая', 'десятые']
+    genitive: ['десятой', 'десятых']
+    dative: ['десятой', 'десятым']
+    accusative: ['десятую', 'десятых']
+    instrumental: ['десятой', 'десятыми']
+    prepositional: ['десятой', 'десятых']
+  hundreds:
+    nominative: ['сотая', 'сотые']
+    genitive: ['сотой', 'сотых']
+    dative: ['сотой', 'сотым']
+    accusative: ['сотую', 'сотых']
+    instrumental: ['сотой', 'сотыми']
+    prepositional: ['сотой', 'сотых']
+fractionalUnitsBeginning:
+  - 'тысяч'
+  - 'миллион'
+  - 'миллиард'
+fractionalUnitPrefixes: ['', 'десяти', 'сто']
+fractionalUnitEndings:
+  nominative: ['ная', 'ные']
+  genitive: ['ной', 'ных']
+  dative: ['ной', 'ным']
+  accusative: ['ную', 'ные']
+  instrumental: ['ной', 'ными']
+  prepositional: ['ной', 'ных']
