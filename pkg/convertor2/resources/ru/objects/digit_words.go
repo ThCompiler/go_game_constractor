@@ -12,19 +12,19 @@ type Sign struct {
 	Minus string `yaml:"minus"`
 }
 
-type gendersWordT map[genders.Gender]string
+type wordsByGenderT map[genders.Gender]string
 
 type digitT struct {
-	word           string
-	wordWithGender gendersWordT
+	word         string
+	wordByGender wordsByGenderT
 }
 
 func (d *digitT) WithGender() bool {
 	return d.word == ""
 }
 
-func (d *digitT) GetGendersWord() gendersWordT {
-	return d.wordWithGender
+func (d *digitT) GetWordsByGender() wordsByGenderT {
+	return d.wordByGender
 }
 
 func (d *digitT) GetWord() string {
@@ -39,11 +39,11 @@ func (d *digitT) UnmarshalYAML(n *yaml.Node) error {
 
 	d.word = ""
 
-	if err = n.Decode(&d.wordWithGender); err == nil {
+	if err = n.Decode(&d.wordByGender); err == nil {
 		return nil
 	}
 
-	d.wordWithGender = nil
+	d.wordByGender = nil
 
 	return err
 }
@@ -72,7 +72,7 @@ func (dn *DeclensionNumbers) convertToWords() Words {
 	for _, num2word := range *dn {
 		for digit, word := range num2word {
 			if word.WithGender() {
-				genderWord := word.GetGendersWord()
+				genderWord := word.GetWordsByGender()
 
 				for _, wrd := range genderWord {
 					words[wrd] = objects.Digit(digit)

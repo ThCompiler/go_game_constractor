@@ -88,7 +88,7 @@ func New(server http.Handler, opts ...Option) *Server {
 		shutdownTimeout: _defaultShutdownTimeout,
 	}
 
-	// Custom options
+	// Custom option
 	for _, opt := range opts {
 		opt(s)
 	}

@@ -5,12 +5,17 @@ import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/functions"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/objects"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/words"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/option"
 	"github.com/ThCompiler/go_game_constractor/pkg/stringutilits"
 	"strings"
 )
 
 type Converter struct {
-	options Options
+	options option.Options
+}
+
+func NewConverter(options option.Options) Converter {
+	return Converter{options: options}
 }
 
 func (c *Converter) ConvertIntegerPart(convertedNumber objects.ResultNumberT, integerPart string,
@@ -21,26 +26,26 @@ func (c *Converter) ConvertIntegerPart(convertedNumber objects.ResultNumberT, in
 	convertedNumber.FirstPart = integerPart
 
 	// Если нужно конвертировать число в слова
-	if c.options.convertNumberToWords.Integer {
+	if c.options.ConvertNumberToWords.Integer {
 		convertedNumber.FirstPart = c.convertTripletsToWords(
 			numberAsTriplets,
 			words.NumberInfo{
-				Declension:   c.options.declension,
-				Delimiter:    delimiter,
-				CurrencyName: c.options.currencyName,
+				Declension:   c.options.Declension,
+				NumberType:   delimiter,
+				CurrencyName: c.options.CurrencyName,
 			},
 		)
 	}
 
 	// Если нужно отображать валюту целой части числа
-	if c.options.showCurrency.Integer {
+	if c.options.ShowCurrency.Integer {
 		// Если разделитель - не дробная черта
 		if delimiter != constants.FRACTIONAL_NUMBER {
-			currencyWord := c.options.language.GetCurrencyAsWord(
+			currencyWord := c.options.Language.GetCurrencyAsWord(
 				words.NumberInfo{
-					Declension:   c.options.declension,
-					Delimiter:    delimiter,
-					CurrencyName: c.options.currencyName,
+					Declension:   c.options.Declension,
+					NumberType:   delimiter,
+					CurrencyName: c.options.CurrencyName,
 				},
 				numberAsTriplets,
 			)
@@ -59,12 +64,12 @@ func (c *Converter) ConvertFractionalPart(convertedNumber objects.ResultNumberT,
 	convertedNumber.SecondPart = fractionalPart
 
 	// Если нужно конвертировать число в слова
-	if c.options.convertNumberToWords.Fractional {
+	if c.options.ConvertNumberToWords.Fractional {
 		convertedNumber.SecondPart = c.convertFractionalTripletsToWords(
 			words.NumberInfo{
-				Declension:   c.options.declension,
-				Delimiter:    delimiter,
-				CurrencyName: c.options.currencyName,
+				Declension:   c.options.Declension,
+				NumberType:   delimiter,
+				CurrencyName: c.options.CurrencyName,
 			},
 			IntegerPartAsTriplets,
 			numberAsTriplets,
@@ -74,7 +79,7 @@ func (c *Converter) ConvertFractionalPart(convertedNumber objects.ResultNumberT,
 	}
 
 	// Если нужно отображать валюту дробной части числа
-	if c.options.showCurrency.Fractional {
+	if c.options.ShowCurrency.Fractional {
 		convertedNumber = c.addCurrencyToFractionalPart(convertedNumber, fractionalPart, numberAsTriplets, delimiter)
 	}
 
@@ -84,18 +89,18 @@ func (c *Converter) ConvertFractionalPart(convertedNumber objects.ResultNumberT,
 func (c *Converter) addCurrencyToFractionalPart(convertedNumber objects.ResultNumberT, fractionalPart string,
 	numberAsTriplets []objects.RuneDigitTriplet, delimiter constants.NumberType) objects.ResultNumberT {
 	// Если валюта - не 'number'
-	if c.options.currencyName != constants.NUMBER {
+	if c.options.CurrencyName != words.NUMBER {
 		// Если разделитель - дробная черта
 		if delimiter == constants.FRACTIONAL_NUMBER {
-			convertedNumber.SecondPartName = c.options.language.GetCurrencyForFractionalNumber()
+			convertedNumber.SecondPartName = c.options.Language.GetCurrencyForFractionalNumber(c.options.CurrencyName)
 			return convertedNumber
 		}
 
-		currencyWord := c.options.language.GetCurrencyAsWord(
+		currencyWord := c.options.Language.GetCurrencyAsWord(
 			words.NumberInfo{
-				Declension:   c.options.declension,
-				Delimiter:    delimiter,
-				CurrencyName: c.options.currencyName,
+				Declension:   c.options.Declension,
+				NumberType:   delimiter,
+				CurrencyName: c.options.CurrencyName,
 			},
 			numberAsTriplets,
 		)
@@ -122,13 +127,13 @@ func (c *Converter) convertNumberToNumberString(convertedNumber objects.ResultNu
 	fractionalPart string,
 ) objects.ResultNumberT {
 	// Если валюта "number"
-	if c.options.currencyName == constants.NUMBER {
+	if c.options.CurrencyName == words.NUMBER {
 		// Если в дробной части есть цифры
 		if len(fractionalPart) > 0 {
 			// Удалить лишние нули перед числом
 			fractionalPart = functions.RemoveFromString(fractionalPart, `^0+`)
 			// Если после удаления лишних нулей не осталось цифр, то добавить один "0"
-			if fractionalPart == "" && c.options.roundNumber != 0 {
+			if fractionalPart == "" && c.options.RoundNumber != 0 {
 				fractionalPart = "0"
 			}
 		}
@@ -142,8 +147,8 @@ func (c *Converter) convertNumberToNumberString(convertedNumber objects.ResultNu
 func (c *Converter) setDecimalNumberCurrency(convertedNumber objects.ResultNumberT,
 	fractionalPart string) objects.ResultNumberT {
 	// Если имеет смысл добавлять название валюты
-	if c.options.roundNumber > 0 ||
-		(c.options.roundNumber < 0 && len(fractionalPart) > 0) {
+	if c.options.RoundNumber > 0 ||
+		(c.options.RoundNumber < 0 && len(fractionalPart) > 0) {
 		runeFractionalScalesArray := []rune(fractionalPart)
 		digitToConvert := objects.Digit(
 			stringutilits.ToDigit(
@@ -151,10 +156,10 @@ func (c *Converter) setDecimalNumberCurrency(convertedNumber objects.ResultNumbe
 			),
 		)
 
-		convertedNumber.SecondPartName = c.options.language.GetEndingOfDecimalNumberForFractionalPart(
+		convertedNumber.SecondPartName = c.options.Language.GetEndingOfDecimalNumberForFractionalPart(
 			len(fractionalPart)-1,
 			digitToConvert,
-			c.options.declension,
+			c.options.Declension,
 		)
 	}
 
@@ -166,7 +171,7 @@ func (c *Converter) convertTripletsToWords(
 	numberInfo words.NumberInfo,
 ) string {
 	numberScalesArrayLen := len(numberByTriplets)
-	convertedResult := c.options.language.ConvertZeroToWordsForIntegerPart(c.options.declension)
+	convertedResult := c.options.Language.ConvertZeroToWordsForIntegerPart(c.options.Declension)
 
 	// Для каждого класса числа
 	for arrIndex, numberTriplet := range numberByTriplets {
@@ -174,7 +179,6 @@ func (c *Converter) convertTripletsToWords(
 		currentNumberScale := numberScalesArrayLen - arrIndex
 
 		digits := numberTriplet.ToNumeric()
-		stringDigits := objects.StringDigitTriplet{Units: "", Dozens: "", Hundreds: ""}
 
 		// Если класс числа пустой (000)
 		if digits.IsZeros() {
@@ -187,13 +191,13 @@ func (c *Converter) convertTripletsToWords(
 			continue
 		}
 
-		stringDigits = c.options.language.ConvertTripletToWords(
+		stringDigits := c.options.Language.ConvertTripletToWords(
 			numberInfo,
 			digits,
 			currentNumberScale,
 		)
 
-		scaleName := c.options.language.GetWordScaleName(currentNumberScale-1, numberInfo, digits)
+		scaleName := c.options.Language.GetWordScaleName(currentNumberScale-1, numberInfo, digits)
 
 		// Убрать ненужный "ноль"
 		if digits.Units == 0 && (digits.Hundreds > 0 || digits.Dozens > 0) {
@@ -236,7 +240,7 @@ func (c *Converter) convertFractionalTripletsToWords(
 	// Если нет ни одного не пустого класса
 	if lastNotNullTriplet == -1 {
 		// Вернуть ноль
-		return c.options.language.ConvertZeroToWordsForFractionalNumber(numberInfo, integerPartTriplets)
+		return c.options.Language.ConvertZeroToWordsForFractionalNumber(numberInfo, integerPartTriplets)
 	}
 
 	// Индекс последнего класса в массиве.
@@ -256,13 +260,13 @@ func (c *Converter) convertFractionalTripletsToWords(
 		// Конвертировать классы как обычное число
 		convertedResult += c.convertTripletsToWords(
 			numberScalesArrForCommonConvert,
-			c.options.language.CorrectNumberInfoForFractionalTriplets(numberInfo),
+			c.options.Language.CorrectNumberInfoForFractionalTriplets(numberInfo),
 		) + " "
 	}
 
 	// Если последний класс для конвертирования - тысячи или больше
 	if lastNotNullTriplet >= 1 {
-		convertedResult += c.options.language.ConvertNotLowestScaleToWords(
+		convertedResult += c.options.Language.ConvertNotLowestScaleToWords(
 			numberInfo,
 			updatedNumberTriplets[lastTripletIndex].ToNumeric(),
 			lastTripletIndex,
@@ -273,7 +277,7 @@ func (c *Converter) convertFractionalTripletsToWords(
 
 	// Если последний класс для конвертирования - единицы
 	if lastNotNullTriplet == 0 {
-		convertedResult += c.options.language.ConvertLowestScaleToWords(
+		convertedResult += c.options.Language.ConvertLowestScaleToWords(
 			numberInfo,
 			updatedNumberTriplets[lastTripletIndex].ToNumeric(),
 			integerPartTriplets,

@@ -1,8 +1,8 @@
 package objects
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/words"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/resources/ru/constants"
 )
 
 type DeclensionFractionalUnits map[words.Declension][constants.CountWordForms]string

@@ -96,7 +96,7 @@ func printHelp() {
 			`functions for store texts of script in redis from yml, or json, or xml file.
 
 Usage:
-    scg ( (-o | --output=<file>) (-s | --script=<file>) | [options] | (-v | --version) | (-h | --help) )
+    scg ( (-o | --output=<file>) (-s | --script=<file>) | [option] | (-v | --version) | (-h | --help) )
 
 Options:
     -u --update         save user changes in files

@@ -5,14 +5,17 @@ import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/objects"
 )
 
-type Gender string
 type Declension string
 type LanguageName string
 type CurrencyName string
 
+const (
+	NUMBER = CurrencyName("number")
+)
+
 type NumberInfo struct {
 	Declension   Declension
-	Delimiter    constants.NumberType
+	NumberType   constants.NumberType
 	CurrencyName CurrencyName
 }
 
@@ -24,7 +27,7 @@ type Language interface {
 	GetCurrencyAsWord(numberInfo NumberInfo, numberAsTriplets []objects.RuneDigitTriplet) string
 
 	// GetCurrencyForFractionalNumber Возвращает значение валюты в случае если передана дробь
-	GetCurrencyForFractionalNumber() string
+	GetCurrencyForFractionalNumber(currencyName CurrencyName) string
 
 	// For Integer Part
 

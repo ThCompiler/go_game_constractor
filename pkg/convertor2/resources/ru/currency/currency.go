@@ -1,11 +1,10 @@
 package currency
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/words"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/resources/ru/constants"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/resources/ru/objects/genders"
 )
-
-const TwoSignAfterRound = 2
 
 const (
 	RUB = words.CurrencyName(`rub`)
@@ -14,20 +13,6 @@ const (
 )
 
 type Declensions map[words.Declension][constants.CountWordForms]string
-
-type NounGender struct {
-	/**
-	 * 0 => 'один', 1 => 'одна', 2 => 'одно'\
-	 * Default: `0`
-	 */
-	IntegerPart words.Gender `yaml:"integerPart"`
-
-	/**
-	 * 0 => 'один', 1 => 'одна', 2 => 'одно'\
-	 * Default: `1`
-	 */
-	FractionalPart words.Gender `yaml:"fractionalPart"`
-}
 
 type Info struct {
 	/**
@@ -43,4 +28,18 @@ type Info struct {
 	FractionalPartNameDeclensions Declensions `yaml:"fractionalPartNameDeclensions"`
 
 	CurrencyNounGender NounGender `yaml:"currencyNounGender"`
+}
+
+type NounGender struct {
+	/**
+	 * 0 => 'один', 1 => 'одна', 2 => 'одно'\
+	 * Default: `0`
+	 */
+	IntegerPart genders.Gender `yaml:"integerPart"`
+
+	/**
+	 * 0 => 'один', 1 => 'одна', 2 => 'одно'\
+	 * Default: `1`
+	 */
+	FractionalPart genders.Gender `yaml:"fractionalPart"`
 }

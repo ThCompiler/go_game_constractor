@@ -1,9 +1,13 @@
-package convertor
+package convertor2
 
 import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/constants"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/converter"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/functions"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/objects"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/words"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/option"
+
 	"strconv"
 	"strings"
 	"unicode"
@@ -22,7 +26,7 @@ type NumberToConvert interface {
 }
 
 // Convert convertor number into the words representation.
-func Convert[N NumberToConvert](number N, options Options) (string, error) {
+func Convert[N NumberToConvert](number N, options option.Options) (string, error) {
 	numberString := convertNumberToString(number)
 	if numberString == "" {
 		return "", nil
@@ -89,8 +93,8 @@ func convertNumberToString(number interface{}) string {
 	}
 }
 
-func ConvertByNumber(number objects.Number, appliedOptions Options) string {
-	conv := Converter{options: appliedOptions}
+func ConvertByNumber(number objects.Number, appliedOptions option.Options) string {
+	conv := convertor.NewConverter(appliedOptions)
 
 	convertedNumber := objects.ResultNumberT{}
 	modifiedNumber := number
@@ -98,29 +102,29 @@ func ConvertByNumber(number objects.Number, appliedOptions Options) string {
 	// Если есть знак минус
 	if number.Sign == "-" {
 		// Если отображать знак минус словом
-		if appliedOptions.convertMinusSignToWord {
-			convertedNumber.Sign = appliedOptions.language.GetMinusString()
+		if appliedOptions.ConvertMinusSignToWord {
+			convertedNumber.Sign = appliedOptions.Language.GetMinusString()
 		} else {
 			convertedNumber.Sign = "-"
 		}
 	}
 
 	// Если указана валюта
-	if appliedOptions.currencyName != constants.NUMBER {
+	if appliedOptions.CurrencyName != words.NUMBER {
 		// Округлить число до 2 знаков после запятой
 		modifiedNumber = functions.RoundNumber(modifiedNumber, constants.TwoSignAfterRoundForCurrency)
 	} else {
 		// Округлить число до заданной точности
-		modifiedNumber = functions.RoundNumber(number, appliedOptions.roundNumber)
+		modifiedNumber = functions.RoundNumber(number, appliedOptions.RoundNumber)
 	}
 
 	// Если нужно отображать целую часть числа
-	if appliedOptions.showNumberParts.Integer {
+	if appliedOptions.ShowNumberParts.Integer {
 		convertedNumber = conv.ConvertIntegerPart(convertedNumber, modifiedNumber.FirstPart, modifiedNumber.Divider)
 	}
 
 	// Если нужно отображать дробную часть числа
-	if appliedOptions.showNumberParts.Fractional {
+	if appliedOptions.ShowNumberParts.Fractional {
 		convertedNumber = conv.ConvertFractionalPart(convertedNumber, modifiedNumber.FirstPart,
 			modifiedNumber.SecondPart, modifiedNumber.Divider)
 	}

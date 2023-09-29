@@ -1,15 +1,14 @@
-package convertor
+package option
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor2/core/words"
 )
 
 type Options struct {
 	/**
-	* Select language for converting
+	* Select Language for converting
 	 */
-	language words.Language
+	Language words.Language
 
 	/**
 	* Select currency\
@@ -20,10 +19,10 @@ type Options struct {
 	* `Object` Custom currency. 124 юаня 42 фыня\
 	* Default: `'rub'`
 	 */
-	currencyName words.CurrencyName
+	CurrencyName words.CurrencyName
 
 	/**
-	 * Select declension\
+	 * Select Declension\
 	 * `'nominative'` Одна тысяча два рубля\
 	 * `'genitive'` Одной тысячи двух рублей\
 	 * `'dative'` Одной тысяче двум рублям\
@@ -32,7 +31,7 @@ type Options struct {
 	 * `'prepositional'` Одной тысяче двух рублях\
 	 * Default: `nominative`
 	 */
-	declension words.Declension
+	Declension words.Declension
 
 	/**
 	 * Rounding\
@@ -40,7 +39,7 @@ type Options struct {
 	 * `0` and more. Precision of rounding\
 	 * Default: `-1`
 	 */
-	roundNumber int64
+	RoundNumber int64
 
 	/**
 	 * Convert minus sign to word\
@@ -48,23 +47,23 @@ type Options struct {
 	 * `false` -\
 	 * Default: `true`
 	 */
-	convertMinusSignToWord bool
+	ConvertMinusSignToWord bool
 
 	/**
 	 * Show number parts
 	 */
-	showNumberParts NumberPart
+	ShowNumberParts NumberPart
 
 	/**
 	 * Convert number parts to words
 	 */
-	convertNumberToWords NumberPart
+	ConvertNumberToWords NumberPart
 
 	/**
 	 * Show currency
 	 * `Object`
 	 */
-	showCurrency NumberPart
+	ShowCurrency NumberPart
 }
 
 func NewOptionsWithCurrency(language words.Language, declension words.Declension,
@@ -73,14 +72,14 @@ func NewOptionsWithCurrency(language words.Language, declension words.Declension
 	currencyName words.CurrencyName,
 ) Options {
 	return Options{
-		language:               language,
-		declension:             declension,
-		roundNumber:            roundNumber,
-		convertMinusSignToWord: convertMinusSignToWord,
-		showCurrency:           showCurrency,
-		showNumberParts:        showNumberParts,
-		convertNumberToWords:   convertNumberToWords,
-		currencyName:           currencyName,
+		Language:               language,
+		Declension:             declension,
+		RoundNumber:            roundNumber,
+		ConvertMinusSignToWord: convertMinusSignToWord,
+		ShowCurrency:           showCurrency,
+		ShowNumberParts:        showNumberParts,
+		ConvertNumberToWords:   convertNumberToWords,
+		CurrencyName:           currencyName,
 	}
 }
 
@@ -89,14 +88,14 @@ func NewOptionsWithoutCurrency(language words.Language, declension words.Declens
 	showNumberParts, convertNumberToWords, showCurrency NumberPart,
 ) Options {
 	return Options{
-		language:               language,
-		declension:             declension,
-		roundNumber:            roundNumber,
-		convertMinusSignToWord: convertMinusSignToWord,
-		showCurrency:           showCurrency,
-		showNumberParts:        showNumberParts,
-		convertNumberToWords:   convertNumberToWords,
-		currencyName:           constants.NUMBER,
+		Language:               language,
+		Declension:             declension,
+		RoundNumber:            roundNumber,
+		ConvertMinusSignToWord: convertMinusSignToWord,
+		ShowCurrency:           showCurrency,
+		ShowNumberParts:        showNumberParts,
+		ConvertNumberToWords:   convertNumberToWords,
+		CurrencyName:           words.NUMBER,
 	}
 }
 

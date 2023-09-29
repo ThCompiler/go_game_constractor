@@ -17,7 +17,7 @@ run:
   modules-download-mode: readonly
   allow-parallel-runners: true
   go: '1.21'
-# output configuration options
+# output configuration option
 output:
   # Format: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
   #
