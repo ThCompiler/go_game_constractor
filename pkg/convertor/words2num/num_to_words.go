@@ -1,12 +1,6 @@
 package words2num
 
-import (
-	"math"
-	"strings"
-
-	words2 "github.com/ThCompiler/go_game_constractor/pkg/convertor/words"
-)
-
+/*
 // Convert convertor number into the words representation.
 func Convert(str string) (int64, error) {
 	if str == "" {
@@ -34,7 +28,7 @@ func convert(str string) (int64, error) {
 }
 
 func AddConvertedWordToNumber(word string, number int64) int64 {
-	if value, is := words2.WordConstants.W2n.Digit.Units[word]; is {
+	if value, is := ru.WordConstants.W2n.Digit.Units[word]; is {
 		return number + int64(value)
 	}
 
@@ -56,3 +50,4 @@ func AddConvertedWordToNumber(word string, number int64) int64 {
 
 	return number
 }
+*/

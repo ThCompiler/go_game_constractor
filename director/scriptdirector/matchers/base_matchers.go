@@ -1,9 +1,8 @@
 package matchers
 
 import (
-	"strconv"
-
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words2num"
+	"strconv"
 )
 
 const (
