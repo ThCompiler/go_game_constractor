@@ -1,14 +1,16 @@
 package ru
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor/core/constants"
+	core_constants "github.com/ThCompiler/go_game_constractor/pkg/convertor/core/constants"
 	core_objects "github.com/ThCompiler/go_game_constractor/pkg/convertor/core/objects"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/core/words"
+	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/ru/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/ru/currency"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/ru/objects"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/ru/objects/declension"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/ru/objects/genders"
 	ts "github.com/ThCompiler/go_game_constractor/pkg/testing"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -50,13 +52,13 @@ var (
 	}
 )
 
-type GetCurrencyWordSuite struct {
+type RussianCurrencyFunctionsSuite struct {
 	ts.TestCasesSuite
 	rs      Russian
 	ActFunc func(args ...interface{}) []interface{}
 }
 
-func (s *GetCurrencyWordSuite) SetupTest() {
+func (s *RussianCurrencyFunctionsSuite) SetupTest() {
 	s.rs = Russian{
 		words: &wordsConstantsForNumbers{
 			CurrencyStrings: objects.CurrencyWords{
@@ -112,7 +114,7 @@ func (s *GetCurrencyWordSuite) SetupTest() {
 
 	s.ActFunc = func(args ...interface{}) []interface{} {
 		numberInfo := words.NumberInfo{
-			NumberType:   args[1].(constants.NumberType),
+			NumberType:   args[1].(core_constants.NumberType),
 			Declension:   args[2].(words.Declension),
 			CurrencyName: args[0].(words.CurrencyName),
 		}
@@ -121,46 +123,53 @@ func (s *GetCurrencyWordSuite) SetupTest() {
 	}
 }
 
-func (s *GetCurrencyWordSuite) TestZeroNumber() {
+func (s *RussianCurrencyFunctionsSuite) TestGetCurrencyForFractionalNumber() {
+	res := s.rs.GetCurrencyForFractionalNumber(testCurrency)
+
+	assert.Equal(s.T(), s.rs.words.CurrencyStrings.Currencies[testCurrency].
+		DecimalCurrencyNameDeclensions[declension.GENITIVE][constants.SINGULAR_WORD], res)
+}
+
+func (s *RussianCurrencyFunctionsSuite) TestZeroNumber() {
 	s.RunTest(
 		s.ActFunc,
 		ts.TestCase{
 			Name: "Zero decimal number with currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				testCurrency,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.NOMINATIVE,    // declension
-				zeroTriplet,              // number triplet
+				testCurrency,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.NOMINATIVE,         // declension
+				zeroTriplet,                   // number triplet
 			),
 			Expected: ts.TTVE("рублей"),
 		},
 		ts.TestCase{
 			Name: "Zero decimal number without currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				words.NUMBER,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.NOMINATIVE,    // declension
-				zeroTriplet,              // number triplet
+				words.NUMBER,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.NOMINATIVE,         // declension
+				zeroTriplet,                   // number triplet
 			),
 			Expected: ts.TTVE("рублей"),
 		},
 		ts.TestCase{
 			Name: "Zero fractional number with currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				testCurrency,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.NOMINATIVE,       // declension
-				zeroTriplet,                 // number triplet
+				testCurrency,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.NOMINATIVE,            // declension
+				zeroTriplet,                      // number triplet
 			),
 			Expected: ts.TTVE("копеек"),
 		},
 		ts.TestCase{
 			Name: "Zero fractional number without currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				words.NUMBER,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.NOMINATIVE,       // declension
-				zeroTriplet,                 // number triplet
+				words.NUMBER,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.NOMINATIVE,            // declension
+				zeroTriplet,                      // number triplet
 			),
 			Expected: ts.TTVE("копеек"),
 		},
@@ -171,178 +180,178 @@ func (s *GetCurrencyWordSuite) TestZeroNumber() {
 // Decimal Number
 //----------------------------------------------------------------------------------------------------------------------
 
-func (s *GetCurrencyWordSuite) TestDecimalNumberWithFirstForm() {
+func (s *RussianCurrencyFunctionsSuite) TestDecimalNumberWithFirstForm() {
 	s.RunTest(
 		s.ActFunc,
 		ts.TestCase{
 			Name: "First form number with currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				testCurrency,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.NOMINATIVE,    // declension
-				firstFormNumber,          // number triplet
+				testCurrency,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.NOMINATIVE,         // declension
+				firstFormNumber,               // number triplet
 			),
 			Expected: ts.TTVE("рубль"),
 		},
 		ts.TestCase{
 			Name: "First form number with currency and declension is ACCUSATIVE",
 			Args: ts.TTA(
-				testCurrency,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.ACCUSATIVE,    // declension
-				firstFormNumber,          // number triplet
+				testCurrency,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.ACCUSATIVE,         // declension
+				firstFormNumber,               // number triplet
 			),
 			Expected: ts.TTVE("рубль"),
 		},
 		ts.TestCase{
 			Name: "First form number with currency and declension is DATIVE",
 			Args: ts.TTA(
-				testCurrency,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.DATIVE,        // declension
-				firstFormNumber,          // number triplet
+				testCurrency,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.DATIVE,             // declension
+				firstFormNumber,               // number triplet
 			),
 			Expected: ts.TTVE("рублю"),
 		},
 		ts.TestCase{
 			Name: "First form number without currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				words.NUMBER,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.NOMINATIVE,    // declension
-				firstFormNumber,          // number triplet
+				words.NUMBER,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.NOMINATIVE,         // declension
+				firstFormNumber,               // number triplet
 			),
 			Expected: ts.TTVE("рубль"),
 		},
 	)
 }
 
-func (s *GetCurrencyWordSuite) TestDecimalNumberWithSecondForm() {
+func (s *RussianCurrencyFunctionsSuite) TestDecimalNumberWithSecondForm() {
 	s.RunTest(
 		s.ActFunc,
 		ts.TestCase{
 			Name: "Second form number with currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				testCurrency,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.NOMINATIVE,    // declension
-				secondFormNumber,         // number triplet
+				testCurrency,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.NOMINATIVE,         // declension
+				secondFormNumber,              // number triplet
 			),
 			Expected: ts.TTVE("рубля"),
 		},
 		ts.TestCase{
 			Name: "Second form number with currency and declension is ACCUSATIVE",
 			Args: ts.TTA(
-				testCurrency,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.ACCUSATIVE,    // declension
-				secondFormNumber,         // number triplet
+				testCurrency,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.ACCUSATIVE,         // declension
+				secondFormNumber,              // number triplet
 			),
 			Expected: ts.TTVE("рубля"),
 		},
 		ts.TestCase{
 			Name: "Second form number with currency and declension is DATIVE",
 			Args: ts.TTA(
-				testCurrency,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.DATIVE,        // declension
-				secondFormNumber,         // number triplet
+				testCurrency,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.DATIVE,             // declension
+				secondFormNumber,              // number triplet
 			),
 			Expected: ts.TTVE("рублям"),
 		},
 		ts.TestCase{
 			Name: "Second form number without currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				words.NUMBER,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.NOMINATIVE,    // declension
-				secondFormNumber,         // number triplet
+				words.NUMBER,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.NOMINATIVE,         // declension
+				secondFormNumber,              // number triplet
 			),
 			Expected: ts.TTVE("рублей"),
 		},
 		ts.TestCase{
 			Name: "Second form number without currency and declension is ACCUSATIVE",
 			Args: ts.TTA(
-				words.NUMBER,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.ACCUSATIVE,    // declension
-				secondFormNumber,         // number triplet
+				words.NUMBER,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.ACCUSATIVE,         // declension
+				secondFormNumber,              // number triplet
 			),
 			Expected: ts.TTVE("рублей"),
 		},
 		ts.TestCase{
 			Name: "Second form number without currency and declension is DATIVE",
 			Args: ts.TTA(
-				words.NUMBER,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.DATIVE,        // declension
-				secondFormNumber,         // number triplet
+				words.NUMBER,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.DATIVE,             // declension
+				secondFormNumber,              // number triplet
 			),
 			Expected: ts.TTVE("рублям"),
 		},
 	)
 }
 
-func (s *GetCurrencyWordSuite) TestDecimalNumberWithThirdForm() {
+func (s *RussianCurrencyFunctionsSuite) TestDecimalNumberWithThirdForm() {
 	s.RunTest(
 		s.ActFunc,
 		ts.TestCase{
 			Name: "Third form number with currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				testCurrency,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.NOMINATIVE,    // declension
-				thirdFormNumber,          // number triplet
+				testCurrency,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.NOMINATIVE,         // declension
+				thirdFormNumber,               // number triplet
 			),
 			Expected: ts.TTVE("рублей"),
 		},
 		ts.TestCase{
 			Name: "Third form number with currency and declension is ACCUSATIVE",
 			Args: ts.TTA(
-				testCurrency,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.ACCUSATIVE,    // declension
-				thirdFormNumber,          // number triplet
+				testCurrency,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.ACCUSATIVE,         // declension
+				thirdFormNumber,               // number triplet
 			),
 			Expected: ts.TTVE("рублей"),
 		},
 		ts.TestCase{
 			Name: "Third form number with currency and declension is DATIVE",
 			Args: ts.TTA(
-				testCurrency,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.DATIVE,        // declension
-				thirdFormNumber,          // number triplet
+				testCurrency,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.DATIVE,             // declension
+				thirdFormNumber,               // number triplet
 			),
 			Expected: ts.TTVE("рублям"),
 		},
 		ts.TestCase{
 			Name: "Third form number without currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				words.NUMBER,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.NOMINATIVE,    // declension
-				thirdFormNumber,          // number triplet
+				words.NUMBER,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.NOMINATIVE,         // declension
+				thirdFormNumber,               // number triplet
 			),
 			Expected: ts.TTVE("рублей"),
 		},
 		ts.TestCase{
 			Name: "Third form number without currency and declension is ACCUSATIVE",
 			Args: ts.TTA(
-				words.NUMBER,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.ACCUSATIVE,    // declension
-				thirdFormNumber,          // number triplet
+				words.NUMBER,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.ACCUSATIVE,         // declension
+				thirdFormNumber,               // number triplet
 			),
 			Expected: ts.TTVE("рублей"),
 		},
 		ts.TestCase{
 			Name: "Third form number without currency and declension is DATIVE",
 			Args: ts.TTA(
-				words.NUMBER,             // currencyName
-				constants.DECIMAL_NUMBER, // numberType
-				declension.DATIVE,        // declension
-				thirdFormNumber,          // number triplet
+				words.NUMBER,                  // currencyName
+				core_constants.DECIMAL_NUMBER, // numberType
+				declension.DATIVE,             // declension
+				thirdFormNumber,               // number triplet
 			),
 			Expected: ts.TTVE("рублям"),
 		},
@@ -353,184 +362,184 @@ func (s *GetCurrencyWordSuite) TestDecimalNumberWithThirdForm() {
 // Fractional Number
 //----------------------------------------------------------------------------------------------------------------------
 
-func (s *GetCurrencyWordSuite) TestFractionalNumberWithFirstForm() {
+func (s *RussianCurrencyFunctionsSuite) TestFractionalNumberWithFirstForm() {
 	s.RunTest(
 		s.ActFunc,
 		ts.TestCase{
 			Name: "First form number with currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				testCurrency,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.NOMINATIVE,       // declension
-				firstFormNumber,             // number triplet
+				testCurrency,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.NOMINATIVE,            // declension
+				firstFormNumber,                  // number triplet
 			),
 			Expected: ts.TTVE("копейка"),
 		},
 		ts.TestCase{
 			Name: "First form number with currency and declension is ACCUSATIVE",
 			Args: ts.TTA(
-				testCurrency,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.ACCUSATIVE,       // declension
-				firstFormNumber,             // number triplet
+				testCurrency,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.ACCUSATIVE,            // declension
+				firstFormNumber,                  // number triplet
 			),
 			Expected: ts.TTVE("копейка"),
 		},
 		ts.TestCase{
 			Name: "First form number with currency and declension is DATIVE",
 			Args: ts.TTA(
-				testCurrency,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.DATIVE,           // declension
-				firstFormNumber,             // number triplet
+				testCurrency,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.DATIVE,                // declension
+				firstFormNumber,                  // number triplet
 			),
 			Expected: ts.TTVE("копейке"),
 		},
 		ts.TestCase{
 			Name: "First form number without currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				words.NUMBER,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.NOMINATIVE,       // declension
-				firstFormNumber,             // number triplet
+				words.NUMBER,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.NOMINATIVE,            // declension
+				firstFormNumber,                  // number triplet
 			),
 			Expected: ts.TTVE("копейка"),
 		},
 	)
 }
 
-func (s *GetCurrencyWordSuite) TestFractionalNumberWithSecondForm() {
+func (s *RussianCurrencyFunctionsSuite) TestFractionalNumberWithSecondForm() {
 	s.RunTest(
 		s.ActFunc,
 		ts.TestCase{
 			Name: "Second form number with currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				testCurrency,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.NOMINATIVE,       // declension
-				secondFormNumber,            // number triplet
+				testCurrency,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.NOMINATIVE,            // declension
+				secondFormNumber,                 // number triplet
 			),
 			Expected: ts.TTVE("копейки"),
 		},
 		ts.TestCase{
 			Name: "Second form number with currency and declension is ACCUSATIVE",
 			Args: ts.TTA(
-				testCurrency,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.ACCUSATIVE,       // declension
-				secondFormNumber,            // number triplet
+				testCurrency,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.ACCUSATIVE,            // declension
+				secondFormNumber,                 // number triplet
 			),
 			Expected: ts.TTVE("копейки"),
 		},
 		ts.TestCase{
 			Name: "Second form number with currency and declension is DATIVE",
 			Args: ts.TTA(
-				testCurrency,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.DATIVE,           // declension
-				secondFormNumber,            // number triplet
+				testCurrency,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.DATIVE,                // declension
+				secondFormNumber,                 // number triplet
 			),
 			Expected: ts.TTVE("копейкам"),
 		},
 		ts.TestCase{
 			Name: "Second form number without currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				words.NUMBER,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.NOMINATIVE,       // declension
-				secondFormNumber,            // number triplet
+				words.NUMBER,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.NOMINATIVE,            // declension
+				secondFormNumber,                 // number triplet
 			),
 			Expected: ts.TTVE("копеек"),
 		},
 		ts.TestCase{
 			Name: "Second form number without currency and declension is ACCUSATIVE",
 			Args: ts.TTA(
-				words.NUMBER,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.ACCUSATIVE,       // declension
-				secondFormNumber,            // number triplet
+				words.NUMBER,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.ACCUSATIVE,            // declension
+				secondFormNumber,                 // number triplet
 			),
 			Expected: ts.TTVE("копеек"),
 		},
 		ts.TestCase{
 			Name: "Second form number without currency and declension is DATIVE",
 			Args: ts.TTA(
-				words.NUMBER,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.DATIVE,           // declension
-				secondFormNumber,            // number triplet
+				words.NUMBER,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.DATIVE,                // declension
+				secondFormNumber,                 // number triplet
 			),
 			Expected: ts.TTVE("копейкам"),
 		},
 	)
 }
 
-func (s *GetCurrencyWordSuite) TestFractionalNumberWithThirdForm() {
+func (s *RussianCurrencyFunctionsSuite) TestFractionalNumberWithThirdForm() {
 	s.RunTest(
 		s.ActFunc,
 		ts.TestCase{
 			Name: "Third form number with currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				testCurrency,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.NOMINATIVE,       // declension
-				thirdFormNumber,             // number triplet
+				testCurrency,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.NOMINATIVE,            // declension
+				thirdFormNumber,                  // number triplet
 			),
 			Expected: ts.TTVE("копеек"),
 		},
 		ts.TestCase{
 			Name: "Third form number with currency and declension is ACCUSATIVE",
 			Args: ts.TTA(
-				testCurrency,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.ACCUSATIVE,       // declension
-				thirdFormNumber,             // number triplet
+				testCurrency,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.ACCUSATIVE,            // declension
+				thirdFormNumber,                  // number triplet
 			),
 			Expected: ts.TTVE("копеек"),
 		},
 		ts.TestCase{
 			Name: "Third form number with currency and declension is DATIVE",
 			Args: ts.TTA(
-				testCurrency,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.DATIVE,           // declension
-				thirdFormNumber,             // number triplet
+				testCurrency,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.DATIVE,                // declension
+				thirdFormNumber,                  // number triplet
 			),
 			Expected: ts.TTVE("копейкам"),
 		},
 		ts.TestCase{
 			Name: "Third form number without currency and declension is NOMINATIVE",
 			Args: ts.TTA(
-				words.NUMBER,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.NOMINATIVE,       // declension
-				thirdFormNumber,             // number triplet
+				words.NUMBER,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.NOMINATIVE,            // declension
+				thirdFormNumber,                  // number triplet
 			),
 			Expected: ts.TTVE("копеек"),
 		},
 		ts.TestCase{
 			Name: "Third form number without currency and declension is ACCUSATIVE",
 			Args: ts.TTA(
-				words.NUMBER,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.ACCUSATIVE,       // declension
-				thirdFormNumber,             // number triplet
+				words.NUMBER,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.ACCUSATIVE,            // declension
+				thirdFormNumber,                  // number triplet
 			),
 			Expected: ts.TTVE("копеек"),
 		},
 		ts.TestCase{
 			Name: "Third form number without currency and declension is DATIVE",
 			Args: ts.TTA(
-				words.NUMBER,                // currencyName
-				constants.FRACTIONAL_NUMBER, // numberType
-				declension.DATIVE,           // declension
-				thirdFormNumber,             // number triplet
+				words.NUMBER,                     // currencyName
+				core_constants.FRACTIONAL_NUMBER, // numberType
+				declension.DATIVE,                // declension
+				thirdFormNumber,                  // number triplet
 			),
 			Expected: ts.TTVE("копейкам"),
 		},
 	)
 }
 
-func TestGetCurrencyWordSuite(t *testing.T) {
-	suite.Run(t, new(GetCurrencyWordSuite))
+func TestRussianCurrencyFunctionsSuite(t *testing.T) {
+	suite.Run(t, new(RussianCurrencyFunctionsSuite))
 }
