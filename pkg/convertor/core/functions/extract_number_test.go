@@ -3,7 +3,7 @@ package functions
 import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/core/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/core/objects"
-	ts "github.com/ThCompiler/go_game_constractor/pkg/testing"
+	"github.com/ThCompiler/ts"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -129,19 +129,11 @@ func TestReplaceInStringSuite(t *testing.T) {
 
 type ValidateNumberSuite struct {
 	ts.TestCasesSuite
-	ActFunc func(args ...interface{}) []interface{}
-}
-
-func (s *ValidateNumberSuite) SetupTest() {
-	s.ActFunc = func(args ...interface{}) []interface{} {
-		res := ValidateNumber(args[0].(string))
-		return []interface{}{res}
-	}
 }
 
 func (s *ValidateNumberSuite) TestCorrectNumber() {
 	s.RunTest(
-		s.ActFunc,
+		ValidateNumber,
 		ts.TestCase{
 			Name:     "Empty",
 			Args:     ts.TTA(``),
@@ -217,7 +209,7 @@ func (s *ValidateNumberSuite) TestCorrectNumber() {
 
 func (s *ValidateNumberSuite) TestIncorrectNumber() {
 	s.RunTest(
-		s.ActFunc,
+		ValidateNumber,
 		ts.TestCase{
 			Name:     "Incorrect chars",
 			Args:     ts.TTA(` !\"#$%&'()*+,-./:;<=>?@[\\]^_` + "`" + `{|}~ `),
@@ -271,14 +263,6 @@ func TestValidateNumberSuite(t *testing.T) {
 
 type ExtractNumberSuite struct {
 	ts.TestCasesSuite
-	ActFunc func(args ...interface{}) []interface{}
-}
-
-func (s *ExtractNumberSuite) SetupTest() {
-	s.ActFunc = func(args ...interface{}) []interface{} {
-		res, err := ExtractNumber(args[0].(string))
-		return []interface{}{res, err}
-	}
 }
 
 func (s *ExtractNumberSuite) TestIncorrectNumber() {
@@ -299,7 +283,7 @@ func (s *ExtractNumberSuite) TestEmptyNumber() {
 
 func (s *ExtractNumberSuite) TestBaseNumber() {
 	s.RunTest(
-		s.ActFunc,
+		ExtractNumber,
 		ts.TestCase{
 			Name: "Only number",
 			Args: ts.TTA(`12`),
@@ -365,7 +349,7 @@ func (s *ExtractNumberSuite) TestBaseNumber() {
 
 func (s *ExtractNumberSuite) TestDecimalNumberWithPoint() {
 	s.RunTest(
-		s.ActFunc,
+		ExtractNumber,
 		ts.TestCase{
 			Name: "Only number",
 			Args: ts.TTA(`1.2`),
@@ -471,7 +455,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithPoint() {
 
 func (s *ExtractNumberSuite) TestDecimalNumberWithComma() {
 	s.RunTest(
-		s.ActFunc,
+		ExtractNumber,
 		ts.TestCase{
 			Name: "Only number",
 			Args: ts.TTA(`1,2`),
@@ -577,7 +561,7 @@ func (s *ExtractNumberSuite) TestDecimalNumberWithComma() {
 
 func (s *ExtractNumberSuite) TestFractionalNumber() {
 	s.RunTest(
-		s.ActFunc,
+		ExtractNumber,
 		ts.TestCase{
 			Name: "Only number",
 			Args: ts.TTA(`1/2`),

@@ -3,26 +3,18 @@ package functions
 import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/core/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/core/objects"
-	ts "github.com/ThCompiler/go_game_constractor/pkg/testing"
+	"github.com/ThCompiler/ts"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
 
 type RoundDigitSuite struct {
 	ts.TestCasesSuite
-	ActFunc func(args ...interface{}) []interface{}
-}
-
-func (s *RoundDigitSuite) SetupTest() {
-	s.ActFunc = func(args ...interface{}) []interface{} {
-		increase, res := roundDigit(args[0].(bool), args[1].([]rune), args[2].(int))
-		return []interface{}{increase, res}
-	}
 }
 
 func (s *RoundDigitSuite) TestWithRequireIncreasing() {
 	s.RunTest(
-		s.ActFunc,
+		roundDigit,
 		ts.TestCase{
 			Name:     "Digit is zero",
 			Args:     ts.TTA(true, []rune("98765432109"), 9),
@@ -58,7 +50,7 @@ func (s *RoundDigitSuite) TestWithRequireIncreasing() {
 
 func (s *RoundDigitSuite) TestWithoutRequireIncreasing() {
 	s.RunTest(
-		s.ActFunc,
+		roundDigit,
 		ts.TestCase{
 			Name:     "Digit is zero",
 			Args:     ts.TTA(false, []rune("98765432109"), 9),
@@ -98,19 +90,11 @@ func TestRoundDigitSuite(t *testing.T) {
 
 type RoundNumberSuite struct {
 	ts.TestCasesSuite
-	ActFunc func(args ...interface{}) []interface{}
-}
-
-func (s *RoundNumberSuite) SetupTest() {
-	s.ActFunc = func(args ...interface{}) []interface{} {
-		res := RoundNumber(args[0].(objects.Number), args[1].(int64))
-		return []interface{}{res}
-	}
 }
 
 func (s *RoundNumberSuite) TestWithoutRound() {
 	s.RunTest(
-		s.ActFunc,
+		RoundNumber,
 		ts.TestCase{
 			Name:     "Number is fractional",
 			Args:     ts.TTA(objects.Number{Divider: constants.FRACTIONAL_NUMBER}, int64(0)),
@@ -159,7 +143,7 @@ func (s *RoundNumberSuite) TestWithoutRound() {
 
 func (s *RoundNumberSuite) TestWithRound() {
 	s.RunTest(
-		s.ActFunc,
+		RoundNumber,
 		ts.TestCase{
 			Name: "Digit for round is less than five",
 			Args: ts.TTA(objects.Number{

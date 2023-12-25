@@ -11,8 +11,6 @@ package main
 import (
 	"log"
 
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words"
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words/languages"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/config"
 	"github.com/ThCompiler/go_game_constractor/scg/example/scg/internal/echogame"
 )
@@ -27,7 +25,7 @@ func main() {
 		log.Fatalf("Config error: %s", err)
 	}
 
-	_ = words.LoadWordsConstants(languages.Russia, cfg.App.ResourcesDir)
+	//_ = words.LoadWordsConstants(languages.Russia, cfg.App.ResourcesDir) // TODO: add load language
 
 	// Run
 	echogame.Run(cfg)

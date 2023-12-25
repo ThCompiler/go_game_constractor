@@ -8,7 +8,7 @@ import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/ru/objects"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/ru/objects/declension"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/ru/objects/genders"
-	ts "github.com/ThCompiler/go_game_constractor/pkg/testing"
+	"github.com/ThCompiler/ts"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )

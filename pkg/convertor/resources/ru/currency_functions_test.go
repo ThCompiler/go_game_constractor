@@ -9,7 +9,7 @@ import (
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/ru/objects"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/ru/objects/declension"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/resources/ru/objects/genders"
-	ts "github.com/ThCompiler/go_game_constractor/pkg/testing"
+	"github.com/ThCompiler/ts"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -55,7 +55,8 @@ var (
 type RussianCurrencyFunctionsSuite struct {
 	ts.TestCasesSuite
 	rs      Russian
-	ActFunc func(args ...interface{}) []interface{}
+	ActFunc func(words.CurrencyName, core_constants.NumberType,
+		words.Declension, []core_objects.RuneDigitTriplet) string
 }
 
 func (s *RussianCurrencyFunctionsSuite) SetupTest() {
@@ -112,14 +113,14 @@ func (s *RussianCurrencyFunctionsSuite) SetupTest() {
 		},
 	}
 
-	s.ActFunc = func(args ...interface{}) []interface{} {
+	s.ActFunc = func(currencyName words.CurrencyName, numberType core_constants.NumberType,
+		declension words.Declension, runeTriplets []core_objects.RuneDigitTriplet) string {
 		numberInfo := words.NumberInfo{
-			NumberType:   args[1].(core_constants.NumberType),
-			Declension:   args[2].(words.Declension),
-			CurrencyName: args[0].(words.CurrencyName),
+			NumberType:   numberType,
+			Declension:   declension,
+			CurrencyName: currencyName,
 		}
-		res := s.rs.GetCurrencyAsWord(numberInfo, args[3].([]core_objects.RuneDigitTriplet))
-		return []interface{}{res}
+		return s.rs.GetCurrencyAsWord(numberInfo, runeTriplets)
 	}
 }
 

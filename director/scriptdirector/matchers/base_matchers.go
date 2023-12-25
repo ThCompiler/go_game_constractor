@@ -1,7 +1,6 @@
 package matchers
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/convertor/words2num"
 	"strconv"
 )
 
@@ -40,7 +39,7 @@ var Agree = NewSelectorMatcher(
 type NumberMatchers struct{}
 
 func (nm NumberMatchers) Match(message string) (bool, string) {
-	res, err := words2num.Convert(message)
+	res, err := int64(2), error(nil) // words2num(message) //  TODO : add convert string to number
 
 	return res != 0 && err == nil, strconv.FormatInt(res, 10)
 }

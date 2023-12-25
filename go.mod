@@ -5,6 +5,7 @@ go 1.21
 require (
 	github.com/BurntSushi/toml v1.1.0
 	github.com/ChimeraCoder/gojson v1.1.0
+	github.com/ThCompiler/ts v0.0.1-alpha-e984e81
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-redis/redis/v8 v8.11.5
@@ -14,7 +15,7 @@ require (
 	github.com/ilyakaznacheev/cleanenv v1.4.0
 	github.com/joho/godotenv v1.4.0
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.8.3
+	github.com/stretchr/testify v1.8.4
 	go.uber.org/zap v1.23.0
 	golang.org/x/exp v0.0.0-20221114191408-850992195362
 	golang.org/x/tools v0.6.0
@@ -54,7 +55,6 @@ require (
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
-	golang.org/x/tools/cmd/cover v0.1.0-deprecated // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
