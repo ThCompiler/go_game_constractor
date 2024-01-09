@@ -235,7 +235,7 @@ func (c *Converter) convertFractionalTripletsToWords(
 	/* Определить индекс класса, который является последним.
 	После него могут быть только классы с "000".
 	0 - единицы, 1 - тысячи, 2 - миллионы и т.д. */
-	lastNotNullTriplet := functions.IndexOfLastNotZeroTripletByEnd(updatedNumberTriplets)
+	lastNotNullTriplet := functions.IndexByEndOfLastNotZeroTriplet(updatedNumberTriplets)
 
 	// Если нет ни одного не пустого класса
 	if lastNotNullTriplet == -1 {

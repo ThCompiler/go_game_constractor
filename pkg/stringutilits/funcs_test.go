@@ -1,28 +1,19 @@
 package stringutilits
 
 import (
+	"github.com/ThCompiler/ts"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-
-	ts "github.com/ThCompiler/go_game_constractor/pkg/testing"
 )
 
 type ClearStringFromPunctuationSuite struct {
 	ts.TestCasesSuite
-	ActFunc func(args ...interface{}) []interface{}
-}
-
-func (s *ClearStringFromPunctuationSuite) SetupTest() {
-	s.ActFunc = func(args ...interface{}) []interface{} {
-		res := ClearStringFromPunctuation(args[0].(string))
-		return []interface{}{res}
-	}
 }
 
 func (s *ClearStringFromPunctuationSuite) TestStrWithPunctuation() {
 	s.RunTest(
-		s.ActFunc,
+		ClearStringFromPunctuation,
 		ts.TestCase{
 			Name:     "All punctuation characters",
 			Args:     ts.TTA(`!\"#$%&'()*+,-./:;<=>?@[\\]^_` + "`" + `{|}~`),
@@ -54,7 +45,7 @@ func (s *ClearStringFromPunctuationSuite) TestStrWithPunctuation() {
 
 func (s *ClearStringFromPunctuationSuite) TestStrWithoutPunctuation() {
 	s.RunTest(
-		s.ActFunc,
+		ClearStringFromPunctuation,
 		ts.TestCase{
 			Name:     "Single word",
 			Args:     ts.TTA(`text`),

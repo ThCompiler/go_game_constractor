@@ -25,9 +25,9 @@ type ResultNumberT struct {
 }
 
 type digitTriplet[T any] struct {
-	Units    T
-	Dozens   T
 	Hundreds T
+	Dozens   T
+	Units    T
 }
 
 type (

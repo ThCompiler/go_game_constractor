@@ -124,7 +124,7 @@ func TestReplaceInStringSuite(t *testing.T) {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-// Tests suite for "ReplaceInString" function
+// Tests suite for "ValidateNumber" function
 //----------------------------------------------------------------------------------------------------------------------
 
 type ValidateNumberSuite struct {

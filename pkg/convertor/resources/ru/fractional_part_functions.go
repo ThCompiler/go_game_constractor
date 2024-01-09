@@ -18,8 +18,8 @@ func (rs *Russian) ConvertNotLowestScaleToWords(numberInfo words.NumberInfo, tri
 		panic(ErrorLanguageNotLoaded)
 	}
 
-	numberDeclension, wordForm := getDeclensionAnsWordFormForFractionalPart(numberInfo.Declension,
-		GetNumberForm(integerPart))
+	wordForm := getCurrencyFractionalPartWordForm(GetNumberForm(integerPart))
+	numberDeclension := getCurrencyFractionalPartDeclension(numberInfo.Declension, GetNumberForm(integerPart))
 
 	// Собрать валюту в виде "двадцатипятитысячная".
 	// Получить текущий класс для конвертирования.
@@ -66,8 +66,8 @@ func (rs *Russian) ConvertLowestScaleToWords(numberInfo words.NumberInfo, triple
 		panic(ErrorLanguageNotLoaded)
 	}
 
-	numberDeclension, wordForm := getDeclensionAnsWordFormForFractionalPart(numberInfo.Declension,
-		GetNumberForm(integerPart))
+	wordForm := getCurrencyFractionalPartWordForm(GetNumberForm(integerPart))
+	numberDeclension := getCurrencyFractionalPartDeclension(numberInfo.Declension, GetNumberForm(integerPart))
 
 	res := ""
 
@@ -174,7 +174,9 @@ func (rs *Russian) ConvertZeroToWordsForFractionalNumber(numberInfo words.Number
 		panic(ErrorLanguageNotLoaded)
 	}
 
-	decl, wordForm := getDeclensionAnsWordFormForFractionalPart(numberInfo.Declension, GetNumberForm(integerPartTriplets))
+	wordForm := getCurrencyFractionalPartWordForm(GetNumberForm(integerPartTriplets))
+	decl := getCurrencyFractionalPartDeclension(numberInfo.Declension, GetNumberForm(integerPartTriplets))
+
 	return rs.words.OrdinalNumbers.Units[0][genders.FEMALE][decl][wordForm]
 }
 
@@ -183,7 +185,8 @@ func (rs *Russian) ConvertZeroToWordsForFractionalNumber(numberInfo words.Number
 func (rs *Russian) GetEndingOfDecimalNumberForFractionalPart(countDigits int, lastDigit objects.Digit,
 	decl words.Declension) string {
 
-	numberDeclension, wordForm := getDeclensionAnsWordFormForFractionalPart(decl, GetNumberFormByDigit(lastDigit))
+	wordForm := getCurrencyFractionalPartWordForm(GetNumberFormByDigit(lastDigit))
+	numberDeclension := getCurrencyFractionalPartDeclension(decl, GetNumberFormByDigit(lastDigit))
 
 	if lastDigit == 0 {
 		numberDeclension = declension.GENITIVE

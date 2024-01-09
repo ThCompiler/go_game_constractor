@@ -24,7 +24,7 @@ func (rs *Russian) GetCurrencyAsWord(numberInfo words.NumberInfo, numberAsTriple
 	// Если падеж "именительный" или "винительный" и множественное число
 	if (currencyDeclensions == declension.NOMINATIVE ||
 		currencyDeclensions == declension.ACCUSATIVE) && numberForm != constants.FIRST_FORM {
-		wordForm = getWordForm(numberInfo.CurrencyName == words.NUMBER, numberForm)
+		wordForm = getCurrencyIntegerPartWordForm(numberInfo.CurrencyName == words.NUMBER, numberForm)
 		// Использовать родительный падеж.
 		currencyDeclensions = declension.GENITIVE
 	}

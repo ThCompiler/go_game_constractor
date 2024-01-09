@@ -11,9 +11,10 @@ const (
 )
 
 const (
-	FIRST_FORM  = NumberForm(0) // when digit is one (1)
-	SECOND_FORM = NumberForm(1) // when digit between 2 and 4
-	THIRD_FORM  = NumberForm(2) // when digit between 4 and 9
+	INVALID_FORM = NumberForm(-1) // when digit out digits range
+	FIRST_FORM   = NumberForm(0)  // when digit is one (1)
+	SECOND_FORM  = NumberForm(1)  // when digit between 2 and 4
+	THIRD_FORM   = NumberForm(2)  // when digit between 4 and 9
 )
 
 const (

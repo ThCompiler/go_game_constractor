@@ -1,6 +1,7 @@
 package objects
 
 import (
+	"encoding/json"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/core/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/core/objects"
 	"github.com/ThCompiler/go_game_constractor/pkg/convertor/core/words"
@@ -12,26 +13,26 @@ type Sign struct {
 	Minus string `yaml:"minus"`
 }
 
-type wordsByGenderT map[genders.Gender]string
+type wordsByGender map[genders.Gender]string
 
-type digitT struct {
+type digitWord struct {
 	word         string
-	wordByGender wordsByGenderT
+	wordByGender wordsByGender
 }
 
-func (d *digitT) WithGender() bool {
+func (d *digitWord) WithGender() bool {
 	return d.word == ""
 }
 
-func (d *digitT) GetWordsByGender() wordsByGenderT {
+func (d *digitWord) GetWordsByGender() wordsByGender {
 	return d.wordByGender
 }
 
-func (d *digitT) GetWord() string {
+func (d *digitWord) GetWord() string {
 	return d.word
 }
 
-func (d *digitT) UnmarshalYAML(n *yaml.Node) error {
+func (d *digitWord) UnmarshalYAML(n *yaml.Node) error {
 	var err error
 	if err = n.Decode(&d.word); err == nil {
 		return nil
@@ -48,7 +49,24 @@ func (d *digitT) UnmarshalYAML(n *yaml.Node) error {
 	return err
 }
 
-type DeclensionNumbers map[words.Declension][constants.CountDigits]digitT
+func (d *digitWord) UnmarshalJSON(b []byte) error {
+	var err error
+	if err = json.Unmarshal(b, &d.word); err == nil {
+		return nil
+	}
+
+	d.word = ""
+
+	if err = json.Unmarshal(b, &d.wordByGender); err == nil {
+		return nil
+	}
+
+	d.wordByGender = nil
+
+	return err
+}
+
+type DeclensionNumbers map[words.Declension][constants.CountDigits]digitWord
 
 type DigitWords struct {
 	Units    DeclensionNumbers `yaml:"units"`

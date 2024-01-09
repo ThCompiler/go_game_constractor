@@ -22,6 +22,10 @@ func GetNumberFormByTriplet(triplet core_objects.NumericDigitTriplet) constants.
 }
 
 func GetNumberFormByDigit(digit core_objects.Digit) constants.NumberForm {
+	if digit <= -1 || digit > 9 {
+		return constants.INVALID_FORM
+	}
+
 	if digit == 1 {
 		return constants.FIRST_FORM
 	}
@@ -46,7 +50,7 @@ func convertDigitToWord(digit core_objects.Digit, digitWords objects.DeclensionN
 	return word.GetWord()
 }
 
-func getWordForm(isNumber bool, numberForm constants.NumberForm) constants.WordForm {
+func getCurrencyIntegerPartWordForm(isNumber bool, numberForm constants.NumberForm) constants.WordForm {
 	if isNumber {
 		return constants.PLURAL_WORD
 	}
@@ -58,18 +62,19 @@ func getWordForm(isNumber bool, numberForm constants.NumberForm) constants.WordF
 	return constants.PLURAL_WORD
 }
 
-func getDeclensionAnsWordFormForFractionalPart(decl words.Declension,
-	numberForm constants.NumberForm) (words.Declension, constants.WordForm) {
-	wordForm := constants.SINGULAR_WORD
-
-	if numberForm != constants.FIRST_FORM {
-		wordForm = constants.PLURAL_WORD
+func getCurrencyFractionalPartWordForm(numberForm constants.NumberForm) constants.WordForm {
+	if numberForm == constants.FIRST_FORM {
+		return constants.SINGULAR_WORD
 	}
 
+	return constants.PLURAL_WORD
+}
+
+func getCurrencyFractionalPartDeclension(decl words.Declension, numberForm constants.NumberForm) words.Declension {
 	// Если падеж "именительный" или "винительный" и множественное число
 	if numberForm != constants.FIRST_FORM && (decl == declension.NOMINATIVE || decl == declension.ACCUSATIVE) {
 		decl = declension.GENITIVE
 	}
 
-	return decl, wordForm
+	return decl
 }

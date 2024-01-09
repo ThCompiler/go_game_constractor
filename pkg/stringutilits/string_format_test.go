@@ -1,22 +1,21 @@
 package stringutilits
 
 import (
+	"github.com/ThCompiler/ts"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-
-	ts "github.com/ThCompiler/go_game_constractor/pkg/testing"
 )
 
 type StringFormatSuite struct {
 	ts.TestCasesSuite
-	ActFunc func(args ...interface{}) []interface{}
+	ActFunc func(args ...interface{}) string
 }
 
 func (s *StringFormatSuite) SetupTest() {
-	s.ActFunc = func(args ...interface{}) []interface{} {
+	s.ActFunc = func(args ...interface{}) string {
 		res := StringFormat(args[0].(string), args[1:]...)
-		return []interface{}{res}
+		return res
 	}
 }
 

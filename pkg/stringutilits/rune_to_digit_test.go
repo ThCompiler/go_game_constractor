@@ -1,28 +1,19 @@
 package stringutilits
 
 import (
+	"github.com/ThCompiler/ts"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-
-	ts "github.com/ThCompiler/go_game_constractor/pkg/testing"
 )
 
 type ToDigitSuite struct {
 	ts.TestCasesSuite
-	ActFunc func(args ...interface{}) []interface{}
-}
-
-func (s *ToDigitSuite) SetupTest() {
-	s.ActFunc = func(args ...interface{}) []interface{} {
-		res := ToDigit(args[0].(rune))
-		return []interface{}{res}
-	}
 }
 
 func (s *ToDigitSuite) TestCorrect() {
 	s.RunTest(
-		s.ActFunc,
+		ToDigit,
 		ts.TestCase{
 			Name:     "0",
 			Args:     ts.ToTestArgs('0'),
@@ -78,7 +69,7 @@ func (s *ToDigitSuite) TestCorrect() {
 
 func (s *ToDigitSuite) TestInCorrect() {
 	s.RunTest(
-		s.ActFunc,
+		ToDigit,
 		ts.TestCase{
 			Name:     "character",
 			Args:     ts.ToTestArgs('h'),
@@ -94,19 +85,11 @@ func (s *ToDigitSuite) TestInCorrect() {
 
 type ToRuneSuite struct {
 	ts.TestCasesSuite
-	ActFunc func(args ...interface{}) []interface{}
-}
-
-func (s *ToRuneSuite) SetupTest() {
-	s.ActFunc = func(args ...interface{}) []interface{} {
-		res := ToRune(args[0].(int8))
-		return []interface{}{res}
-	}
 }
 
 func (s *ToRuneSuite) TestCorrect() {
 	s.RunTest(
-		s.ActFunc,
+		ToRune,
 		ts.TestCase{
 			Name:     "0",
 			Args:     ts.ToTestArgs(int8(0)),
@@ -162,7 +145,7 @@ func (s *ToRuneSuite) TestCorrect() {
 
 func (s *ToRuneSuite) TestInCorrect() {
 	s.RunTest(
-		s.ActFunc,
+		ToRune,
 		ts.TestCase{
 			Name:     "positive number",
 			Args:     ts.ToTestArgs(int8(30)),
