@@ -22,8 +22,8 @@ func generateMain(rootPkg, rootDir string, scriptInfo expr.ScriptInfo) *codegen.
 	fpath := filepath.Join(rootDir, "cmd", "main.go")
 	imports := []*codegen.ImportSpec{
 		{Path: path.Join("log")},
-		codegen.SCGImport(path.Join("pkg", "convertor", "words")),
-		codegen.SCGImport(path.Join("pkg", "convertor", "words", "resources")),
+		codegen.SCGImport(path.Join("pkg", "converter", "words")),
+		codegen.SCGImport(path.Join("pkg", "converter", "words", "resources")),
 		{Path: path.Join(rootPkg, "config")},
 		{Path: path.Join(rootPkg, "internal", strings.ToLower(codegen.ToTitle(scriptInfo.Name)))},
 	}

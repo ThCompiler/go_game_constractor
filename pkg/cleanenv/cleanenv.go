@@ -9,6 +9,7 @@ import (
 	"encoding/xml"
 	"flag"
 	"fmt"
+	"gopkg.in/yaml.v3"
 	"io"
 	"net/url"
 	"os"
@@ -21,7 +22,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/BurntSushi/toml"
-	"github.com/goccy/go-yaml"
+	// "github.com/goccy/go-yaml" code with params about yaml fields
 	"github.com/joho/godotenv"
 	"olympos.io/encoding/edn"
 
@@ -226,7 +227,8 @@ func parseReader(reader io.Reader, ext ConfigType, cfg interface{}) (err error) 
 
 // parseYAML parses YAML from reader to data structure.
 func parseYAML(r io.Reader, str interface{}) error {
-	dec := yaml.NewDecoder(r, yaml.DisallowUnknownField(), yaml.DisallowDuplicateKey())
+	dec := yaml.NewDecoder(r)
+	// dec := yaml.NewDecoder(r, yaml.DisallowUnknownField(), yaml.DisallowDuplicateKey()) // code for  "github.com/goccy/go-yaml"
 
 	return dec.Decode(str)
 }
