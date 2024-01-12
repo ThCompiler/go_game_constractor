@@ -2,19 +2,15 @@ package ru
 
 import (
 	core_constants "github.com/ThCompiler/go_game_constractor/pkg/converter/core/constants"
+	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/convert"
 	core_objects "github.com/ThCompiler/go_game_constractor/pkg/converter/core/objects"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/declension"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/genders"
 )
 
-const (
-	UnitsScale    = 1
-	ThousandScale = 2
-)
-
-// ConvertZeroToWordsForIntegerPart Возвращает словесную форму числа состоящего из нулей
-func (rs *Russian) ConvertZeroToWordsForIntegerPart() string {
+// GetZeroAsWordsForIntegerPart Возвращает словесную форму числа состоящего из нулей
+func (rs *Russian) GetZeroAsWordsForIntegerPart() string {
 	if rs.words == nil {
 		panic(ErrorLanguageNotLoaded)
 	}
@@ -39,10 +35,10 @@ func (rs *Russian) ConvertTripletToWords(numberType core_constants.NumberType,
 	stringDigits := core_objects.StringDigitTriplet{Units: "", Dozens: "", Hundreds: ""}
 
 	gender := genders.MALE
-	if scale == ThousandScale {
+	if scale == convert.ThousandScale {
 		// Если текущий класс - тысячи
 		gender = genders.FEMALE
-	} else if scale == UnitsScale {
+	} else if scale == convert.UnitsScale {
 		// Если текущий класс - единицы
 		gender = unitNounGender
 	}
@@ -89,7 +85,7 @@ func (rs *Russian) GetWordScaleName(numberType core_constants.NumberType,
 		panic(ErrorLanguageNotLoaded)
 	}
 
-	if scale == 0 {
+	if scale == convert.UnitsScale {
 		// Класс единиц
 		// Для них название не отображается.
 		return ""
@@ -112,20 +108,19 @@ func (rs *Russian) GetWordScaleName(numberType core_constants.NumberType,
 		numberForm >= constants.SECOND_FORM {
 		// Для множественного числа именительного падежа используется родительный падеж.
 		scaleDeclension = declension.GENITIVE
-		wordForm = constants.SINGULAR_WORD
 
-		if numberForm == constants.THIRD_FORM {
-			wordForm = constants.PLURAL_WORD
+		if numberForm == constants.SECOND_FORM {
+			wordForm = constants.SINGULAR_WORD
 		}
 	}
 
 	// Класс тысяч
-	if scale == 1 {
+	if scale == convert.ThousandScale {
 		return rs.words.UnitScalesNames.Thousands[scaleDeclension][wordForm]
 	}
 
 	// Остальные классы
-	base := rs.words.UnitScalesNames.OtherBeginning[scale-2]
+	base := rs.words.UnitScalesNames.OtherBeginning[scale-3]
 	ending := rs.words.UnitScalesNames.OtherEnding[scaleDeclension][wordForm]
 
 	return base + ending

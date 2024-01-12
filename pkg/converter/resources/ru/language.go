@@ -2,21 +2,16 @@ package ru
 
 import (
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/words"
-	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/currency"
-	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/genders"
-	"github.com/google/uuid"
+	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/currency"
+	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/declension"
 	"github.com/pkg/errors"
-)
-
-var (
-	femaleCurrency = words.CurrencyName(uuid.NewString())
 )
 
 var _ = words.Language(&Russian{})
 
 type Russian struct {
 	words        *wordsConstantsForNumbers
-	declension   words.Declension
+	declension   declension.Declension
 	currencyName words.CurrencyName
 }
 
@@ -26,9 +21,7 @@ func LoadRussianFromPath(path string, opts ...Option) *Russian {
 		panic(errors.Wrapf(err, "could not load russian language"))
 	}
 
-	N2w := addFemaleCurrency(wordsConstants.N2w)
-
-	rs := &Russian{words: &N2w}
+	rs := &Russian{words: &wordsConstants.N2w}
 	rs.SetOptions(opts...)
 	return rs
 }
@@ -38,22 +31,10 @@ func LoadRussian(opts ...Option) *Russian {
 	if err != nil {
 		panic(errors.Wrapf(err, "could not load russian language"))
 	}
-	N2w := addFemaleCurrency(wordsConstants.N2w)
 
-	rs := &Russian{words: &N2w}
+	rs := &Russian{words: &wordsConstants.N2w}
 	rs.SetOptions(opts...)
 	return rs
-}
-
-func addFemaleCurrency(wordsConstants wordsConstantsForNumbers) wordsConstantsForNumbers {
-	wordsConstants.CurrencyStrings.Currencies[femaleCurrency] = currency.Info{
-		CurrencyNounGender: currency.NounGender{
-			IntegerPart:    genders.FEMALE,
-			FractionalPart: genders.FEMALE,
-		},
-	}
-
-	return wordsConstants
 }
 
 func (rs *Russian) GetMinusString() string {

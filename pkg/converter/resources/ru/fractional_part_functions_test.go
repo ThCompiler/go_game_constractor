@@ -5,8 +5,8 @@ import (
 	core_objects "github.com/ThCompiler/go_game_constractor/pkg/converter/core/objects"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/words"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/constants"
-	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/currency"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects"
+	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/currency"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/declension"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/genders"
 	"github.com/ThCompiler/ts"
@@ -19,7 +19,7 @@ type ConvertNotLowestScaleToWordsSuite struct {
 	ts.TestCasesSuite
 	rs      Russian
 	ActFunc func(words.CurrencyName, core_constants.NumberPart,
-		words.Declension, []core_objects.RuneDigitTriplet) string
+		declension.Declension, []core_objects.RuneDigitTriplet) string
 }
 
 func (s *ConvertNotLowestScaleToWordsSuite) SetupTest() {
@@ -77,9 +77,9 @@ func (s *ConvertNotLowestScaleToWordsSuite) SetupTest() {
 	}
 
 	s.ActFunc = func(currencyName words.CurrencyName, numberPart core_constants.NumberPart,
-		declension words.Declension, runeTriplets []core_objects.RuneDigitTriplet) string {
+		decl declension.Declension, runeTriplets []core_objects.RuneDigitTriplet) string {
 		s.rs.currencyName = currencyName
-		s.rs.declension = declension
+		s.rs.declension = decl
 		return s.rs.GetCurrencyAsWord(numberPart, runeTriplets)
 	}
 }

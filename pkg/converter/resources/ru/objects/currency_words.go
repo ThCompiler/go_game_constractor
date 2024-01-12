@@ -2,7 +2,7 @@ package objects
 
 import (
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/words"
-	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/currency"
+	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/currency"
 )
 
 type CurrencyWords struct {

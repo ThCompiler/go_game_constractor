@@ -1,4 +1,4 @@
-package convertor
+package convert
 
 import (
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/constants"
@@ -7,6 +7,11 @@ import (
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/option"
 	"github.com/ThCompiler/go_game_constractor/pkg/stringutilits"
 	"strings"
+)
+
+const (
+	UnitsScale    = 1
+	ThousandScale = 2
 )
 
 type Converter struct {
@@ -174,7 +179,7 @@ func (c *Converter) convertTripletsToWords(
 	delimiter constants.NumberType,
 ) string {
 	if len(numberByTriplets) == 0 || (len(numberByTriplets) == 1 && numberByTriplets[0].IsZeros()) {
-		return strings.TrimSpace(c.options.Language.ConvertZeroToWordsForIntegerPart())
+		return strings.TrimSpace(c.options.Language.GetZeroAsWordsForIntegerPart())
 	}
 	numberScalesArrayLen := len(numberByTriplets)
 	convertedResult := ""
@@ -203,7 +208,7 @@ func (c *Converter) convertTripletsToWords(
 			currentNumberScale,
 		)
 
-		scaleName := c.options.Language.GetWordScaleName(delimiter, currentNumberScale-1, digits)
+		scaleName := c.options.Language.GetWordScaleName(delimiter, currentNumberScale, digits)
 
 		// Убрать ненужный "ноль"
 		if digits.Units == 0 && (digits.Hundreds > 0 || digits.Dozens > 0) {
@@ -245,7 +250,7 @@ func (c *Converter) convertFractionalTripletsToWords(
 	// Если нет ни одного не пустого класса
 	if lastNotNullTriplet == -1 {
 		// Вернуть ноль
-		return c.options.Language.ConvertZeroToWordsForFractionalNumber(integerPartTriplets)
+		return c.options.Language.GetZeroAsWordsForFractionalNumber(integerPartTriplets)
 	}
 
 	// Индекс последнего класса в массиве.

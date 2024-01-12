@@ -423,7 +423,6 @@ func (wh *Webhook) HandleFunc(c HTTPContext) {
 	// Возвращаем данные
 	c.SetHeader("Content-Type", "application/json; encoding=utf-8")
 	err = c.SendResponse(http.StatusOK, fullResponse)
-
 	if err != nil {
 		wh.Log(c.GetContext()).Error(errors.Wrap(errWebhook, "http - error send response"))
 	}

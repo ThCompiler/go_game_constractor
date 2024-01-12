@@ -1,12 +1,12 @@
 package declension
 
-import "github.com/ThCompiler/go_game_constractor/pkg/converter/core/words"
+type Declension string
 
 const (
-	NOMINATIVE    = words.Declension(`nominative`)    // именительный
-	GENITIVE      = words.Declension(`genitive`)      // родительный
-	DATIVE        = words.Declension(`dative`)        // дательный
-	ACCUSATIVE    = words.Declension(`accusative`)    // винительный
-	INSTRUMENTAL  = words.Declension(`instrumental`)  // творительный
-	PREPOSITIONAL = words.Declension(`prepositional`) // предложный
+	NOMINATIVE    = Declension(`nominative`)    // именительный
+	GENITIVE      = Declension(`genitive`)      // родительный
+	DATIVE        = Declension(`dative`)        // дательный
+	ACCUSATIVE    = Declension(`accusative`)    // винительный
+	INSTRUMENTAL  = Declension(`instrumental`)  // творительный
+	PREPOSITIONAL = Declension(`prepositional`) // предложный
 )

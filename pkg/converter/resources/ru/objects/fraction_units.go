@@ -1,11 +1,11 @@
 package objects
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/words"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/constants"
+	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/declension"
 )
 
-type DeclensionFractionalUnits map[words.Declension][constants.CountWordForms]string
+type DeclensionFractionalUnits map[declension.Declension][constants.CountWordForms]string
 
 type fractionalUnitsDeclensionsT struct {
 	Tens     DeclensionFractionalUnits `yaml:"tens"`

@@ -11,6 +11,9 @@ import (
 // GetCurrencyAsWord Возвращает значение валюты в словах для указанной части числа
 func (rs *Russian) GetCurrencyAsWord(numberPart core_constants.NumberPart,
 	numberAsTriplets []core_objects.RuneDigitTriplet) string {
+	if rs.words == nil {
+		panic(ErrorLanguageNotLoaded)
+	}
 	// Если не "именительный" и не "винительный" падеж,
 	// то всё что не один это множественное число
 
@@ -45,5 +48,8 @@ func (rs *Russian) GetCurrencyAsWord(numberPart core_constants.NumberPart,
 
 // GetCurrencyForFractionalNumber Возвращает значение валюты в случае если передана дробь
 func (rs *Russian) GetCurrencyForFractionalNumber() string {
+	if rs.words == nil {
+		panic(ErrorLanguageNotLoaded)
+	}
 	return rs.GetCurrency().DecimalCurrencyNameDeclensions[declension.GENITIVE][constants.SINGULAR_WORD]
 }

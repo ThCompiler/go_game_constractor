@@ -2,7 +2,6 @@ package ru
 
 import (
 	core_objects "github.com/ThCompiler/go_game_constractor/pkg/converter/core/objects"
-	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/words"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/declension"
@@ -38,9 +37,9 @@ func GetNumberFormByDigit(digit core_objects.Digit) constants.NumberForm {
 }
 
 func convertDigitToWord(digit core_objects.Digit, digitWords objects.DeclensionNumbers,
-	declension words.Declension, gender genders.Gender,
+	decl declension.Declension, gender genders.Gender,
 ) string {
-	declensionValues := digitWords[declension]
+	declensionValues := digitWords[decl]
 	word := declensionValues[digit]
 
 	if word.WithGender() {
@@ -70,7 +69,7 @@ func getCurrencyFractionalPartWordForm(numberForm constants.NumberForm) constant
 	return constants.PLURAL_WORD
 }
 
-func getCurrencyFractionalPartDeclension(decl words.Declension, numberForm constants.NumberForm) words.Declension {
+func getCurrencyFractionalPartDeclension(decl declension.Declension, numberForm constants.NumberForm) declension.Declension {
 	// Если падеж "именительный" или "винительный" и множественное число
 	if numberForm != constants.FIRST_FORM && (decl == declension.NOMINATIVE || decl == declension.ACCUSATIVE) {
 		decl = declension.GENITIVE

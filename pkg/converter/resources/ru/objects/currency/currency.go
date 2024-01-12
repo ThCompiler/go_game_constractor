@@ -3,6 +3,7 @@ package currency
 import (
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/words"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/constants"
+	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/declension"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/genders"
 )
 
@@ -12,7 +13,7 @@ const (
 	EUR = words.CurrencyName(`eur`)
 )
 
-type Declensions map[words.Declension][constants.CountWordForms]string
+type Declensions map[declension.Declension][constants.CountWordForms]string
 
 type Info struct {
 	/**

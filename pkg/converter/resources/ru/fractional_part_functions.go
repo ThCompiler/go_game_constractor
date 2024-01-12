@@ -3,7 +3,6 @@ package ru
 import (
 	core_constants "github.com/ThCompiler/go_game_constractor/pkg/converter/core/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/objects"
-	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/words"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/declension"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/genders"
@@ -167,8 +166,8 @@ func (rs *Russian) convertNotScaleNumbersToWords(digits objects.NumericDigitTrip
 		strings.TrimSpace(stringDigits.Units)
 }
 
-// ConvertZeroToWordsForFractionalNumber Возвращает словесную форму числа для знаменателя числа
-func (rs *Russian) ConvertZeroToWordsForFractionalNumber(integerPartTriplets []objects.RuneDigitTriplet) string {
+// GetZeroAsWordsForFractionalNumber Возвращает словесную форму нуля для знаменателя числа
+func (rs *Russian) GetZeroAsWordsForFractionalNumber(integerPartTriplets []objects.RuneDigitTriplet) string {
 	if rs.words == nil {
 		panic(ErrorLanguageNotLoaded)
 	}
@@ -182,6 +181,9 @@ func (rs *Russian) ConvertZeroToWordsForFractionalNumber(integerPartTriplets []o
 // GetEndingOfDecimalNumberForFractionalPart Возвращает значение описывающие размерность десятичной
 // части числа (тысячных, десятых, сотых и т.д.)
 func (rs *Russian) GetEndingOfDecimalNumberForFractionalPart(countDigits int, lastDigit objects.Digit) string {
+	if rs.words == nil {
+		panic(ErrorLanguageNotLoaded)
+	}
 
 	wordForm := getCurrencyFractionalPartWordForm(GetNumberFormByDigit(lastDigit))
 	numberDeclension := getCurrencyFractionalPartDeclension(rs.declension, GetNumberFormByDigit(lastDigit))
@@ -220,14 +222,4 @@ func (rs *Russian) GetEndingOfDecimalNumberForFractionalPart(countDigits int, la
 
 	// Составить объект с падежами
 	return unitNamePrefix + unitNameBegin + rs.words.FractionalUnit.FractionalUnitEndings[numberDeclension][wordForm]
-}
-
-// CorrectNumberInfoForFractionalTriplets преобразует существующую информацию о числе в требуемую для описания
-// чисел в знаменателе до последней значащей тройки (т.е. "123 231 123 000", параметры для описания 123 и 231)
-func (rs *Russian) CorrectNumberInfoForFractionalTriplets() words.NumberInfo {
-	if rs.words == nil {
-		panic(ErrorLanguageNotLoaded)
-	}
-
-	return words.NumberInfo{CurrencyName: femaleCurrency, Declension: declension.NOMINATIVE}
 }

@@ -107,7 +107,6 @@ func (f *File) Render(dir string, update bool) (string, error) {
 	}
 
 	err = f.baseRender(path)
-
 	if err != nil {
 		return "", err
 	}

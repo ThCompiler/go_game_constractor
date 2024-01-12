@@ -3,7 +3,7 @@ package converter
 import (
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/option"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru"
-	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/currency"
+	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/currency"
 	"github.com/ThCompiler/ts"
 	"github.com/stretchr/testify/suite"
 	"testing"

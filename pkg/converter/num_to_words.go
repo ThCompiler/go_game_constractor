@@ -86,7 +86,7 @@ func convertNumberToString(number interface{}) string {
 }
 
 func ConvertByNumber(number objects.Number, appliedOptions option.Options) string {
-	conv := convertor.NewConverter(appliedOptions)
+	conv := convert.NewConverter(appliedOptions)
 
 	convertedNumber := objects.ResultNumberT{}
 	modifiedNumber := number

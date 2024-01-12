@@ -16,8 +16,7 @@ import (
 
 type RussianUtilityFunctionsSuite struct {
 	ts.TestCasesSuite
-	rs      Russian
-	ActFunc func(args ...interface{}) []interface{}
+	rs Russian
 }
 
 func (r *RussianUtilityFunctionsSuite) TestGetNumberFormByDigitFunction() {

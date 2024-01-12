@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/constants"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/objects"
-	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/words"
+	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/declension"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/genders"
 	"gopkg.in/yaml.v3"
 )
@@ -66,7 +66,7 @@ func (d *digitWord) UnmarshalJSON(b []byte) error {
 	return err
 }
 
-type DeclensionNumbers map[words.Declension][constants.CountDigits]digitWord
+type DeclensionNumbers map[declension.Declension][constants.CountDigits]digitWord
 
 type DigitWords struct {
 	Units    DeclensionNumbers `yaml:"units"`

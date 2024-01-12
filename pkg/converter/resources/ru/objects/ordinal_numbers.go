@@ -1,12 +1,12 @@
 package objects
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/words"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/constants"
+	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/declension"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/genders"
 )
 
-type declensionOrdinalNumbersT map[words.Declension][constants.CountWordForms]string
+type declensionOrdinalNumbersT map[declension.Declension][constants.CountWordForms]string
 
 type genderOrdinalNumbersT map[genders.Gender]declensionOrdinalNumbersT
 

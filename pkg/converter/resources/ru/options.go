@@ -2,6 +2,7 @@ package ru
 
 import (
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/words"
+	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/currency"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/declension"
 )
 
@@ -29,9 +30,16 @@ func AsNumber() Option {
 	}
 }
 
-func WithDeclension(declension words.Declension) Option {
+func WithDeclension(declension declension.Declension) Option {
 	return func(russian *Russian) *Russian {
 		russian.declension = declension
+		return russian
+	}
+}
+
+func AddCurrency(name words.CurrencyName, info currency.Info) Option {
+	return func(russian *Russian) *Russian {
+		russian.words.CurrencyStrings.Currencies[name] = info
 		return russian
 	}
 }

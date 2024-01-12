@@ -1,13 +1,13 @@
 package objects
 
 import (
-	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/words"
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/constants"
+	"github.com/ThCompiler/go_game_constractor/pkg/converter/resources/ru/objects/declension"
 )
 
 const indexShift = 2
 
-type declensionUnitName map[words.Declension][constants.CountWordForms]string
+type declensionUnitName map[declension.Declension][constants.CountWordForms]string
 
 type UnitScalesNames struct {
 	Thousands      declensionUnitName `yaml:"thousands"`

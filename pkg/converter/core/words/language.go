@@ -5,19 +5,12 @@ import (
 	"github.com/ThCompiler/go_game_constractor/pkg/converter/core/objects"
 )
 
-type Declension string
 type LanguageName string
 type CurrencyName string
 
 const (
 	NUMBER = CurrencyName("number")
 )
-
-type NumberInfo struct {
-	Declension Declension
-	//NumberType   constants.NumberType
-	CurrencyName CurrencyName
-}
 
 type Language interface {
 	// GetMinusString Возвращает значение знака минус в словах
@@ -31,8 +24,8 @@ type Language interface {
 
 	// For Integer Part
 
-	// ConvertZeroToWordsForIntegerPart Возвращает словесную форму числа состоящего из нулей
-	ConvertZeroToWordsForIntegerPart() string
+	// GetZeroAsWordsForIntegerPart Возвращает словесную форму числа состоящего из нулей
+	GetZeroAsWordsForIntegerPart() string
 
 	// ConvertTripletToWords Преобразует тройку в словесную форму
 	ConvertTripletToWords(numberType core_constants.NumberType, digits objects.NumericDigitTriplet,
@@ -53,16 +46,12 @@ type Language interface {
 	ConvertLowestScaleToWords(triplet objects.NumericDigitTriplet,
 		integerPart []objects.RuneDigitTriplet) string
 
-	// ConvertZeroToWordsForFractionalNumber Возвращает словесную форму числа для знаменателя числа
-	ConvertZeroToWordsForFractionalNumber(integerPartTriplets []objects.RuneDigitTriplet) string
+	// GetZeroAsWordsForFractionalNumber Возвращает словесную форму нуля для знаменателя числа
+	GetZeroAsWordsForFractionalNumber(integerPartTriplets []objects.RuneDigitTriplet) string
 
 	// GetEndingOfDecimalNumberForFractionalPart Возвращает значение описывающие размерность десятичной
 	// части числа (тысячных, десятых, сотых и т.д.)
 	GetEndingOfDecimalNumberForFractionalPart(countDigits int, lastDigit objects.Digit) string
-
-	// CorrectNumberInfoForFractionalTriplets преобразует существующую информацию о числе в требуемую для описания
-	// чисел в знаменателе до последней значащей тройки (т.е. "123 231 123 000", параметры для описания 123 и 231)
-	CorrectNumberInfoForFractionalTriplets() NumberInfo
 
 	// IsCurrency Сообщает необходимо ли перевести число с указанием валюты
 	IsCurrency() bool
